@@ -79,3 +79,24 @@ Private Enum sParseMode
 	pmFieldIndex	' ...its index...
 	pmFieldFormat	' ...and its format.
 End Enum
+
+
+
+' ###########
+' ## Types ##
+' ###########
+
+' Elements into which formats are parsed.
+Public Type sParseElement
+	Kind As sParseKind
+	Text As String
+	HasIndex As Boolean
+	Index As String
+	RawIndex As String
+	IndexIsKey As String
+	HasFormat As Boolean
+	Format As String
+End Type
+
+
+
