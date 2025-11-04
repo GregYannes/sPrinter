@@ -128,6 +128,7 @@ Public Function sParse( _
 	' Short-circuit for unformatted input.
 	If fLen = 0 Then
 		charIndex = 0
+		Erase elements
 		sParse = sParseStatus.psSuccess
 		Exit Function
 	End If
