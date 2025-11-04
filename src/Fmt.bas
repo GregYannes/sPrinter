@@ -52,7 +52,7 @@ Public Enum sFormatMode
 End Enum
 
 
-' Outcomes for parsing.
+' Outcomes of parsing.
 Public Enum sParseStatus
 	psSuccess = 0			' Report success.
 	psError = 1000			' Report a general syntax error.
@@ -63,7 +63,7 @@ Public Enum sParseStatus
 End Enum
 
 
-' Kinds of elements for parsing.
+' Kinds of elements which may be parsed.
 Public Enum sElementKind
 	[_Unknown]	' Uninitialized.
 	ekPlain		' Plain text which is displayed as is.
@@ -71,7 +71,7 @@ Public Enum sElementKind
 End Enum
 
 
-' Modes for parsing.
+' Contexts in which symbols are interpreted.
 Private Enum sParseContext
 	[_Unknown]	' Uninitialized.
 	pcPlain		' Plain text.
