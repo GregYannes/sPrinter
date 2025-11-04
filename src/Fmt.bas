@@ -570,7 +570,7 @@ Private Function EndField( _
 	ByRef idxStop As Long, _
 	ByRef fmtStart As Long, _
 	ByRef fmtStop As Long _
-) As sParseMode
+) As sParseStatus
 	Dim idxQuo As Boolean: idxQuo = False
 	
 	' Record the index.
