@@ -64,10 +64,10 @@ End Enum
 
 
 ' Kinds of elements for parsing.
-Public Enum sParseKind
+Public Enum sElementKind
 	[_Unknown]	' Uninitialized.
-	pkPlain		' Plain text which is displayed as is.
-	pkField		' Field that is formatted and embedded.
+	ekPlain		' Plain text which is displayed as is.
+	ekField		' Field that is formatted and embedded.
 End Enum
 
 
@@ -88,7 +88,7 @@ End Enum
 
 ' Elements into which formats are parsed.
 Public Type sParseElement
-	Kind As sParseKind
+	Kind As sElementKind
 	Text As String
 	HasIndex As Boolean
 	Index As String
@@ -190,13 +190,13 @@ Public Function sParse( _
 			Case openField
 				depth = depth + 1
 				mode = sParseMode.pmField
-				elements(eIdx).Kind = sParseKind.pkField
+				elements(eIdx).Kind = sElementKind.ekField
 				GoTo NEXT_CHAR
 				
 			' ...or interpret as text.
 			Case Else
 				mode = sParseMode.pmPlain
-				elements(eIdx).Kind = sParseKind.pkPlain
+				elements(eIdx).Kind = sElementKind.ekPlain
 				GoTo NEXT_LOOP
 			End Select
 			
@@ -245,12 +245,12 @@ Public Function sParse( _
 					mode = sParseMode.pmField
 					
 					' Move to the next element if the current is already used.
-					If elements(eIdx).Kind <> sParseKind.[_Unknown] Then
+					If elements(eIdx).Kind <> sElementKind.[_Unknown] Then
 						eIdx = eIdx + 1
 					End If
 					
 					' Identify the element as a field.
-					elements(eIdx).Kind = sParseKind.pkField
+					elements(eIdx).Kind = sElementKind.ekField
 					
 				' ...or display literally.
 				Case Else
@@ -438,7 +438,7 @@ Public Function sParse( _
 	' 	
 	' ' Reset the information.
 	' RESET_ELEMENT:
-	' 	e_Kind = sParseKind.[_Off]
+	' 	e_Kind = sElementKind.[_Unknown]
 	' 	e_Text = VBA.vbNullString
 	' 	e_HasIndex = False
 	' 	e_Index = VBA.vbNullString
@@ -497,7 +497,7 @@ Public Function sParse( _
 	' ####################
 	
 	' Resize to the elements we actually parsed.
-	If elements(eIdx).Kind = sParseKind.[_Unknown] Then
+	If elements(eIdx).Kind = sElementKind.[_Unknown] Then
 		eIdx = eIdx - 1
 	End If
 	
