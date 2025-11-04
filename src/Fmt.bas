@@ -72,12 +72,12 @@ End Enum
 
 
 ' Modes for parsing.
-Private Enum sParseMode
-	[_Off]		' Inactive.
-	pmPlain		' Plain text.
-	pmField		' An embedded field...
-	pmFieldIndex	' ...its index...
-	pmFieldFormat	' ...and its format.
+Private Enum sParseContext
+	[_Unknown]	' Uninitialized.
+	pcPlain		' Plain text.
+	pcField		' An embedded field...
+	pcFieldIndex	' ...its index...
+	pcFieldFormat	' ...and its format.
 End Enum
 
 
@@ -141,7 +141,7 @@ Public Function sParse( _
 	
 	
 	' Track the current mode for parsing...
-	Dim mode As sParseMode: mode = sParseMode.[_Off]
+	Dim mode As sParseContext: mode = sParseContext.[_Unknown]
 	Dim isQuo As Boolean: isQuo = False
 	Dim isEsc As Boolean: isEsc = False
 	
@@ -183,19 +183,19 @@ Public Function sParse( _
 		' ## Inactive ##
 		' ##############
 		
-		Case sParseMode.[_Off]
+		Case sParseContext.[_Unknown]
 			Select Case char
 			
 			' Parse into a field...
 			Case openField
 				depth = depth + 1
-				mode = sParseMode.pmField
+				mode = sParseContext.pcField
 				elements(eIdx).Kind = sElementKind.ekField
 				GoTo NEXT_CHAR
 				
 			' ...or interpret as text.
 			Case Else
-				mode = sParseMode.pmPlain
+				mode = sParseContext.pcPlain
 				elements(eIdx).Kind = sElementKind.ekPlain
 				GoTo NEXT_LOOP
 			End Select
@@ -206,7 +206,7 @@ Public Function sParse( _
 		' ## Plain Text ##
 		' ################
 		
-		Case sParseMode.pmPlain
+		Case sParseContext.pcPlain
 			
 			' Quote "inert" text...
 			If isQuo Then
@@ -242,7 +242,7 @@ Public Function sParse( _
 				Case openField
 					' Update parsing mode.
 					depth = depth + 1
-					mode = sParseMode.pmField
+					mode = sParseContext.pcField
 					
 					' Move to the next element if the current is already used.
 					If elements(eIdx).Kind <> sElementKind.[_Unknown] Then
@@ -266,7 +266,7 @@ Public Function sParse( _
 		' ## Field ##
 		' ###########
 		
-		Case sParseMode.pmField
+		Case sParseContext.pcField
 			Select Case char
 			
 			' Parse out of the field...
@@ -276,14 +276,14 @@ Public Function sParse( _
 				
 			' ...or parse into the format...
 			Case separator
-				mode = sParseMode.pmFieldFormat
+				mode = sParseContext.pcFieldFormat
 				elements(eIdx).HasFormat = True
 				fmtStart = charIndex
 				fmtStop = fmtStart
 				
 			' ...or parse the index.
 			Case Else
-				mode = sParseMode.pmFieldIndex
+				mode = sParseContext.pcFieldIndex
 				elements(eIdx).HasIndex = True
 				idxStart = charIndex
 				idxStop = idxStart
@@ -299,7 +299,7 @@ Public Function sParse( _
 		' ## Field | Index ##
 		' ###################
 		
-		Case sParseMode.pmFieldIndex
+		Case sParseContext.pcFieldIndex
 			
 			' Quote "inert" symbol...
 			If isQuo Then
@@ -308,7 +308,7 @@ Public Function sParse( _
 				' Terminate the quote...
 				Case closeQuote
 					isQuo = False
-					If depth = 1 Then mode = sParseMode.pmField
+					If depth = 1 Then mode = sParseContext.pcField
 					
 				' ...or continue quoting.
 				Case Else
@@ -319,7 +319,7 @@ Public Function sParse( _
 			ElseIf isEsc Then
 				elements(eIdx).Index = elements(eIdx).Index & char
 				isEsc = False
-				If depth = 1 Then mode = sParseMode.pmField
+				If depth = 1 Then mode = sParseContext.pcField
 				
 			' ...or parse "active" symbol.
 			Else
@@ -343,10 +343,10 @@ Public Function sParse( _
 				Case closeField
 					depth = depth - 1
 					If depth = 0 Then
-						mode = sParseMode.[_Off]
+						mode = sParseContext.[_Unknown]
 						GoTo END_FIELD
 					ElseIf depth = 1 Then
-						mode = sParseMode.pmField
+						mode = sParseContext.pcField
 					Else
 						elements(eIdx).Index = elements(eIdx).Index & char
 					End If
@@ -358,7 +358,7 @@ Public Function sParse( _
 					
 				' ' ...or parse into a format...
 				' Case separator
-				' 	mode = sParseMode.pmFormat
+				' 	mode = sParseContext.pcFormat
 				' 	elements(eIdx).HasFormat = True
 					
 				' ...or display literally.
@@ -376,7 +376,7 @@ Public Function sParse( _
 		' ## Field | Format ##
 		' ####################
 		
-		Case sParseMode.pmFieldFormat
+		Case sParseContext.pcFieldFormat
 			
 			' Include quoted symbol...
 			If isQuo Then
@@ -509,7 +509,7 @@ Public Function sParse( _
 	
 	' Record any pending field information.
 	Select Case mode
-	Case sParseMode.pmField, sParseMode.pmFieldIndex, sParseMode.pmFieldFormat
+	Case sParseContext.pcField, sParseContext.pcFieldIndex, sParseContext.pcFieldFormat
 		fldStatus = EndField( _
 			format := format, _
 			e := elements(eIdx), _
@@ -563,7 +563,7 @@ End Function
 Private Function EndField( _
 	ByRef format As String, _
 	ByRef e As sParseElement, _
-	ByRef mode As sParseMode, _
+	ByRef mode As sParseContext, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean, _
 	ByRef idxStart As Long, _
@@ -616,7 +616,7 @@ IDX_ERROR:
 	
 ' Reset the trackers.
 RESET_VARS:
-	mode = sParseMode.[_Off]
+	mode = sParseContext.[_Unknown]
 	' isQuo = False
 	' isEsc = False
 	
