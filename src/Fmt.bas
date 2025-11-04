@@ -149,7 +149,6 @@ Public Function sParse( _
 	
 	' ...and the current element...
 	Dim eIdx As Long: eIdx = base
-	Dim e As sParseElement: e = elements(eIdx)
 	
 	' ...and the current characters.
 	Dim char As String: charIndex = 1
@@ -190,13 +189,13 @@ Public Function sParse( _
 			Case openField
 				depth = depth + 1
 				mode = sParseMode.pmField
-				e.Kind = sParseKind.pkField
+				elements(eIdx).Kind = sParseKind.pkField
 				GoTo NEXT_CHAR
 				
 			' ...or interpret as text.
 			Case Else
 				mode = sParseMode.pmPlain
-				e.Kind = sParseKind.pkPlain
+				elements(eIdx).Kind = sParseKind.pkPlain
 				GoTo NEXT_LOOP
 			End Select
 			
@@ -218,12 +217,12 @@ Public Function sParse( _
 					
 				' ...or continue quoting.
 				Case Else
-					e.Text = e.Text & char
+					elements(eIdx).Text = elements(eIdx).Text & char
 				End Select
 				
 			' ...or escape literal text...
 			ElseIf isEsc Then
-				e.Text = e.Text & char
+				elements(eIdx).Text = elements(eIdx).Text & char
 				isEsc = False
 				
 			' ...or parse "active" text.
@@ -245,17 +244,16 @@ Public Function sParse( _
 					mode = sParseMode.pmField
 					
 					' Move to the next element if the current is already used.
-					If e.Kind <> sParseKind.[_Unknown] Then
+					If elements(eIdx).Kind <> sParseKind.[_Unknown] Then
 						eIdx = eIdx + 1
-						e = elements(eIdx)
 					End If
 					
 					' Identify the element as a field.
-					e.Kind = sParseKind.pkField
+					elements(eIdx).Kind = sParseKind.pkField
 					
 				' ...or display literally.
 				Case Else
-					e.Text = e.Text & char
+					elements(eIdx).Text = elements(eIdx).Text & char
 				End Select
 			End If
 			
@@ -278,14 +276,14 @@ Public Function sParse( _
 			' ...or parse into the format...
 			Case separator
 				mode = sParseMode.pmFieldFormat
-				e.HasFormat = True
+				elements(eIdx).HasFormat = True
 				fmtStart = charIndex
 				fmtStop = fmtStart
 				
 			' ...or parse the index.
 			Case Else
 				mode = sParseMode.pmFieldIndex
-				e.HasIndex = True
+				elements(eIdx).HasIndex = True
 				idxStart = charIndex
 				idxStop = idxStart
 				
@@ -313,12 +311,12 @@ Public Function sParse( _
 					
 				' ...or continue quoting.
 				Case Else
-					e.Index = e.Index & char
+					elements(eIdx).Index = elements(eIdx).Index & char
 				End Select
 				
 			' ...or escape literal symbol...
 			ElseIf isEsc Then
-				e.Index = e.Index & char
+				elements(eIdx).Index = elements(eIdx).Index & char
 				isEsc = False
 				If depth = 1 Then mode = sParseMode.pmField
 				
@@ -337,7 +335,7 @@ Public Function sParse( _
 					If depth = 2 Then
 						nQuo = nQuo + 1
 					Else
-						e.Index = e.Index & char
+						elements(eIdx).Index = elements(eIdx).Index & char
 					End If
 					
 				' ...or unnest out of the field...
@@ -349,7 +347,7 @@ Public Function sParse( _
 					ElseIf depth = 1 Then
 						mode = sParseMode.pmField
 					Else
-						e.Index = e.Index & char
+						elements(eIdx).Index = elements(eIdx).Index & char
 					End If
 					
 				' ...or parse into a quoted key...
@@ -360,11 +358,11 @@ Public Function sParse( _
 				' ' ...or parse into a format...
 				' Case separator
 				' 	mode = sParseMode.pmFormat
-				' 	e.HasFormat = True
+				' 	elements(eIdx).HasFormat = True
 					
 				' ...or display literally.
 				Case Else
-					e.Index = e.Index & char
+					elements(eIdx).Index = elements(eIdx).Index & char
 				End Select
 			End If
 			
@@ -426,16 +424,16 @@ Public Function sParse( _
 	
 	' ' Save the information to the element.
 	' SAVE_ELEMENT:
-	' 	e = elements(eIdx)
-	' 	
-	' 	e.Kind = e_Kind
-	' 	e.Text = e_Text
-	' 	e.HasIndex = e_HasIndex
-	' 	e.Index = e_Index
-	' 	e.EscapesIndex = e_EscapesIndex
-	' 	e.QuotesIndex = e_QuotesIndex
-	' 	e.HasFormat = e_HasFormat
-	' 	e.Format = e_Format
+	' 	elements(eIdx).Kind = e_Kind
+	' 	elements(eIdx).Text = e_Text
+	' 	elements(eIdx).HasIndex = e_HasIndex
+	' 	elements(eIdx).Index = e_Index
+	' 	elements(eIdx).IndexRaw = e_IndexRaw
+	' '	elements(eIdx).IndexIsKey = e_IndexIsKey
+	' '	elements(eIdx).EscapesIndex = e_EscapesIndex
+	' '	elements(eIdx).QuotesIndex = e_QuotesIndex
+	' 	elements(eIdx).HasFormat = e_HasFormat
+	' 	elements(eIdx).Format = e_Format
 	' 	
 	' ' Reset the information.
 	' RESET_ELEMENT:
@@ -443,8 +441,10 @@ Public Function sParse( _
 	' 	e_Text = VBA.vbNullString
 	' 	e_HasIndex = False
 	' 	e_Index = VBA.vbNullString
-	' 	e_EscapesIndex = False
-	' 	e_QuotesIndex = False
+	' 	e_IndexRaw = VBA.vbNullString
+	' 	e_IndexIsKey = False
+	' '	e_EscapesIndex = False
+	' ' 	e_QuotesIndex = False
 	' 	e_HasFormat = False
 	' 	e_Format = VBA.vbNullString
 		
@@ -453,7 +453,7 @@ Public Function sParse( _
 		' Record the elemental information...
 		fldStatus = EndField( _
 			format := format, _
-			e := e, _
+			e := elements(eIdx), _
 			mode := mode, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc, _
@@ -469,14 +469,12 @@ Public Function sParse( _
 		
 		' Increment the element.
 		eIdx = eIdx + 1
-		e = elements(eIdx)
 		
 		GoTo NEXT_CHAR
 		
 	' ' Increment the element.
 	' NEXT_ELEMENT:
 	' 	eIdx = eIdx + 1
-	' 	' e = elements(eIdx)
 		
 	' Increment the character.
 	NEXT_CHAR:
@@ -498,10 +496,8 @@ Public Function sParse( _
 	' ####################
 	
 	' Resize to the elements we actually parsed.
-	e = elements(eIdx)
-	If e.Kind = sParseKind.[_Unknown] Then
+	If elements(eIdx).Kind = sParseKind.[_Unknown] Then
 		eIdx = eIdx - 1
-		e = elements(eIdx)
 	End If
 	
 	If eIdx < eUp Then
@@ -515,7 +511,7 @@ Public Function sParse( _
 	Case sParseMode.pmField, sParseMode.pmFieldIndex, sParseMode.pmFieldFormat
 		fldStatus = EndField( _
 			format := format, _
-			e := e, _
+			e := elements(eIdx), _
 			mode := mode, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc, _
