@@ -17,7 +17,7 @@ Public Sub Test()
 		
 		Select Case e.Kind
 		Case sParseKind.pkPlain
-			Debug.Print "PLAIN: out(" & i & ") = '" & e.Text & "'"
+			Debug.Print "PLAIN: out(" & i & ")" & VBA.vbTab & "= " & e.Text
 			out = out & e.Text
 		Case sParseKind.pkField
 			fld = "{"
@@ -36,7 +36,7 @@ Public Sub Test()
 			End If
 			
 			fld = fld & "}"
-			Debug.Print "FIELD: out(" & i & ") = " & fld
+			Debug.Print "FIELD: out(" & i & ")" & VBA.vbTab & "= " & fld
 			
 			out = out & fld
 		End Select
