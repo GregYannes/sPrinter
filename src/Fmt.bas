@@ -93,7 +93,7 @@ Public Type sParseElement
 	HasIndex As Boolean
 	Index As String
 	RawIndex As String
-	IndexIsKey As String
+	IndexIsKey As Boolean
 	HasFormat As Boolean
 	Format As String
 End Type
@@ -107,7 +107,7 @@ End Type
 ' .
 Public Function sParse( _
 	ByRef format As String, _
-	Optional ByRef elements() As sParseElement,
+	ByRef elements() As sParseElement, _
 	Optional ByRef charIndex As Long, _
 	Optional ByVal base As Long = 1, _
 	Optional ByVal escape As String = STX_ESC, _
@@ -152,9 +152,9 @@ Public Function sParse( _
 	Dim e As sParseElement: e = elements(eIdx)
 	
 	' ...and the current characters.
-	Dim char As String
+	Dim char As String: charIndex = 1
 	Dim nQuo As Long: nQuo = 0
-	Dim idxQuo As Boolean, idxEsc As Long
+	Dim idxEsc As Boolean: idxEsc = False
 	Dim idxStart As Long, idxStop As Long, idxLen As Long
 	Dim fmtStart As Long, fmtStop As Long, fmtLen As Long
 	Dim fldStatus As sParseStatus: fldStatus = sParseStatus.psSuccess
@@ -286,6 +286,8 @@ Public Function sParse( _
 			Case Else
 				mode = sParseMode.pmFieldIndex
 				e.HasIndex = True
+				idxStart = charIndex
+				idxStop = idxStart
 				
 				GoTo NEXT_LOOP
 			End Select
@@ -318,6 +320,7 @@ Public Function sParse( _
 			ElseIf isEsc Then
 				e.Index = e.Index & char
 				isEsc = False
+				If depth = 1 Then mode = sParseMode.pmField
 				
 			' ...or parse "active" symbol.
 			Else
@@ -340,7 +343,10 @@ Public Function sParse( _
 				' ...or unnest out of the field...
 				Case closeField
 					depth = depth - 1
-					If depth = 1 Then
+					If depth = 0 Then
+						mode = sParseMode.[_Off]
+						GoTo END_FIELD
+					ElseIf depth = 1 Then
 						mode = sParseMode.pmField
 					Else
 						e.Index = e.Index & char
@@ -362,6 +368,7 @@ Public Function sParse( _
 				End Select
 			End If
 			
+			idxStop = idxStop + 1
 			GoTo NEXT_CHAR
 			
 			
@@ -453,7 +460,7 @@ Public Function sParse( _
 			idxStart := idxStart, _
 			idxStop := idxStop, _
 			fmtStart := fmtStart, _
-			fmtEnd := fmtEnd _
+			fmtStop := fmtStop _
 		)
 		
 		' ...and short-circuit for an index of the wrong type.
@@ -505,7 +512,7 @@ Public Function sParse( _
 	
 	' Record any pending field information.
 	Select Case mode
-	Case sParseMode.Field, sParseMode.FieldIndex, sParseMode.FieldFormat
+	Case sParseMode.pmField, sParseMode.pmFieldIndex, sParseMode.pmFieldFormat
 		fldStatus = EndField( _
 			format := format, _
 			e := e, _
@@ -515,7 +522,7 @@ Public Function sParse( _
 			idxStart := idxStart, _
 			idxStop := idxStop, _
 			fmtStart := fmtStart, _
-			fmtEnd := fmtEnd _
+			fmtStop := fmtStop _
 		)
 	End Select
 	
@@ -565,26 +572,34 @@ Private Function EndField( _
 	ByRef idxStart As Long, _
 	ByRef idxStop As Long, _
 	ByRef fmtStart As Long, _
-	ByRef fmtEnd As Long _
+	ByRef fmtStop As Long _
 ) As sParseMode
 	Dim idxQuo As Boolean: idxQuo = False
 	
 	' Record the index.
-	If e.HasIndex Then
+	If e.HasIndex And idxStart < idxStop Then
+		idxStop = idxStop - 1
 		Dim idxLen As Long: idxLen = idxStop - idxStart + 1
 		e.RawIndex = VBA.Mid(format, idxStart, idxLen)
 		idxQuo = (nQuo = 1)
 	End If
 	
 	' Record the format.
-	If e.HasFormat And fmtStart > 0 Then
+	If e.HasFormat And fmtStart < fmtStop Then
+		fmtStart = fmtStart + 1
 		Dim fmtLen As Long: fmtLen = fmtStop - fmtStart + 1
 		e.Format = VBA.Mid(format, fmtStart, fmtLen)
 	End If
 	
+	' Ignore a missing index.
+	If Not e.HasIndex Then
+		EndField = sParseStatus.psSuccess
+		GoTo RESET_VARS
+		
 	' Test for a key...
-	If idxQuo Or idxEsc Then
+	ElseIf idxQuo Or idxEsc Then
 		e.IndexIsKey = True
+		GoTo RESET_VARS
 		
 	' ...or an integral index.
 	Else
