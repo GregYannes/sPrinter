@@ -140,8 +140,8 @@ Public Function sParse( _
 	ReDim elements(base To eUp)
 	
 	
-	' Track the current mode for parsing...
-	Dim mode As ParsingContext: mode = ParsingContext.[_Unknown]
+	' Track the current context for parsing...
+	Dim context As ParsingContext: context = ParsingContext.[_Unknown]
 	Dim isQuo As Boolean: isQuo = False
 	Dim isEsc As Boolean: isEsc = False
 	
@@ -175,7 +175,7 @@ Public Function sParse( _
 		char = VBA.Mid$(format, charIndex, 1)
 		
 		' Interpret this character in context.
-		Select Case mode
+		Select Case context
 		
 		
 		
@@ -189,13 +189,13 @@ Public Function sParse( _
 			' Parse into a field...
 			Case openField
 				depth = depth + 1
-				mode = ParsingContext.pcField
+				context = ParsingContext.pcField
 				elements(eIdx).Kind = sElementKind.ekField
 				GoTo NEXT_CHAR
 				
 			' ...or interpret as text.
 			Case Else
-				mode = ParsingContext.pcPlain
+				context = ParsingContext.pcPlain
 				elements(eIdx).Kind = sElementKind.ekPlain
 				GoTo NEXT_LOOP
 			End Select
@@ -240,9 +240,9 @@ Public Function sParse( _
 					
 				' ...or parse into a field...
 				Case openField
-					' Update parsing mode.
+					' Update parsing context.
 					depth = depth + 1
-					mode = ParsingContext.pcField
+					context = ParsingContext.pcField
 					
 					' Move to the next element if the current is already used.
 					If elements(eIdx).Kind <> sElementKind.[_Unknown] Then
@@ -276,14 +276,14 @@ Public Function sParse( _
 				
 			' ...or parse into the format...
 			Case separator
-				mode = ParsingContext.pcFieldFormat
+				context = ParsingContext.pcFieldFormat
 				elements(eIdx).HasFormat = True
 				fmtStart = charIndex
 				fmtStop = fmtStart
 				
 			' ...or parse the index.
 			Case Else
-				mode = ParsingContext.pcFieldIndex
+				context = ParsingContext.pcFieldIndex
 				elements(eIdx).HasIndex = True
 				idxStart = charIndex
 				idxStop = idxStart
@@ -308,7 +308,7 @@ Public Function sParse( _
 				' Terminate the quote...
 				Case closeQuote
 					isQuo = False
-					If depth = 1 Then mode = ParsingContext.pcField
+					If depth = 1 Then context = ParsingContext.pcField
 					
 				' ...or continue quoting.
 				Case Else
@@ -319,7 +319,7 @@ Public Function sParse( _
 			ElseIf isEsc Then
 				elements(eIdx).Index = elements(eIdx).Index & char
 				isEsc = False
-				If depth = 1 Then mode = ParsingContext.pcField
+				If depth = 1 Then context = ParsingContext.pcField
 				
 			' ...or parse "active" symbol.
 			Else
@@ -343,10 +343,10 @@ Public Function sParse( _
 				Case closeField
 					depth = depth - 1
 					If depth = 0 Then
-						mode = ParsingContext.[_Unknown]
+						context = ParsingContext.[_Unknown]
 						GoTo END_FIELD
 					ElseIf depth = 1 Then
-						mode = ParsingContext.pcField
+						context = ParsingContext.pcField
 					Else
 						elements(eIdx).Index = elements(eIdx).Index & char
 					End If
@@ -358,7 +358,7 @@ Public Function sParse( _
 					
 				' ' ...or parse into a format...
 				' Case separator
-				' 	mode = ParsingContext.pcFormat
+				' 	context = ParsingContext.pcFormat
 				' 	elements(eIdx).HasFormat = True
 					
 				' ...or display literally.
@@ -455,7 +455,7 @@ Public Function sParse( _
 		fldStatus = EndField( _
 			format := format, _
 			e := elements(eIdx), _
-			mode := mode, _
+			context := context, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc, _
 			idxStart := idxStart, _
@@ -508,12 +508,12 @@ Public Function sParse( _
 	
 	
 	' Record any pending field information.
-	Select Case mode
+	Select Case context
 	Case ParsingContext.pcField, ParsingContext.pcFieldIndex, ParsingContext.pcFieldFormat
 		fldStatus = EndField( _
 			format := format, _
 			e := elements(eIdx), _
-			mode := mode, _
+			context := context, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc, _
 			idxStart := idxStart, _
@@ -563,7 +563,7 @@ End Function
 Private Function EndField( _
 	ByRef format As String, _
 	ByRef e As ParsingElement, _
-	ByRef mode As ParsingContext, _
+	ByRef context As ParsingContext, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean, _
 	ByRef idxStart As Long, _
@@ -616,7 +616,7 @@ IDX_ERROR:
 	
 ' Reset the trackers.
 RESET_VARS:
-	mode = ParsingContext.[_Unknown]
+	context = ParsingContext.[_Unknown]
 	' isQuo = False
 	' isEsc = False
 	
