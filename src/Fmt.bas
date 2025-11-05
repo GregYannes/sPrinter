@@ -53,7 +53,7 @@ End Enum
 
 
 ' Outcomes of parsing.
-Public Enum sParseStatus
+Public Enum ParsingStatus
 	psSuccess = 0			' Report success.
 	psError = 1000			' Report a general syntax error.
 	psErrorHangingEscape = 1001	' Report a hanging escape...
@@ -72,7 +72,7 @@ End Enum
 
 
 ' Contexts in which symbols are interpreted.
-Private Enum sParseContext
+Private Enum ParsingContext
 	[_Unknown]	' Uninitialized.
 	pcPlain		' Plain text.
 	pcField		' An embedded field...
@@ -87,7 +87,7 @@ End Enum
 ' ###########
 
 ' Elements into which formats are parsed.
-Public Type sParseElement
+Public Type ParsingElement
 	Kind As sElementKind
 	Text As String
 	HasIndex As Boolean
@@ -107,7 +107,7 @@ End Type
 ' .
 Public Function sParse( _
 	ByRef format As String, _
-	ByRef elements() As sParseElement, _
+	ByRef elements() As ParsingElement, _
 	Optional ByRef charIndex As Long, _
 	Optional ByVal base As Long = 1, _
 	Optional ByVal escape As String = STX_ESC, _
@@ -116,7 +116,7 @@ Public Function sParse( _
 	Optional ByVal openQuote As String = STX_QUO_OPEN, _
 	Optional ByVal closeQuote As String = STX_QUO_CLOSE, _
 	Optional ByVal separator As String = STX_SEP _
-) As sParseStatus
+) As ParsingStatus
 	
 	' ###########
 	' ## Setup ##
@@ -129,7 +129,7 @@ Public Function sParse( _
 	If fLen = 0 Then
 		charIndex = 0
 		Erase elements
-		sParse = sParseStatus.psSuccess
+		sParse = ParsingStatus.psSuccess
 		Exit Function
 	End If
 	
@@ -141,7 +141,7 @@ Public Function sParse( _
 	
 	
 	' Track the current mode for parsing...
-	Dim mode As sParseContext: mode = sParseContext.[_Unknown]
+	Dim mode As ParsingContext: mode = ParsingContext.[_Unknown]
 	Dim isQuo As Boolean: isQuo = False
 	Dim isEsc As Boolean: isEsc = False
 	
@@ -157,7 +157,7 @@ Public Function sParse( _
 	Dim idxEsc As Boolean: idxEsc = False
 	Dim idxStart As Long, idxStop As Long, idxLen As Long
 	Dim fmtStart As Long, fmtStop As Long, fmtLen As Long
-	Dim fldStatus As sParseStatus: fldStatus = sParseStatus.psSuccess
+	Dim fldStatus As ParsingStatus: fldStatus = ParsingStatus.psSuccess
 	
 	
 	
@@ -183,19 +183,19 @@ Public Function sParse( _
 		' ## Inactive ##
 		' ##############
 		
-		Case sParseContext.[_Unknown]
+		Case ParsingContext.[_Unknown]
 			Select Case char
 			
 			' Parse into a field...
 			Case openField
 				depth = depth + 1
-				mode = sParseContext.pcField
+				mode = ParsingContext.pcField
 				elements(eIdx).Kind = sElementKind.ekField
 				GoTo NEXT_CHAR
 				
 			' ...or interpret as text.
 			Case Else
-				mode = sParseContext.pcPlain
+				mode = ParsingContext.pcPlain
 				elements(eIdx).Kind = sElementKind.ekPlain
 				GoTo NEXT_LOOP
 			End Select
@@ -206,7 +206,7 @@ Public Function sParse( _
 		' ## Plain Text ##
 		' ################
 		
-		Case sParseContext.pcPlain
+		Case ParsingContext.pcPlain
 			
 			' Quote "inert" text...
 			If isQuo Then
@@ -242,7 +242,7 @@ Public Function sParse( _
 				Case openField
 					' Update parsing mode.
 					depth = depth + 1
-					mode = sParseContext.pcField
+					mode = ParsingContext.pcField
 					
 					' Move to the next element if the current is already used.
 					If elements(eIdx).Kind <> sElementKind.[_Unknown] Then
@@ -266,7 +266,7 @@ Public Function sParse( _
 		' ## Field ##
 		' ###########
 		
-		Case sParseContext.pcField
+		Case ParsingContext.pcField
 			Select Case char
 			
 			' Parse out of the field...
@@ -276,14 +276,14 @@ Public Function sParse( _
 				
 			' ...or parse into the format...
 			Case separator
-				mode = sParseContext.pcFieldFormat
+				mode = ParsingContext.pcFieldFormat
 				elements(eIdx).HasFormat = True
 				fmtStart = charIndex
 				fmtStop = fmtStart
 				
 			' ...or parse the index.
 			Case Else
-				mode = sParseContext.pcFieldIndex
+				mode = ParsingContext.pcFieldIndex
 				elements(eIdx).HasIndex = True
 				idxStart = charIndex
 				idxStop = idxStart
@@ -299,7 +299,7 @@ Public Function sParse( _
 		' ## Field | Index ##
 		' ###################
 		
-		Case sParseContext.pcFieldIndex
+		Case ParsingContext.pcFieldIndex
 			
 			' Quote "inert" symbol...
 			If isQuo Then
@@ -308,7 +308,7 @@ Public Function sParse( _
 				' Terminate the quote...
 				Case closeQuote
 					isQuo = False
-					If depth = 1 Then mode = sParseContext.pcField
+					If depth = 1 Then mode = ParsingContext.pcField
 					
 				' ...or continue quoting.
 				Case Else
@@ -319,7 +319,7 @@ Public Function sParse( _
 			ElseIf isEsc Then
 				elements(eIdx).Index = elements(eIdx).Index & char
 				isEsc = False
-				If depth = 1 Then mode = sParseContext.pcField
+				If depth = 1 Then mode = ParsingContext.pcField
 				
 			' ...or parse "active" symbol.
 			Else
@@ -343,10 +343,10 @@ Public Function sParse( _
 				Case closeField
 					depth = depth - 1
 					If depth = 0 Then
-						mode = sParseContext.[_Unknown]
+						mode = ParsingContext.[_Unknown]
 						GoTo END_FIELD
 					ElseIf depth = 1 Then
-						mode = sParseContext.pcField
+						mode = ParsingContext.pcField
 					Else
 						elements(eIdx).Index = elements(eIdx).Index & char
 					End If
@@ -358,7 +358,7 @@ Public Function sParse( _
 					
 				' ' ...or parse into a format...
 				' Case separator
-				' 	mode = sParseContext.pcFormat
+				' 	mode = ParsingContext.pcFormat
 				' 	elements(eIdx).HasFormat = True
 					
 				' ...or display literally.
@@ -376,7 +376,7 @@ Public Function sParse( _
 		' ## Field | Format ##
 		' ####################
 		
-		Case sParseContext.pcFieldFormat
+		Case ParsingContext.pcFieldFormat
 			
 			' Include quoted symbol...
 			If isQuo Then
@@ -465,8 +465,8 @@ Public Function sParse( _
 		)
 		
 		' ...and short-circuit for an index of the wrong type.
-		If fldStatus = sParseStatus.psErrorNonintegralIndex Then Exit Do
-		fldStatus = sParseStatus.psSuccess
+		If fldStatus = ParsingStatus.psErrorNonintegralIndex Then Exit Do
+		fldStatus = ParsingStatus.psSuccess
 		
 		' Increment the element.
 		eIdx = eIdx + 1
@@ -509,7 +509,7 @@ Public Function sParse( _
 	
 	' Record any pending field information.
 	Select Case mode
-	Case sParseContext.pcField, sParseContext.pcFieldIndex, sParseContext.pcFieldFormat
+	Case ParsingContext.pcField, ParsingContext.pcFieldIndex, ParsingContext.pcFieldFormat
 		fldStatus = EndField( _
 			format := format, _
 			e := elements(eIdx), _
@@ -526,23 +526,23 @@ Public Function sParse( _
 	
 	' Report status: a hanging escape...
 	If isEsc Then
-		sParse = sParseStatus.psErrorHangingEscape
+		sParse = ParsingStatus.psErrorHangingEscape
 		
 	' ...or an unclosed quote...
 	ElseIf isQuo Then
-		sParse = sParseStatus.psErrorUnclosedQuote
+		sParse = ParsingStatus.psErrorUnclosedQuote
 		
 	' ...or an unclosed field...
 	ElseIf depth <> 0 Then
-		sParse = sParseStatus.psErrorUnclosedField
+		sParse = ParsingStatus.psErrorUnclosedField
 		
 	' ...or a index of the wrong type...
-	ElseIf fldStatus = sParseStatus.psErrorNonintegralIndex Then
-		sParse = sParseStatus.psErrorNonintegralIndex
+	ElseIf fldStatus = ParsingStatus.psErrorNonintegralIndex Then
+		sParse = ParsingStatus.psErrorNonintegralIndex
 		
 	' ...or a successful parsing.
 	Else
-		sParse = sParseStatus.psSuccess
+		sParse = ParsingStatus.psSuccess
 	End If
 	
 	Exit Function
@@ -550,7 +550,7 @@ Public Function sParse( _
 	
 ' Report a generic syntax error.
 STX_ERROR:
-	sParse = sParseStatus.psError
+	sParse = ParsingStatus.psError
 End Function
 
 
@@ -562,15 +562,15 @@ End Function
 ' Close a field and record its elemental information.
 Private Function EndField( _
 	ByRef format As String, _
-	ByRef e As sParseElement, _
-	ByRef mode As sParseContext, _
+	ByRef e As ParsingElement, _
+	ByRef mode As ParsingContext, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean, _
 	ByRef idxStart As Long, _
 	ByRef idxStop As Long, _
 	ByRef fmtStart As Long, _
 	ByRef fmtStop As Long _
-) As sParseStatus
+) As ParsingStatus
 	Dim idxQuo As Boolean: idxQuo = False
 	
 	' Record the index.
@@ -590,7 +590,7 @@ Private Function EndField( _
 	
 	' Ignore a missing index.
 	If Not e.HasIndex Then
-		EndField = sParseStatus.psSuccess
+		EndField = ParsingStatus.psSuccess
 		GoTo RESET_VARS
 		
 	' Test for a key...
@@ -604,19 +604,19 @@ Private Function EndField( _
 		VBA.CLng e.Index
 		
 		On Error GoTo 0
-		EndField = sParseStatus.psSuccess
+		EndField = ParsingStatus.psSuccess
 		GoTo RESET_VARS
 		
 IDX_ERROR:
 		On Error GoTo 0
-		EndField = sParseStatus.psErrorNonintegralIndex
+		EndField = ParsingStatus.psErrorNonintegralIndex
 		GoTo RESET_VARS
 	End If
 	
 	
 ' Reset the trackers.
 RESET_VARS:
-	mode = sParseContext.[_Unknown]
+	mode = ParsingContext.[_Unknown]
 	' isQuo = False
 	' isEsc = False
 	
