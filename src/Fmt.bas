@@ -65,7 +65,7 @@ End Enum
 
 ' Kinds of elements which may be parsed.
 Public Enum ElementKind
-	[_ekUnknown]	' Uninitialized.
+	[_Unknown]	' Uninitialized.
 	ekPlain		' Plain text which is displayed as is.
 	ekField		' Field that is formatted and embedded.
 End Enum
@@ -73,7 +73,7 @@ End Enum
 
 ' Contexts in which symbols are interpreted.
 Private Enum ParsingContext
-	[_pcUnknown]	' Uninitialized.
+	[_Unknown]	' Uninitialized.
 	pcPlain		' Plain text.
 	pcField		' An embedded field...
 	pcFieldIndex	' ...its index...
@@ -83,7 +83,7 @@ End Enum
 
 ' Ways to defuse literal symbols rather than interpreting them.
 Private Enum ParsingDefusal
-	[_pdOff]	' No defusal.
+	[_Off]		' No defusal.
 	pdEscape	' Defuse only the next character...
 	pdQuote		' ...or all characters within quotes.
 End Enum
@@ -91,7 +91,7 @@ End Enum
 
 ' Kinds of indices for extracting values.
 Private Enum IndexKind
-	[_ikUnknown]	' Uninitialized.
+	[_Unknown]	' Uninitialized.
 	ikPosition	' Integer for a position...
 	ikKey		' ...or text for a key.
 End Enum
@@ -192,7 +192,7 @@ Public Function Parse( _
 	
 	
 	' Track the current context for parsing...
-	Dim context As ParsingContext: context = ParsingContext.[_pcUnknown]
+	Dim context As ParsingContext: context = ParsingContext.[_Unknown]
 	Dim isQuo As Boolean: isQuo = False
 	Dim isEsc As Boolean: isEsc = False
 	
@@ -234,7 +234,7 @@ Public Function Parse( _
 		' ## Inactive ##
 		' ##############
 		
-		Case ParsingContext.[_pcUnknown]
+		Case ParsingContext.[_Unknown]
 			Select Case char
 			
 			' Parse into a field...
@@ -296,7 +296,7 @@ Public Function Parse( _
 					context = ParsingContext.pcField
 					
 					' Move to the next element if the current is already used.
-					If elements(eIdx).Kind <> ElementKind.[_ekUnknown] Then
+					If elements(eIdx).Kind <> ElementKind.[_Unknown] Then
 						eIdx = eIdx + 1
 					End If
 					
@@ -394,7 +394,7 @@ Public Function Parse( _
 				Case closeField
 					depth = depth - 1
 					If depth = 0 Then
-						context = ParsingContext.[_pcUnknown]
+						context = ParsingContext.[_Unknown]
 						GoTo END_FIELD
 					ElseIf depth = 1 Then
 						context = ParsingContext.pcField
@@ -489,7 +489,7 @@ Public Function Parse( _
 	' 	
 	' ' Reset the information.
 	' RESET_ELEMENT:
-	' 	e_Kind = ElementKind.[_ekUnknown]
+	' 	e_Kind = ElementKind.[_Unknown]
 	' 	e_Text = VBA.vbNullString
 	' 	e_HasIndex = False
 	' 	e_Index = VBA.vbNullString
@@ -548,7 +548,7 @@ Public Function Parse( _
 	' ####################
 	
 	' Resize to the elements we actually parsed.
-	If elements(eIdx).Kind = ElementKind.[_ekUnknown] Then
+	If elements(eIdx).Kind = ElementKind.[_Unknown] Then
 		eIdx = eIdx - 1
 	End If
 	
@@ -667,7 +667,7 @@ IDX_ERROR:
 	
 ' Reset the trackers.
 RESET_VARS:
-	context = ParsingContext.[_pcUnknown]
+	context = ParsingContext.[_Unknown]
 	' isQuo = False
 	' isEsc = False
 	
