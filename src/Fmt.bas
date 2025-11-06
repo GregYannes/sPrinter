@@ -105,7 +105,7 @@ End Type
 ' #########
 
 ' .
-Public Function sParse( _
+Public Function Parse( _
 	ByRef format As String, _
 	ByRef elements() As ParsingElement, _
 	Optional ByRef charIndex As Long, _
@@ -129,7 +129,7 @@ Public Function sParse( _
 	If fLen = 0 Then
 		charIndex = 0
 		Erase elements
-		sParse = ParsingStatus.psSuccess
+		Parse = ParsingStatus.psSuccess
 		Exit Function
 	End If
 	
@@ -526,23 +526,23 @@ Public Function sParse( _
 	
 	' Report status: a hanging escape...
 	If isEsc Then
-		sParse = ParsingStatus.psErrorHangingEscape
+		Parse = ParsingStatus.psErrorHangingEscape
 		
 	' ...or an unclosed quote...
 	ElseIf isQuo Then
-		sParse = ParsingStatus.psErrorUnclosedQuote
+		Parse = ParsingStatus.psErrorUnclosedQuote
 		
 	' ...or an unclosed field...
 	ElseIf depth <> 0 Then
-		sParse = ParsingStatus.psErrorUnclosedField
+		Parse = ParsingStatus.psErrorUnclosedField
 		
 	' ...or a index of the wrong type...
 	ElseIf fldStatus = ParsingStatus.psErrorNonintegralIndex Then
-		sParse = ParsingStatus.psErrorNonintegralIndex
+		Parse = ParsingStatus.psErrorNonintegralIndex
 		
 	' ...or a successful parsing.
 	Else
-		sParse = ParsingStatus.psSuccess
+		Parse = ParsingStatus.psSuccess
 	End If
 	
 	Exit Function
@@ -550,7 +550,7 @@ Public Function sParse( _
 	
 ' Report a generic syntax error.
 STX_ERROR:
-	sParse = ParsingStatus.psError
+	Parse = ParsingStatus.psError
 End Function
 
 
