@@ -102,16 +102,51 @@ End Enum
 ' ## Types ##
 ' ###########
 
+' Element for parsing the index...
+Public Type peFieldIndex
+	Exists As Boolean
+	Kind As IndexKind
+	Code As String
+	Start As Long
+	Stop As Long
+	Position As Long
+	Key As String
+End Type
+
+
+' ...and the custom format...
+Public Type peFieldFormat
+	Exists As Boolean
+	Start As Long
+	Stop As Long
+	Code As String
+End Type
+
+
+' ...of a field embedded in formatting.
+Public Type peField
+	Code As String
+	Start As Long
+	Stop As Long
+	Index As peFieldIndex
+	Format As peFieldFormat
+End Type
+
+
+' Element for parsing plain text in formatting.
+Public Type pePlain
+	Text As String
+End Type
+
+
 ' Elements into which formats are parsed.
 Public Type ParsingElement
-	Kind As sElementKind
-	Text As String
-	HasIndex As Boolean
-	Index As String
-	RawIndex As String
-	IndexIsKey As Boolean
-	HasFormat As Boolean
-	Format As String
+	Kind As ElementKind
+	Code As String
+	Start As Long
+	Stop As Long
+	Plain as pePlain
+	Field As peField
 End Type
 
 
