@@ -46,7 +46,7 @@ Private Const STX_SEP As String = ":"			' Separate specifiers in a field.
 ' ##################
 
 ' Engine used for formatting.
-Public Enum sFormatMode
+Public Enum FormatMode
 	fmVbFormat	' The Format() function in VBA.
 	fmXlText	' The Text() function in Excel.
 End Enum
@@ -64,7 +64,7 @@ End Enum
 
 
 ' Kinds of elements which may be parsed.
-Public Enum sElementKind
+Public Enum ElementKind
 	[_Unknown]	' Uninitialized.
 	ekPlain		' Plain text which is displayed as is.
 	ekField		' Field that is formatted and embedded.
@@ -198,13 +198,13 @@ Public Function Parse( _
 			Case openField
 				depth = depth + 1
 				context = ParsingContext.pcField
-				elements(eIdx).Kind = sElementKind.ekField
+				elements(eIdx).Kind = ElementKind.ekField
 				GoTo NEXT_CHAR
 				
 			' ...or interpret as text.
 			Case Else
 				context = ParsingContext.pcPlain
-				elements(eIdx).Kind = sElementKind.ekPlain
+				elements(eIdx).Kind = ElementKind.ekPlain
 				GoTo NEXT_LOOP
 			End Select
 			
@@ -253,12 +253,12 @@ Public Function Parse( _
 					context = ParsingContext.pcField
 					
 					' Move to the next element if the current is already used.
-					If elements(eIdx).Kind <> sElementKind.[_Unknown] Then
+					If elements(eIdx).Kind <> ElementKind.[_Unknown] Then
 						eIdx = eIdx + 1
 					End If
 					
 					' Identify the element as a field.
-					elements(eIdx).Kind = sElementKind.ekField
+					elements(eIdx).Kind = ElementKind.ekField
 					
 				' ...or display literally.
 				Case Else
@@ -446,7 +446,7 @@ Public Function Parse( _
 	' 	
 	' ' Reset the information.
 	' RESET_ELEMENT:
-	' 	e_Kind = sElementKind.[_Unknown]
+	' 	e_Kind = ElementKind.[_Unknown]
 	' 	e_Text = VBA.vbNullString
 	' 	e_HasIndex = False
 	' 	e_Index = VBA.vbNullString
@@ -505,7 +505,7 @@ Public Function Parse( _
 	' ####################
 	
 	' Resize to the elements we actually parsed.
-	If elements(eIdx).Kind = sElementKind.[_Unknown] Then
+	If elements(eIdx).Kind = ElementKind.[_Unknown] Then
 		eIdx = eIdx - 1
 	End If
 	
