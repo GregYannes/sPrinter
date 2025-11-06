@@ -81,6 +81,14 @@ Private Enum ParsingContext
 End Enum
 
 
+' Ways to defuse literal symbols rather than interpreting them.
+Private Enum ParsingDefusal
+	[_Off]		' No defusal.
+	pdEscape	' Defuse only the next character...
+	pdQuote		' ...or all characters within quotes.
+End Enum
+
+
 
 ' ###########
 ' ## Types ##
