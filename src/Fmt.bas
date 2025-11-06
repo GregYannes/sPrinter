@@ -192,7 +192,7 @@ Public Function Parse( _
 	
 	
 	' Track the current context for parsing...
-	Dim context As ParsingContext: context = ParsingContext.[_Unknown]
+	Dim cxt As ParsingContext: cxt = ParsingContext.[_Unknown]
 	Dim isQuo As Boolean: isQuo = False
 	Dim isEsc As Boolean: isEsc = False
 	
@@ -226,7 +226,7 @@ Public Function Parse( _
 		char = VBA.Mid$(format, charIndex, 1)
 		
 		' Interpret this character in context.
-		Select Case context
+		Select Case cxt
 		
 		
 		
@@ -240,13 +240,13 @@ Public Function Parse( _
 			' Parse into a field...
 			Case openField
 				depth = depth + 1
-				context = ParsingContext.pcField
+				cxt = ParsingContext.pcField
 				elements(eIdx).Kind = ElementKind.ekField
 				GoTo NEXT_CHAR
 				
 			' ...or interpret as text.
 			Case Else
-				context = ParsingContext.pcPlain
+				cxt = ParsingContext.pcPlain
 				elements(eIdx).Kind = ElementKind.ekPlain
 				GoTo NEXT_LOOP
 			End Select
@@ -293,7 +293,7 @@ Public Function Parse( _
 				Case openField
 					' Update parsing context.
 					depth = depth + 1
-					context = ParsingContext.pcField
+					cxt = ParsingContext.pcField
 					
 					' Move to the next element if the current is already used.
 					If elements(eIdx).Kind <> ElementKind.[_Unknown] Then
@@ -327,14 +327,14 @@ Public Function Parse( _
 				
 			' ...or parse into the format...
 			Case separator
-				context = ParsingContext.pcFieldFormat
+				cxt = ParsingContext.pcFieldFormat
 				elements(eIdx).HasFormat = True
 				fmtStart = charIndex
 				fmtStop = fmtStart
 				
 			' ...or parse the index.
 			Case Else
-				context = ParsingContext.pcFieldIndex
+				cxt = ParsingContext.pcFieldIndex
 				elements(eIdx).HasIndex = True
 				idxStart = charIndex
 				idxStop = idxStart
@@ -359,7 +359,7 @@ Public Function Parse( _
 				' Terminate the quote...
 				Case closeQuote
 					isQuo = False
-					If depth = 1 Then context = ParsingContext.pcField
+					If depth = 1 Then cxt = ParsingContext.pcField
 					
 				' ...or continue quoting.
 				Case Else
@@ -370,7 +370,7 @@ Public Function Parse( _
 			ElseIf isEsc Then
 				elements(eIdx).Index = elements(eIdx).Index & char
 				isEsc = False
-				If depth = 1 Then context = ParsingContext.pcField
+				If depth = 1 Then cxt = ParsingContext.pcField
 				
 			' ...or parse "active" symbol.
 			Else
@@ -394,10 +394,10 @@ Public Function Parse( _
 				Case closeField
 					depth = depth - 1
 					If depth = 0 Then
-						context = ParsingContext.[_Unknown]
+						cxt = ParsingContext.[_Unknown]
 						GoTo END_FIELD
 					ElseIf depth = 1 Then
-						context = ParsingContext.pcField
+						cxt = ParsingContext.pcField
 					Else
 						elements(eIdx).Index = elements(eIdx).Index & char
 					End If
@@ -409,7 +409,7 @@ Public Function Parse( _
 					
 				' ' ...or parse into a format...
 				' Case separator
-				' 	context = ParsingContext.pcFormat
+				' 	cxt = ParsingContext.pcFormat
 				' 	elements(eIdx).HasFormat = True
 					
 				' ...or display literally.
@@ -506,7 +506,7 @@ Public Function Parse( _
 		fldStatus = EndField( _
 			format := format, _
 			e := elements(eIdx), _
-			context := context, _
+			cxt := cxt, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc, _
 			idxStart := idxStart, _
@@ -559,12 +559,12 @@ Public Function Parse( _
 	
 	
 	' Record any pending field information.
-	Select Case context
+	Select Case cxt
 	Case ParsingContext.pcField, ParsingContext.pcFieldIndex, ParsingContext.pcFieldFormat
 		fldStatus = EndField( _
 			format := format, _
 			e := elements(eIdx), _
-			context := context, _
+			cxt := cxt, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc, _
 			idxStart := idxStart, _
@@ -614,7 +614,7 @@ End Function
 Private Function EndField( _
 	ByRef format As String, _
 	ByRef e As ParsingElement, _
-	ByRef context As ParsingContext, _
+	ByRef cxt As ParsingContext, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean, _
 	ByRef idxStart As Long, _
@@ -667,7 +667,7 @@ IDX_ERROR:
 	
 ' Reset the trackers.
 RESET_VARS:
-	context = ParsingContext.[_Unknown]
+	cxt = ParsingContext.[_Unknown]
 	' isQuo = False
 	' isEsc = False
 	
