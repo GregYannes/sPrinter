@@ -588,17 +588,17 @@ Public Function Parse( _
 		
 	' ...or an unclosed field...
 	Case Else
-	If depth <> 0 Then
-		Parse = ParsingStatus.psErrorUnclosedField
-		
-	' ...or a index of the wrong type...
-	ElseIf fldStatus = ParsingStatus.psErrorNonintegralIndex Then
-		Parse = ParsingStatus.psErrorNonintegralIndex
-		
-	' ...or a successful parsing.
-	Else
-		Parse = ParsingStatus.psSuccess
-	End If
+		If depth <> 0 Then
+			Parse = ParsingStatus.psErrorUnclosedField
+			
+		' ...or a index of the wrong type...
+		ElseIf fldStatus = ParsingStatus.psErrorNonintegralIndex Then
+			Parse = ParsingStatus.psErrorNonintegralIndex
+			
+		' ...or a successful parsing.
+		Else
+			Parse = ParsingStatus.psSuccess
+		End If
 	End Select
 	
 	Exit Function
