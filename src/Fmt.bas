@@ -193,8 +193,7 @@ Public Function Parse( _
 	
 	' Track the current context for parsing...
 	Dim cxt As ParsingContext: cxt = ParsingContext.[_Unknown]
-	Dim isQuo As Boolean: isQuo = False
-	Dim isEsc As Boolean: isEsc = False
+	Dim dfu As ParsingDefusal: dfu = ParsingDefusal.[_Off]
 	
 	' ...and the current depth of nesting...
 	Dim depth As Long: depth = 0
@@ -258,14 +257,15 @@ Public Function Parse( _
 		' ################
 		
 		Case ParsingContext.pcPlain
+			Select Case dfu
 			
 			' Quote "inert" text...
-			If isQuo Then
+			Case ParsingDefusal.pdQuote
 				Select Case char
 				
 				' Terminate the quote...
 				Case closeQuote
-					isQuo = False
+					dfu = ParsingDefusal.[_Off]
 					
 				' ...or continue quoting.
 				Case Else
@@ -273,21 +273,21 @@ Public Function Parse( _
 				End Select
 				
 			' ...or escape literal text...
-			ElseIf isEsc Then
+			Case ParsingDefusal.pdEscape
 				elements(eIdx).Text = elements(eIdx).Text & char
-				isEsc = False
+				dfu = ParsingDefusal.[_Off]
 				
 			' ...or parse "active" text.
-			Else
+			Case Else
 				Select Case char
 				
 				' Quote the next characters...
 				Case openQuote
-					isQuo = True
+					dfu = ParsingDefusal.pdQuote
 					
 				' ..escape the next character...
 				Case escape
-					isEsc = True
+					dfu = ParsingDefusal.pdEscape
 					
 				' ...or parse into a field...
 				Case openField
@@ -307,7 +307,7 @@ Public Function Parse( _
 				Case Else
 					elements(eIdx).Text = elements(eIdx).Text & char
 				End Select
-			End If
+			End Select
 			
 			GoTo NEXT_CHAR
 			
@@ -351,14 +351,15 @@ Public Function Parse( _
 		' ###################
 		
 		Case ParsingContext.pcFieldIndex
+			Select Case dfu
 			
 			' Quote "inert" symbol...
-			If isQuo Then
+			Case ParsingDefusal.pdQuote
 				Select Case char
 				
 				' Terminate the quote...
 				Case closeQuote
-					isQuo = False
+					dfu = ParsingDefusal.[_Off]
 					If depth = 1 Then cxt = ParsingContext.pcField
 					
 				' ...or continue quoting.
@@ -367,18 +368,18 @@ Public Function Parse( _
 				End Select
 				
 			' ...or escape literal symbol...
-			ElseIf isEsc Then
+			Case ParsingDefusal.pdEscape
 				elements(eIdx).Index = elements(eIdx).Index & char
-				isEsc = False
+				dfu = ParsingDefusal.[_Off]
 				If depth = 1 Then cxt = ParsingContext.pcField
 				
 			' ...or parse "active" symbol.
-			Else
+			Case Else
 				Select Case char
 				
 				' Escape the next character...
 				Case escape
-					isEsc = True
+					dfu = ParsingDefusal.pdEscape
 					idxEsc = True
 					
 				' ...or nest into the field...
@@ -404,7 +405,7 @@ Public Function Parse( _
 					
 				' ...or parse into a quoted key...
 				Case openQuote
-					isQuo = True
+					dfu = ParsingDefusal.pdQuote
 					If depth = 1 Then nQuo = nQuo + 1
 					
 				' ' ...or parse into a format...
@@ -416,7 +417,7 @@ Public Function Parse( _
 				Case Else
 					elements(eIdx).Index = elements(eIdx).Index & char
 				End Select
-			End If
+			End Select
 			
 			idxStop = idxStop + 1
 			GoTo NEXT_CHAR
@@ -428,15 +429,16 @@ Public Function Parse( _
 		' ####################
 		
 		Case ParsingContext.pcFieldFormat
+			Select Case dfu
 			
 			' Include quoted symbol...
-			If isQuo Then
+			Case ParsingDefusal.pdQuote
 				' Terminate the quote if appropriate.
-				If char = closeQuote Then isQuo = False
+				If char = closeQuote Then dfu = ParsingDefusal.[_Off]
 				
 			' ...or include escaped symbol...
-			ElseIf isEsc Then
-				isEsc = False
+			Case ParsingDefusal.pdEscape
+				dfu = ParsingDefusal.[_Off]
 				
 			' ...but parse "active" symbol.
 			Else
@@ -444,7 +446,7 @@ Public Function Parse( _
 				
 				' Escape the next character...
 				Case escape
-					isEsc = True
+					dfu = ParsingDefusal.pdEscape
 					
 				' ...or nest into the field...
 				Case openField
@@ -457,11 +459,11 @@ Public Function Parse( _
 					
 				' ...or parse into a quoted key.
 				Case openQuote
-					isQuo = True
+					dfu = ParsingDefusal.pdQuote
 				End Select
 				
 				
-			End If
+			End Select
 			
 			fmtStop = fmtStop + 1
 			GoTo NEXT_CHAR
@@ -576,15 +578,17 @@ Public Function Parse( _
 	
 	
 	' Report status: a hanging escape...
-	If isEsc Then
+	Select Case dfu
+	Case ParsingDefusal.pdEscape
 		Parse = ParsingStatus.psErrorHangingEscape
 		
 	' ...or an unclosed quote...
-	ElseIf isQuo Then
+	Case ParsingDefusal.pdQuote
 		Parse = ParsingStatus.psErrorUnclosedQuote
 		
 	' ...or an unclosed field...
-	ElseIf depth <> 0 Then
+	Case Else
+	If depth <> 0 Then
 		Parse = ParsingStatus.psErrorUnclosedField
 		
 	' ...or a index of the wrong type...
@@ -595,6 +599,7 @@ Public Function Parse( _
 	Else
 		Parse = ParsingStatus.psSuccess
 	End If
+	End Select
 	
 	Exit Function
 	
@@ -668,8 +673,7 @@ IDX_ERROR:
 ' Reset the trackers.
 RESET_VARS:
 	cxt = ParsingContext.[_Unknown]
-	' isQuo = False
-	' isEsc = False
+	' dfu = ParsingDefusal.[_Off]
 	
 	nQuo = 0
 	idxEsc = False
