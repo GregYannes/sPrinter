@@ -577,8 +577,10 @@ Public Function Parse( _
 	End Select
 	
 	
-	' Report status: a hanging escape...
+	
 	Select Case dfu
+	
+	' Report status: hanging escape...
 	Case ParsingDefusal.pdEscape
 		Parse = ParsingStatus.psErrorHangingEscape
 		
@@ -586,8 +588,8 @@ Public Function Parse( _
 	Case ParsingDefusal.pdQuote
 		Parse = ParsingStatus.psErrorUnclosedQuote
 		
-	' ...or an unclosed field...
 	Case Else
+		' ...or an unclosed field...
 		If depth <> 0 Then
 			Parse = ParsingStatus.psErrorUnclosedField
 			
