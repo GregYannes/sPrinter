@@ -89,6 +89,14 @@ Private Enum ParsingDefusal
 End Enum
 
 
+' Kinds of indices for extracting values.
+Private Enum IndexKind
+	[_Unknown]	' Uninitialized.
+	ikPosition	' Integer for a position...
+	ikKey		' ...or text for a key.
+End Enum
+
+
 
 ' ###########
 ' ## Types ##
