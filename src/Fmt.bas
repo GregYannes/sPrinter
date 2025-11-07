@@ -200,7 +200,8 @@ Public Function Parse( _
 	Dim fldDepth As Long: fldDepth = 0
 	
 	' ...and the current element...
-	Dim eIdx As Long: eIdx = base
+	Dim eIdx As Long: eIdx = base - 1
+	Dim eLen As Long: eLen = 0
 	
 	' ...and the current characters.
 	Dim char As String: charIndex = 1
@@ -208,6 +209,7 @@ Public Function Parse( _
 	Dim idxEsc As Boolean: idxEsc = False
 	Dim idxStart As Long, idxStop As Long
 	Dim fmtStart As Long, fmtStop As Long
+	Dim fldStart As Long, fldStop As Long
 	Dim fldStatus As ParsingStatus: fldStatus = ParsingStatus.psSuccess
 	
 	
@@ -239,16 +241,21 @@ Public Function Parse( _
 			
 			' Parse into a field...
 			Case openField
-				fldDepth = fldDepth + 1
-				cxt = ParsingContext.pcField
-				elements(eIdx).Kind = ElementKind.ekField
-				GoTo NEXT_CHAR
+				' fldDepth = fldDepth + 1
+				' cxt = ParsingContext.pcField
+				' elements(eIdx).Kind = ElementKind.ekField
+				' elements(eIdx).Start = charIndex
+				' elements(eIdx).Stop = elements(eIdx).Start
+				' GoTo NEXT_CHAR
 				
 			' ...or interpret as text.
 			Case Else
-				cxt = ParsingContext.pcPlain
-				elements(eIdx).Kind = ElementKind.ekPlain
-				GoTo NEXT_LOOP
+				' cxt = ParsingContext.pcPlain
+				' eIdx = eIdx + 1
+				' elements(eIdx).Kind = ElementKind.ekPlain
+				' elements(eIdx).Start = charIndex
+				' elements(eIdx).Stop = elements(eIdx).Start - 1
+				' GoTo NEXT_LOOP
 			End Select
 			
 			
@@ -266,17 +273,23 @@ Public Function Parse( _
 				
 				' Terminate the quote...
 				Case closeQuote
-					dfu = ParsingDefusal.[_Off]
+					' dfu = ParsingDefusal.[_Off]
+					' elements(eIdx).Stop = elements(eIdx).Stop + 1
+					' GoTo NEXT_CHAR
 					
 				' ...or continue quoting.
 				Case Else
-					elements(eIdx).Text = elements(eIdx).Text & char
+					' elements(eIdx).Stop = elements(eIdx).Stop + 1
+					' elements(eIdx).Plain.Text = elements(eIdx).Plain.Text & char
+					' GoTo NEXT_CHAR
 				End Select
 				
 			' ...or escape literal text...
 			Case ParsingDefusal.pdEscape
-				elements(eIdx).Text = elements(eIdx).Text & char
-				dfu = ParsingDefusal.[_Off]
+				' dfu = ParsingDefusal.[_Off]
+				' elements(eIdx).Stop = elements(eIdx).Stop + 1
+				' elements(eIdx).Plain.Text = elements(eIdx).Plain.Text & char
+				' GoTo NEXT_CHAR
 				
 			' ...or parse "active" text.
 			Case Else
@@ -284,33 +297,37 @@ Public Function Parse( _
 				
 				' Quote the next characters...
 				Case openQuote
-					dfu = ParsingDefusal.pdQuote
+					' dfu = ParsingDefusal.pdQuote
+					' elements(eIdx).Stop = elements(eIdx).Stop + 1
+					' GoTo NEXT_CHAR
 					
 				' ...escape the next character...
 				Case escape
-					dfu = ParsingDefusal.pdEscape
+					' dfu = ParsingDefusal.pdEscape
+					' elements(eIdx).Stop = elements(eIdx).Stop + 1
+					' GoTo NEXT_CHAR
 					
 				' ...or parse into a field...
 				Case openField
-					' Update parsing context.
-					fldDepth = fldDepth + 1
-					cxt = ParsingContext.pcField
-					
-					' Move to the next element if the current is already used.
-					If elements(eIdx).Kind <> ElementKind.[_Unknown] Then
-						eIdx = eIdx + 1
-					End If
-					
-					' Identify the element as a field.
-					elements(eIdx).Kind = ElementKind.ekField
+					' ' Reset parsing context.
+					' cxt = ParsingContext.[_Unknown]
+					' 
+					' ' Close the plain text and record its elemental information.
+					' eLen = elements(eIdx).Stop - elements(eIdx).Start + 1
+					' elements(eIdx).Syntax = VBA.Mid$(format, elements(eIdx).Start, eLen)
+					' 
+					' ' Reset variables.
+					' eLen = 0
+					' 
+					' GoTo NEXT_CHAR
 					
 				' ...or display literally.
 				Case Else
-					elements(eIdx).Text = elements(eIdx).Text & char
+					' elements(eIdx).Stop = elements(eIdx).Stop + 1
+					' elements(eIdx).Plain.Text = elements(eIdx).Plain.Text & char
+					' GoTo NEXT_CHAR
 				End Select
 			End Select
-			
-			GoTo NEXT_CHAR
 			
 			
 			
@@ -323,27 +340,36 @@ Public Function Parse( _
 			
 			' Parse out of the field...
 			Case closeField
-				fldDepth = fldDepth - 1
-				If fldDepth = 0 Then GoTo END_FIELD
+				' fldDepth = fldDepth - 1
+				' elements(eIdx).Stop = elements(eIdx).Stop + 1
+				' 
+				' If fldDepth = 0 Then
+				' 	cxt = ParsingContext.[_Unknown]
+				' 	GoTo END_FIELD
+				' Else
+				' 	GoTo NEXT_CHAR
+				' End If
 				
 			' ...or parse into the format...
 			Case separator
-				cxt = ParsingContext.pcFieldFormat
-				elements(eIdx).HasFormat = True
-				fmtStart = charIndex
-				fmtStop = fmtStart
+				' cxt = ParsingContext.pcFieldFormat
+				' elements(eIdx).Stop = elements(eIdx).Stop + 1
+				' elements(eIdx).Field.Format.Exists = True
+				' fmtStart = charIndex
+				' fmtStop = fmtStart
+				' 
+				' GoTo NEXT_CHAR
 				
 			' ...or parse the index.
 			Case Else
-				cxt = ParsingContext.pcFieldIndex
-				elements(eIdx).HasIndex = True
-				idxStart = charIndex
-				idxStop = idxStart
-				
-				GoTo NEXT_LOOP
+				' cxt = ParsingContext.pcFieldIndex
+				' elements(eIdx).Stop = elements(eIdx).Stop + 1
+				' elements(eIdx).Index.Exists = True
+				' idxStart = charIndex
+				' idxStop = idxStart
+				' 
+				' GoTo NEXT_LOOP
 			End Select
-			
-			GoTo NEXT_CHAR
 			
 			
 			
@@ -360,19 +386,21 @@ Public Function Parse( _
 				
 				' Terminate the quote...
 				Case closeQuote
-					dfu = ParsingDefusal.[_Off]
-					If fldDepth = 1 Then cxt = ParsingContext.pcField
+					' dfu = ParsingDefusal.[_Off]
+					' elements(eIdx).Stop = elements(eIdx).Stop + 1
+					' elements(eIdx).Field.Index.Stop = elements(eIdx).Field.Index.Stop + 1
+					' If fldDepth = 1 Then cxt = ParsingContext.pcField
 					
 				' ...or continue quoting.
 				Case Else
-					elements(eIdx).Index = elements(eIdx).Index & char
+					' elements(eIdx).Index = elements(eIdx).Index & char
 				End Select
 				
 			' ...or escape literal symbol...
 			Case ParsingDefusal.pdEscape
-				elements(eIdx).Index = elements(eIdx).Index & char
-				dfu = ParsingDefusal.[_Off]
-				If fldDepth = 1 Then cxt = ParsingContext.pcField
+				' elements(eIdx).Index = elements(eIdx).Index & char
+				' dfu = ParsingDefusal.[_Off]
+				' If fldDepth = 1 Then cxt = ParsingContext.pcField
 				
 			' ...or parse "active" symbol.
 			Case Else
@@ -380,48 +408,48 @@ Public Function Parse( _
 				
 				' Escape the next character...
 				Case escape
-					dfu = ParsingDefusal.pdEscape
-					idxEsc = True
+					' dfu = ParsingDefusal.pdEscape
+					' idxEsc = True
 					
 				' ...or nest into the field...
 				Case openField
-					fldDepth = fldDepth + 1
-					If fldDepth = 2 Then
-						nQuo = nQuo + 1
-					Else
-						elements(eIdx).Index = elements(eIdx).Index & char
-					End If
+					' fldDepth = fldDepth + 1
+					' If fldDepth = 2 Then
+					' 	nQuo = nQuo + 1
+					' Else
+					' 	elements(eIdx).Index = elements(eIdx).Index & char
+					' End If
 					
 				' ...or unnest out of the field...
 				Case closeField
-					fldDepth = fldDepth - 1
-					If fldDepth = 0 Then
-						cxt = ParsingContext.[_Unknown]
-						GoTo END_FIELD
-					ElseIf fldDepth = 1 Then
-						cxt = ParsingContext.pcField
-					Else
-						elements(eIdx).Index = elements(eIdx).Index & char
-					End If
+					' fldDepth = fldDepth - 1
+					' If fldDepth = 0 Then
+					' 	cxt = ParsingContext.[_Unknown]
+					' 	GoTo END_FIELD
+					' ElseIf fldDepth = 1 Then
+					' 	cxt = ParsingContext.pcField
+					' Else
+					' 	elements(eIdx).Index = elements(eIdx).Index & char
+					' End If
 					
 				' ...or parse into a quoted key...
 				Case openQuote
-					dfu = ParsingDefusal.pdQuote
-					If fldDepth = 1 Then nQuo = nQuo + 1
+					' dfu = ParsingDefusal.pdQuote
+					' If fldDepth = 1 Then nQuo = nQuo + 1
 					
 				' ' ...or parse into a format...
 				' Case separator
-				' 	cxt = ParsingContext.pcFormat
-				' 	elements(eIdx).HasFormat = True
+				' 	' cxt = ParsingContext.pcFormat
+				' 	' elements(eIdx).HasFormat = True
 					
 				' ...or display literally.
 				Case Else
-					elements(eIdx).Index = elements(eIdx).Index & char
+					' elements(eIdx).Index = elements(eIdx).Index & char
 				End Select
 			End Select
 			
-			idxStop = idxStop + 1
-			GoTo NEXT_CHAR
+			' idxStop = idxStop + 1
+			' GoTo NEXT_CHAR
 			
 			
 			
@@ -434,12 +462,12 @@ Public Function Parse( _
 			
 			' Include quoted symbol...
 			Case ParsingDefusal.pdQuote
-				' Terminate the quote if appropriate.
-				If char = closeQuote Then dfu = ParsingDefusal.[_Off]
+				' ' Terminate the quote if appropriate.
+				' If char = closeQuote Then dfu = ParsingDefusal.[_Off]
 				
 			' ...or include escaped symbol...
 			Case ParsingDefusal.pdEscape
-				dfu = ParsingDefusal.[_Off]
+				' dfu = ParsingDefusal.[_Off]
 				
 			' ...but parse "active" symbol.
 			Else
@@ -447,27 +475,27 @@ Public Function Parse( _
 				
 				' Escape the next character...
 				Case escape
-					dfu = ParsingDefusal.pdEscape
+					' dfu = ParsingDefusal.pdEscape
 					
 				' ...or nest into the field...
 				Case openField
-					fldDepth = fldDepth + 1
+					' fldDepth = fldDepth + 1
 					
 				' ...or unnest out of the field...
 				Case closeField
-					fldDepth = fldDepth - 1
-					If fldDepth = 0 Then GoTo END_FIELD
+					' fldDepth = fldDepth - 1
+					' If fldDepth = 0 Then GoTo END_FIELD
 					
 				' ...or parse into a quoted key.
 				Case openQuote
-					dfu = ParsingDefusal.pdQuote
+					' dfu = ParsingDefusal.pdQuote
 				End Select
 				
 				
 			End Select
 			
-			fmtStop = fmtStop + 1
-			GoTo NEXT_CHAR
+			' fmtStop = fmtStop + 1
+			' GoTo NEXT_CHAR
 			
 		End Select
 		
