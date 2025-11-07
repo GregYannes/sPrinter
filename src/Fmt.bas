@@ -632,32 +632,32 @@ End Function
 ' ########################
 
 ' Reset an element.
-Private Sub ParsingElement_Reset(ByRef pe As ParsingElement)
+Private Sub Elm_Reset(ByRef e As ParsingElement)
 	Dim reset As ParsingElement
-	Let pe = reset
+	Let e = reset
 End Sub
 
 
 ' Copy one element into another.
-Private Sub ParsingElement_Copy(ByRef pe1 As ParsingElement, ByRef pe2 As ParsingElement)
-	Let pe2.Syntax			= pe1.Syntax
-	Let pe2.Start			= pe1.Start
-	Let pe2.Stop			= pe1.Stop
-	Let pe2.Kind			= pe1.Kind
-	'      .Plain			     .Plain
-	Let pe2.Plain.Text		= pe1.Plain.Text
-	'      .Field			     .Field
-	'      .Field.Index		     .Field.Index
-	Let pe2.Field.Index.Exists	= pe1.Field.Index.Exists
-	Let pe2.Field.Index.Syntax	= pe1.Field.Index.Syntax
-	Let pe2.Field.Index.Start	= pe1.Field.Index.Start
-	Let pe2.Field.Index.Stop	= pe1.Field.Index.Stop
-	Let pe2.Field.Index.Kind	= pe1.Field.Index.Kind
-	Let pe2.Field.Index.Position	= pe1.Field.Index.Position
-	Let pe2.Field.Index.Key		= pe1.Field.Index.Key
-	'      .Field.Format		     .Field.Format
-	Let pe2.Field.Format.Exists	= pe1.Field.Format.Exists
-	Let pe2.Field.Format.Syntax	= pe1.Field.Format.Syntax
-	Let pe2.Field.Format.Start	= pe1.Field.Format.Start
-	Let pe2.Field.Format.Stop	= pe1.Field.Format.Stop
+Private Sub Elm_Copy(ByRef e1 As ParsingElement, ByRef e1 As ParsingElement)
+	Let e2.Syntax			= e1.Syntax
+	Let e2.Start			= e1.Start
+	Let e2.Stop			= e1.Stop
+	Let e2.Kind			= e1.Kind
+	'     .Plain			    .Plain
+	Let e2.Plain.Text		= e1.Plain.Text
+	'     .Field			    .Field
+	'     .Field.Index		    .Field.Index
+	Let e2.Field.Index.Exists	= e1.Field.Index.Exists
+	Let e2.Field.Index.Syntax	= e1.Field.Index.Syntax
+	Let e2.Field.Index.Start	= e1.Field.Index.Start
+	Let e2.Field.Index.Stop		= e1.Field.Index.Stop
+	Let e2.Field.Index.Kind		= e1.Field.Index.Kind
+	Let e2.Field.Index.Position	= e1.Field.Index.Position
+	Let e2.Field.Index.Key		= e1.Field.Index.Key
+	'     .Field.Format		    .Field.Format
+	Let e2.Field.Format.Exists	= e1.Field.Format.Exists
+	Let e2.Field.Format.Syntax	= e1.Field.Format.Syntax
+	Let e2.Field.Format.Start	= e1.Field.Format.Start
+	Let e2.Field.Format.Stop	= e1.Field.Format.Stop
 End Sub
