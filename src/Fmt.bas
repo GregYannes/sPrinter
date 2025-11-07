@@ -633,46 +633,24 @@ End Function
 
 ' Copy one element into another.
 Private Sub ParsingElement_Copy(ByRef pe1 As ParsingElement, ByRef pe2 As ParsingElement)
-	Let pe2.Syntax = pe1.Syntax
-	Let pe2.Start = pe1.Start
-	Let pe2.Stop = pe1.Stop
-	
-	Let pe2.Kind = pe1.Kind
-	pePlain_Copy pe1.Plain, pe2.Plain
-	peField_Copy pe1.Field, pe2.Field
-End Sub
-
-
-' Copy one plaintext (sub)element into another.
-Private Sub pePlain_Copy(ByRef p1 As pePlain, ByRef p2 As pePlain)
-	Let p2.Text = p1.Text
-End Sub
-
-
-' Copy one field (sub)element into another...
-Private Sub peField_Copy(ByRef f1 As peField, ByRef f2 As peField)
-	peFieldIndex_Copy f1.Index, f2.Index
-	peFieldFormat_Copy f1.Format, f2.Format
-End Sub
-
-
-' ...and its index subelement into another...
-Private Sub peFieldIndex_Copy(ByRef fi1 As peFieldIndex, ByRef fi2 As peFieldIndex)
-	Let fi2.Exists = fi1.Exists
-	Let fi2.Syntax = fi1.Syntax
-	Let fi2.Start = fi1.Start
-	Let fi2.Stop = fi1.Stop
-	
-	Let fi2.Kind = fi1.Kind
-	Let fi2.Position = fi1.Position
-	Let fi2.Key = fi1.Key
-End Sub
-
-
-' ...and its format subelement into another.
-Private Sub peFieldFormat_Copy(ByRef ff1 As peFieldFormat, ByRef ff2 As peFieldFormat)
-	Let ff2.Exists = ff1.Exists
-	Let ff2.Syntax = ff1.Syntax
-	Let ff2.Start = ff1.Start
-	Let ff2.Stop = ff1.Stop
+	Let pe2.Syntax			= pe1.Syntax
+	Let pe2.Start			= pe1.Start
+	Let pe2.Stop			= pe1.Stop
+	Let pe2.Kind			= pe1.Kind
+	'      .Plain			     .Plain
+	Let pe2.Plain.Text		= pe1.Plain.Text
+	'      .Field			     .Field
+	'      .Field.Index		     .Field.Index
+	Let pe2.Field.Index.Exists	= pe1.Field.Index.Exists
+	Let pe2.Field.Index.Syntax	= pe1.Field.Index.Syntax
+	Let pe2.Field.Index.Start	= pe1.Field.Index.Start
+	Let pe2.Field.Index.Stop	= pe1.Field.Index.Stop
+	Let pe2.Field.Index.Kind	= pe1.Field.Index.Kind
+	Let pe2.Field.Index.Position	= pe1.Field.Index.Position
+	Let pe2.Field.Index.Key		= pe1.Field.Index.Key
+	'      .Field.Format		     .Field.Format
+	Let pe2.Field.Format.Exists	= pe1.Field.Format.Exists
+	Let pe2.Field.Format.Syntax	= pe1.Field.Format.Syntax
+	Let pe2.Field.Format.Start	= pe1.Field.Format.Start
+	Let pe2.Field.Format.Stop	= pe1.Field.Format.Stop
 End Sub
