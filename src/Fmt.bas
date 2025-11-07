@@ -634,7 +634,7 @@ End Function
 ' Reset an element.
 Private Sub ParsingElement_Reset(ByRef pe As ParsingElement)
 	Dim reset As ParsingElement
-	ParsingElement_Copy reset, pe
+	Let pe = reset
 End Sub
 
 
