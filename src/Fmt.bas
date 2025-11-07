@@ -175,10 +175,10 @@ Public Function Parse( _
 	' ###########
 	
 	' Record the format length.
-	Dim fLen As Long: fLen = VBA.Len(format)
+	Dim fmtLen As Long: fmtLen = VBA.Len(format)
 	
 	' Short-circuit for unformatted input.
-	If fLen = 0 Then
+	If fmtLen = 0 Then
 		charIndex = 0
 		Erase elements
 		Parse = ParsingStatus.psSuccess
@@ -187,7 +187,7 @@ Public Function Parse( _
 	
 	
 	' Size to accommodate all (possible) elements.
-	Dim eLen As Long: eLen = VBA.Int(fLen / 2) + 1
+	Dim eLen As Long: eLen = VBA.Int(fmtLen / 2) + 1
 	Dim eUp As Long: eUp = base + eLen - 1
 	ReDim elements(base To eUp)
 	
@@ -222,7 +222,7 @@ Public Function Parse( _
 	On Error GoTo STX_ERROR
 	
 	' Scan and parse the format.
-	Do While charIndex <= fLen
+	Do While charIndex <= fmtLen
 		
 		' Extract the current character.
 		char = VBA.Mid$(format, charIndex, 1)
