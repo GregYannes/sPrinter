@@ -631,6 +631,13 @@ End Function
 ' ## Support | Elements ##
 ' ########################
 
+' Reset an element.
+Private Sub ParsingElement_Reset(ByRef pe As ParsingElement)
+	Dim reset As ParsingElement
+	ParsingElement_Copy reset, pe
+End Sub
+
+
 ' Copy one element into another.
 Private Sub ParsingElement_Copy(ByRef pe1 As ParsingElement, ByRef pe2 As ParsingElement)
 	Let pe2.Syntax			= pe1.Syntax
