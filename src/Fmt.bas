@@ -109,7 +109,8 @@ Public Type peFieldIndex
 	Start As Long		' Where that syntax begins in the original string...
 	Stop As Long		' ...and where it ends.
 	
-	Kind As IndexKind	' The type of index:
+	' The type of index:
+	Kind As IndexKind
 	Position As Long	' - A positional integer...
 	Key As String		' - ...or a textual key.
 End Type
@@ -143,7 +144,8 @@ Public Type ParsingElement
 	Start As Long		' Where that syntax begins in the original string...
 	Stop As Long		' ...and where it ends.
 	
-	Kind As ElementKind	' The subtype which extends this element:
+	' The subtype which extends this element:
+	Kind As ElementKind
 	Plain as pePlain	' - Plain text which displays literally...
 	Field As peField	' - ...or a field which embeds a value.
 End Type
