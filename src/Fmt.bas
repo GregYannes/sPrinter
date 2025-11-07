@@ -204,7 +204,7 @@ Public Function Parse( _
 	Dim eLen As Long: eLen = 0
 	
 	' ...and the current characters.
-	Dim char As String: charIndex = 1
+	Dim char As String
 	Dim nQuo As Long: nQuo = 0
 	Dim idxEsc As Boolean: idxEsc = False
 	Dim idxStart As Long, idxStop As Long
@@ -222,11 +222,13 @@ Public Function Parse( _
 	On Error GoTo STX_ERROR
 	
 	' Scan and parse the format.
-	Do While charIndex <= fmtLen
+	For charIndex = 1 To fmtLen
 		
 		' Extract the current character.
 		char = VBA.Mid$(format, charIndex, 1)
 		
+	' Revisit the character.
+	SAME_CHAR:
 		' Interpret this character in context.
 		Select Case cxt
 		
@@ -470,18 +472,10 @@ Public Function Parse( _
 		
 		GoTo NEXT_CHAR
 		
-	' ' Increment the element.
-	' NEXT_ELEMENT:
-	' 	eIdx = eIdx + 1
-		
 	' Increment the character.
 	NEXT_CHAR:
-		charIndex = charIndex + 1
 		
-	' Continue to the next iteration.
-	NEXT_LOOP:
-		
-	Loop
+	Next charIndex
 	
 	
 	' Deactivate error handling.
