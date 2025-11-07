@@ -195,7 +195,7 @@ Public Function Parse( _
 	Dim dfu As ParsingDefusal: dfu = ParsingDefusal.[_Off]
 	
 	' ...and the current depth of nesting...
-	Dim depth As Long: depth = 0
+	Dim fldDepth As Long: fldDepth = 0
 	
 	' ...and the current element...
 	Dim eIdx As Long: eIdx = base
@@ -237,7 +237,7 @@ Public Function Parse( _
 			
 			' Parse into a field...
 			Case openField
-				depth = depth + 1
+				fldDepth = fldDepth + 1
 				cxt = ParsingContext.pcField
 				elements(eIdx).Kind = ElementKind.ekField
 				GoTo NEXT_CHAR
@@ -291,7 +291,7 @@ Public Function Parse( _
 				' ...or parse into a field...
 				Case openField
 					' Update parsing context.
-					depth = depth + 1
+					fldDepth = fldDepth + 1
 					cxt = ParsingContext.pcField
 					
 					' Move to the next element if the current is already used.
@@ -321,8 +321,8 @@ Public Function Parse( _
 			
 			' Parse out of the field...
 			Case closeField
-				depth = depth - 1
-				If depth = 0 Then GoTo END_FIELD
+				fldDepth = fldDepth - 1
+				If fldDepth = 0 Then GoTo END_FIELD
 				
 			' ...or parse into the format...
 			Case separator
@@ -359,7 +359,7 @@ Public Function Parse( _
 				' Terminate the quote...
 				Case closeQuote
 					dfu = ParsingDefusal.[_Off]
-					If depth = 1 Then cxt = ParsingContext.pcField
+					If fldDepth = 1 Then cxt = ParsingContext.pcField
 					
 				' ...or continue quoting.
 				Case Else
@@ -370,7 +370,7 @@ Public Function Parse( _
 			Case ParsingDefusal.pdEscape
 				elements(eIdx).Index = elements(eIdx).Index & char
 				dfu = ParsingDefusal.[_Off]
-				If depth = 1 Then cxt = ParsingContext.pcField
+				If fldDepth = 1 Then cxt = ParsingContext.pcField
 				
 			' ...or parse "active" symbol.
 			Case Else
@@ -383,8 +383,8 @@ Public Function Parse( _
 					
 				' ...or nest into the field...
 				Case openField
-					depth = depth + 1
-					If depth = 2 Then
+					fldDepth = fldDepth + 1
+					If fldDepth = 2 Then
 						nQuo = nQuo + 1
 					Else
 						elements(eIdx).Index = elements(eIdx).Index & char
@@ -392,11 +392,11 @@ Public Function Parse( _
 					
 				' ...or unnest out of the field...
 				Case closeField
-					depth = depth - 1
-					If depth = 0 Then
+					fldDepth = fldDepth - 1
+					If fldDepth = 0 Then
 						cxt = ParsingContext.[_Unknown]
 						GoTo END_FIELD
-					ElseIf depth = 1 Then
+					ElseIf fldDepth = 1 Then
 						cxt = ParsingContext.pcField
 					Else
 						elements(eIdx).Index = elements(eIdx).Index & char
@@ -405,7 +405,7 @@ Public Function Parse( _
 				' ...or parse into a quoted key...
 				Case openQuote
 					dfu = ParsingDefusal.pdQuote
-					If depth = 1 Then nQuo = nQuo + 1
+					If fldDepth = 1 Then nQuo = nQuo + 1
 					
 				' ' ...or parse into a format...
 				' Case separator
@@ -449,12 +449,12 @@ Public Function Parse( _
 					
 				' ...or nest into the field...
 				Case openField
-					depth = depth + 1
+					fldDepth = fldDepth + 1
 					
 				' ...or unnest out of the field...
 				Case closeField
-					depth = depth - 1
-					If depth = 0 Then GoTo END_FIELD
+					fldDepth = fldDepth - 1
+					If fldDepth = 0 Then GoTo END_FIELD
 					
 				' ...or parse into a quoted key.
 				Case openQuote
@@ -589,7 +589,7 @@ Public Function Parse( _
 		
 	Case Else
 		' ...or an unclosed field...
-		If depth <> 0 Then
+		If fldDepth <> 0 Then
 			Parse = ParsingStatus.psErrorUnclosedField
 			
 		' ...or a index of the wrong type...
