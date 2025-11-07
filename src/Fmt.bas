@@ -104,46 +104,46 @@ End Enum
 
 ' Element for parsing the index...
 Public Type peFieldIndex
-	Exists As Boolean
-	Syntax As String
-	Start As Long
-	Stop As Long
-	Kind As IndexKind
-	Position As Long
-	Key As String
+	Exists As Boolean	' Whether this index exists in its field.
+	Syntax As String	' The syntax that was parsed to define this index.
+	Start As Long		' Where that syntax begins in the original string...
+	Stop As Long		' ...and where it ends.
+	Kind As IndexKind	' The type of index:
+	Position As Long	' - A positional integer...
+	Key As String		' - ...or a textual key.
 End Type
 
 
 ' ...and the custom format...
 Public Type peFieldFormat
-	Exists As Boolean
-	Syntax As String
-	Start As Long
-	Stop As Long
+	Exists As Boolean	' Whether this format exists in its field.
+	Syntax As String	' The syntax that was parsed to define this format.
+	Start As Long		' Where that syntax begins in the original string...
+	Stop As Long		' ...and where it ends.
 End Type
 
 
 ' ...of a field embedded in formatting.
 Public Type peField
-	Index As peFieldIndex
-	Format As peFieldFormat
+	Index As peFieldIndex	' Any index for this field...
+	Format As peFieldFormat	' ...along with any format.
 End Type
 
 
 ' Element for parsing plain text in formatting.
 Public Type pePlain
-	Text As String
+	Text As String		' The text to display literally.
 End Type
 
 
 ' Elements into which formats are parsed.
 Public Type ParsingElement
-	Syntax As String
-	Start As Long
-	Stop As Long
-	Kind As ElementKind
-	Plain as pePlain
-	Field As peField
+	Syntax As String	' The syntax that was parsed to define this element.
+	Start As Long		' Where that syntax begins in the original string...
+	Stop As Long		' ...and where it ends.
+	Kind As ElementKind	' The subtype which extends this element:
+	Plain as pePlain	' - Plain text which displays literally...
+	Field As peField	' - ...or a field which embeds a value.
 End Type
 
 
