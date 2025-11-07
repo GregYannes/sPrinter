@@ -105,7 +105,7 @@ End Enum
 ' Element for parsing the index...
 Public Type peFieldIndex
 	Exists As Boolean
-	Code As String
+	Syntax As String
 	Start As Long
 	Stop As Long
 	Kind As IndexKind
@@ -117,7 +117,7 @@ End Type
 ' ...and the custom format...
 Public Type peFieldFormat
 	Exists As Boolean
-	Code As String
+	Syntax As String
 	Start As Long
 	Stop As Long
 End Type
@@ -138,7 +138,7 @@ End Type
 
 ' Elements into which formats are parsed.
 Public Type ParsingElement
-	Code As String
+	Syntax As String
 	Start As Long
 	Stop As Long
 	Kind As ElementKind
