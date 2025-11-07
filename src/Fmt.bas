@@ -111,8 +111,8 @@ Public Type peFieldIndex
 	
 	' The type of index:
 	Kind As IndexKind
-	Position As Long	' - A positional integer...
-	Key As String		' - ...or a textual key.
+	Position As Long	' A positional integer...
+	Key As String		' ...or a textual key.
 End Type
 
 
@@ -146,8 +146,8 @@ Public Type ParsingElement
 	
 	' The subtype which extends this element:
 	Kind As ElementKind
-	Plain as pePlain	' - Plain text which displays literally...
-	Field As peField	' - ...or a field which embeds a value.
+	Plain as pePlain	' Plain text which displays literally...
+	Field As peField	' ...or a field which embeds a value.
 End Type
 
 
