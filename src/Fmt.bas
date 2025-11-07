@@ -204,8 +204,8 @@ Public Function Parse( _
 	Dim char As String: charIndex = 1
 	Dim nQuo As Long: nQuo = 0
 	Dim idxEsc As Boolean: idxEsc = False
-	Dim idxStart As Long, idxStop As Long, idxLen As Long
-	Dim fmtStart As Long, fmtStop As Long, fmtLen As Long
+	Dim idxStart As Long, idxStop As Long
+	Dim fmtStart As Long, fmtStop As Long
 	Dim fldStatus As ParsingStatus: fldStatus = ParsingStatus.psSuccess
 	
 	
