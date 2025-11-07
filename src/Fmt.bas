@@ -286,7 +286,7 @@ Public Function Parse( _
 				Case openQuote
 					dfu = ParsingDefusal.pdQuote
 					
-				' ..escape the next character...
+				' ...escape the next character...
 				Case escape
 					dfu = ParsingDefusal.pdEscape
 					
