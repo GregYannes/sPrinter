@@ -210,7 +210,7 @@ Public Function Parse( _
 	Dim idxStart As Long, idxStop As Long
 	Dim fmtStart As Long, fmtStop As Long
 	Dim fldStart As Long, fldStop As Long
-	Dim fldStatus As ParsingStatus: fldStatus = ParsingStatus.psSuccess
+	Dim endStatus As ParsingStatus: endStatus = ParsingStatus.psSuccess
 	
 	
 	
@@ -451,7 +451,7 @@ Public Function Parse( _
 	' Parse out of the field.
 	END_FIELD:
 		' Record the elemental information...
-		fldStatus = EndField( _
+		endStatus = EndField( _
 			format := format, _
 			e := elements(eIdx), _
 			cxt := cxt, _
@@ -464,8 +464,8 @@ Public Function Parse( _
 		)
 		
 		' ...and short-circuit for an index of the wrong type.
-		If fldStatus = ParsingStatus.psErrorNonintegralIndex Then Exit Do
-		fldStatus = ParsingStatus.psSuccess
+		If endStatus = ParsingStatus.psErrorNonintegralIndex Then Exit Do
+		endStatus = ParsingStatus.psSuccess
 		
 		' Increment the element.
 		eIdx = eIdx + 1
@@ -501,7 +501,7 @@ Public Function Parse( _
 	' Record any pending field information.
 	Select Case cxt
 	Case ParsingContext.pcField, ParsingContext.pcFieldIndex, ParsingContext.pcFieldFormat
-		fldStatus = EndField( _
+		endStatus = EndField( _
 			format := format, _
 			e := elements(eIdx), _
 			cxt := cxt, _
@@ -532,7 +532,7 @@ Public Function Parse( _
 			Parse = ParsingStatus.psErrorUnenclosedField
 			
 		' ...or a index of the wrong type...
-		ElseIf fldStatus = ParsingStatus.psErrorNonintegralIndex Then
+		ElseIf endStatus = ParsingStatus.psErrorNonintegralIndex Then
 			Parse = ParsingStatus.psErrorNonintegralIndex
 			
 		' ...or a successful parsing.
