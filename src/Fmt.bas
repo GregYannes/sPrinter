@@ -448,9 +448,8 @@ Public Function Parse( _
 	' Parse out of the field.
 	END_FIELD:
 		' Record the elemental information...
-		endStatus = Fld_Close( _
+		endStatus = Fld_Close(e.Field, _
 			format := format, _
-			e := elements(eIdx), _
 			cxt := cxt, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc _
@@ -494,9 +493,8 @@ Public Function Parse( _
 	' Record any pending field information.
 	Select Case cxt
 	Case ParsingContext.pcField, ParsingContext.pcFieldIndex, ParsingContext.pcFieldFormat
-		endStatus = Fld_Close( _
+		endStatus = Fld_Close(e.Field, _
 			format := format, _
-			e := elements(eIdx), _
 			cxt := cxt, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc _
@@ -549,37 +547,36 @@ End Function
 ' #######################
 
 ' Close a field and record its elemental information.
-Private Function Fld_Close( _
+Private Function Fld_Close(ByRef fld As peField, _
 	ByRef format As String, _
-	ByRef e As ParsingElement, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
 	Dim idxQuo As Boolean: idxQuo = False
 	
 	' Record the index.
-	If e.Field.Index.Exists And e.Field.Index.Start < e.Field.Index.Stop Then
-		e.Field.Index.Stop = e.Field.Index.Stop - 1
-		Dim idxLen As Long: idxLen = e.Field.Index.Stop - e.Field.Index.Start + 1
-		e.Field.Index.Syntax = VBA.Mid(format, e.Field.Index.Start, idxLen)
+	If fld.Index.Exists And fld.Index.Start < fld.Index.Stop Then
+		fld.Index.Stop = fld.Index.Stop - 1
+		Dim idxLen As Long: idxLen = fld.Index.Stop - fld.Index.Start + 1
+		fld.Index.Syntax = VBA.Mid(format, fld.Index.Start, idxLen)
 		idxQuo = (nQuo = 1)
 	End If
 	
 	' Record the format.
-	If e.Field.Format.Exists And e.Field.Format.Start < e.Field.Format.Stop Then
-		e.Field.Format.Start = e.Field.Format.Start + 1
-		Dim fmtLen As Long: fmtLen = e.Field.Format.Stop - e.Field.Format.Start + 1
-		e.Field.Format.Syntax = VBA.Mid(format, e.Field.Format.Start, fmtLen)
+	If fld.Format.Exists And fld.Format.Start < fld.Format.Stop Then
+		fld.Format.Start = fld.Format.Start + 1
+		Dim fmtLen As Long: fmtLen = fld.Format.Stop - fld.Format.Start + 1
+		fld.Format.Syntax = VBA.Mid(format, fld.Format.Start, fmtLen)
 	End If
 	
 	' Ignore a missing index.
-	If Not e.Field.Index.Exists Then
+	If Not fld.Index.Exists Then
 		Fld_Close = ParsingStatus.psSuccess
 		Exit Function
 		
 	' Test for a key...
 	ElseIf idxQuo Or idxEsc Then
-		e.Field.Index.Kind = IndexKind.ikKey
+		fld.Index.Kind = IndexKind.ikKey
 		
 		Fld_Close = ParsingStatus.psSuccess
 		Exit Function
@@ -587,18 +584,18 @@ Private Function Fld_Close( _
 	' ...or an integral index.
 	Else
 		On Error GoTo IDX_ERROR
-		e.Field.Index.Position = VBA.CLng(e.Key)
+		fld.Index.Position = VBA.CLng(e.Key)
 		On Error GoTo 0
 		
-		e.Field.Index.Kind = IndexKind.ikPosition
-		e.Field.Index.Key = VBA.vbNullString
+		fld.Index.Kind = IndexKind.ikPosition
+		fld.Index.Key = VBA.vbNullString
 		
 		Fld_Close = ParsingStatus.psSuccess
 		Exit Function
 		
 IDX_ERROR:
 		On Error GoTo 0
-		' e.Field.Index.Kind = IndexKind.[_Unknown]
+		' fld.Index.Kind = IndexKind.[_Unknown]
 		
 		Fld_Close = ParsingStatus.psErrorNonintegralIndex
 		Exit Function
