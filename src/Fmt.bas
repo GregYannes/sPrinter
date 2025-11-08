@@ -207,9 +207,6 @@ Public Function Parse( _
 	Dim char As String
 	Dim nQuo As Long: nQuo = 0
 	Dim idxEsc As Boolean: idxEsc = False
-	Dim idxStart As Long, idxStop As Long
-	Dim fmtStart As Long, fmtStop As Long
-	Dim fldStart As Long, fldStop As Long
 	Dim endStatus As ParsingStatus: endStatus = ParsingStatus.psSuccess
 	
 	
@@ -456,11 +453,7 @@ Public Function Parse( _
 			e := elements(eIdx), _
 			cxt := cxt, _
 			nQuo := nQuo, _
-			idxEsc := idxEsc, _
-			idxStart := idxStart, _
-			idxStop := idxStop, _
-			fmtStart := fmtStart, _
-			fmtStop := fmtStop _
+			idxEsc := idxEsc _
 		)
 		
 		' ...and short-circuit for an index of the wrong type.
@@ -506,11 +499,7 @@ Public Function Parse( _
 			e := elements(eIdx), _
 			cxt := cxt, _
 			nQuo := nQuo, _
-			idxEsc := idxEsc, _
-			idxStart := idxStart, _
-			idxStop := idxStop, _
-			fmtStart := fmtStart, _
-			fmtStop := fmtStop _
+			idxEsc := idxEsc _
 		)
 	End Select
 	
@@ -565,50 +554,49 @@ Private Function EndField( _
 	ByRef e As ParsingElement, _
 	ByRef cxt As ParsingContext, _
 	ByRef nQuo As Long, _
-	ByRef idxEsc As Boolean, _
-	ByRef idxStart As Long, _
-	ByRef idxStop As Long, _
-	ByRef fmtStart As Long, _
-	ByRef fmtStop As Long _
+	ByRef idxEsc As Boolean _
 ) As ParsingStatus
 	Dim idxQuo As Boolean: idxQuo = False
 	
 	' Record the index.
-	If e.HasIndex And idxStart < idxStop Then
-		idxStop = idxStop - 1
-		Dim idxLen As Long: idxLen = idxStop - idxStart + 1
-		e.RawIndex = VBA.Mid(format, idxStart, idxLen)
+	If e.Field.Index.Exists And e.Field.Index.Start < e.Field.Index.Stop Then
+		e.Field.Index.Stop = e.Field.Index.Stop - 1
+		Dim idxLen As Long: idxLen = e.Field.Index.Stop - e.Field.Index.Start + 1
+		e.Field.Index.Syntax = VBA.Mid(format, e.Field.Index.Start, idxLen)
 		idxQuo = (nQuo = 1)
 	End If
 	
 	' Record the format.
-	If e.HasFormat And fmtStart < fmtStop Then
-		fmtStart = fmtStart + 1
-		Dim fmtLen As Long: fmtLen = fmtStop - fmtStart + 1
-		e.Format = VBA.Mid(format, fmtStart, fmtLen)
+	If e.Field.Format.Exists And e.Field.Format.Start < e.Field.Format.Stop Then
+		e.Field.Format.Start = e.Field.Format.Start + 1
+		Dim fmtLen As Long: fmtLen = e.Field.Format.Stop - e.Field.Format.Start + 1
+		e.Field.Format.Syntax = VBA.Mid(format, e.Field.Format.Start, fmtLen)
 	End If
 	
 	' Ignore a missing index.
-	If Not e.HasIndex Then
+	If Not e.Field.Index.Exists Then
 		EndField = ParsingStatus.psSuccess
 		GoTo RESET_VARS
 		
 	' Test for a key...
 	ElseIf idxQuo Or idxEsc Then
-		e.IndexIsKey = True
+		e.Field.Index.Kind = IndexKind.ikKey
 		GoTo RESET_VARS
 		
 	' ...or an integral index.
 	Else
 		On Error GoTo IDX_ERROR
-		VBA.CLng e.Index
-		
+		e.Field.Index.Position = VBA.CLng(e.Key)
 		On Error GoTo 0
+		
+		e.Field.Index.Kind = IndexKind.ikPosition
+		e.Field.Index.Key = VBA.vbNullString
 		EndField = ParsingStatus.psSuccess
 		GoTo RESET_VARS
 		
 IDX_ERROR:
 		On Error GoTo 0
+		' e.Field.Index.Kind = IndexKind.[_Unknown]
 		EndField = ParsingStatus.psErrorNonintegralIndex
 		GoTo RESET_VARS
 	End If
@@ -621,8 +609,6 @@ RESET_VARS:
 	
 	nQuo = 0
 	idxEsc = False
-	idxStart = 0: idxStop = 0
-	fmtStart = 0: fmtStop = 0
 End Function
 
 
