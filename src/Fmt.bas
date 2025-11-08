@@ -448,7 +448,7 @@ Public Function Parse( _
 	' Parse out of the field.
 	END_FIELD:
 		' Record the elemental information...
-		endStatus = EndField( _
+		endStatus = Fld_Close( _
 			format := format, _
 			e := elements(eIdx), _
 			cxt := cxt, _
@@ -494,7 +494,7 @@ Public Function Parse( _
 	' Record any pending field information.
 	Select Case cxt
 	Case ParsingContext.pcField, ParsingContext.pcFieldIndex, ParsingContext.pcFieldFormat
-		endStatus = EndField( _
+		endStatus = Fld_Close( _
 			format := format, _
 			e := elements(eIdx), _
 			cxt := cxt, _
@@ -549,7 +549,7 @@ End Function
 ' #######################
 
 ' Close a field and record its elemental information.
-Private Function EndField( _
+Private Function Fld_Close( _
 	ByRef format As String, _
 	ByRef e As ParsingElement, _
 	ByRef nQuo As Long, _
@@ -574,14 +574,14 @@ Private Function EndField( _
 	
 	' Ignore a missing index.
 	If Not e.Field.Index.Exists Then
-		EndField = ParsingStatus.psSuccess
+		Fld_Close = ParsingStatus.psSuccess
 		Exit Function
 		
 	' Test for a key...
 	ElseIf idxQuo Or idxEsc Then
 		e.Field.Index.Kind = IndexKind.ikKey
 		
-		EndField = ParsingStatus.psSuccess
+		Fld_Close = ParsingStatus.psSuccess
 		Exit Function
 		
 	' ...or an integral index.
@@ -593,14 +593,14 @@ Private Function EndField( _
 		e.Field.Index.Kind = IndexKind.ikPosition
 		e.Field.Index.Key = VBA.vbNullString
 		
-		EndField = ParsingStatus.psSuccess
+		Fld_Close = ParsingStatus.psSuccess
 		Exit Function
 		
 IDX_ERROR:
 		On Error GoTo 0
 		' e.Field.Index.Kind = IndexKind.[_Unknown]
 		
-		EndField = ParsingStatus.psErrorNonintegralIndex
+		Fld_Close = ParsingStatus.psErrorNonintegralIndex
 		Exit Function
 	End If
 End Function
