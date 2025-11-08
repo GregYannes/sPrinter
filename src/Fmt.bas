@@ -552,7 +552,6 @@ End Function
 Private Function EndField( _
 	ByRef format As String, _
 	ByRef e As ParsingElement, _
-	ByRef cxt As ParsingContext, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
@@ -604,9 +603,6 @@ IDX_ERROR:
 	
 ' Reset the trackers.
 RESET_VARS:
-	cxt = ParsingContext.[_Unknown]
-	' dfu = ParsingDefusal.[_Off]
-	
 	nQuo = 0
 	idxEsc = False
 End Function
