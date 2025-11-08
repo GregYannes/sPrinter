@@ -580,6 +580,7 @@ Private Function EndField( _
 	' Test for a key...
 	ElseIf idxQuo Or idxEsc Then
 		e.Field.Index.Kind = IndexKind.ikKey
+		EndField = ParsingStatus.psSuccess
 		GoTo RESET_VARS
 		
 	' ...or an integral index.
