@@ -575,13 +575,13 @@ Private Function EndField( _
 	' Ignore a missing index.
 	If Not e.Field.Index.Exists Then
 		EndField = ParsingStatus.psSuccess
-		GoTo RESET_VARS
+		Exit Function
 		
 	' Test for a key...
 	ElseIf idxQuo Or idxEsc Then
 		e.Field.Index.Kind = IndexKind.ikKey
 		EndField = ParsingStatus.psSuccess
-		GoTo RESET_VARS
+		Exit Function
 		
 	' ...or an integral index.
 	Else
@@ -592,20 +592,14 @@ Private Function EndField( _
 		e.Field.Index.Kind = IndexKind.ikPosition
 		e.Field.Index.Key = VBA.vbNullString
 		EndField = ParsingStatus.psSuccess
-		GoTo RESET_VARS
+		Exit Function
 		
 IDX_ERROR:
 		On Error GoTo 0
 		' e.Field.Index.Kind = IndexKind.[_Unknown]
 		EndField = ParsingStatus.psErrorNonintegralIndex
-		GoTo RESET_VARS
+		Exit Function
 	End If
-	
-	
-' Reset the trackers.
-RESET_VARS:
-	nQuo = 0
-	idxEsc = False
 End Function
 
 
