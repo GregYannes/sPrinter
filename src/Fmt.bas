@@ -580,6 +580,7 @@ Private Function EndField( _
 	' Test for a key...
 	ElseIf idxQuo Or idxEsc Then
 		e.Field.Index.Kind = IndexKind.ikKey
+		
 		EndField = ParsingStatus.psSuccess
 		Exit Function
 		
@@ -591,12 +592,14 @@ Private Function EndField( _
 		
 		e.Field.Index.Kind = IndexKind.ikPosition
 		e.Field.Index.Key = VBA.vbNullString
+		
 		EndField = ParsingStatus.psSuccess
 		Exit Function
 		
 IDX_ERROR:
 		On Error GoTo 0
 		' e.Field.Index.Kind = IndexKind.[_Unknown]
+		
 		EndField = ParsingStatus.psErrorNonintegralIndex
 		Exit Function
 	End If
