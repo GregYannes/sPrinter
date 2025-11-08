@@ -584,7 +584,7 @@ Private Function Fld_Close(ByRef fld As peField, _
 	' ...or an integral index.
 	Else
 		On Error GoTo IDX_ERROR
-		fld.Index.Position = VBA.CLng(e.Key)
+		fld.Index.Position = VBA.CLng(fld.Index.Key)
 		On Error GoTo 0
 		
 		fld.Index.Kind = IndexKind.ikPosition
