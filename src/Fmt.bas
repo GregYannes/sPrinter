@@ -555,7 +555,7 @@ Private Function Fld_Close(ByRef fld As peField, _
 	Dim idxQuo As Boolean: idxQuo = False
 	
 	' Record the index.
-	If fld.Index.Exists And fld.Index.Start < fld.Index.Stop Then
+	If fld.Index.Exists And fld.Index.Start <= fld.Index.Stop Then
 		fld.Index.Stop = fld.Index.Stop - 1
 		Dim idxLen As Long: idxLen = fld.Index.Stop - fld.Index.Start + 1
 		fld.Index.Syntax = VBA.Mid(format, fld.Index.Start, idxLen)
@@ -563,7 +563,7 @@ Private Function Fld_Close(ByRef fld As peField, _
 	End If
 	
 	' Record the format.
-	If fld.Format.Exists And fld.Format.Start < fld.Format.Stop Then
+	If fld.Format.Exists And fld.Format.Start <= fld.Format.Stop Then
 		fld.Format.Start = fld.Format.Start + 1
 		Dim fmtLen As Long: fmtLen = fld.Format.Stop - fld.Format.Start + 1
 		fld.Format.Syntax = VBA.Mid(format, fld.Format.Start, fmtLen)
