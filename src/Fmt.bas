@@ -638,3 +638,37 @@ Private Sub Elm_Clone(ByRef elm1 As ParsingElement, ByRef elm2 As ParsingElement
 	Let elm2.Field.Format.Start	= elm1.Field.Format.Start
 	Let elm2.Field.Format.Stop	= elm1.Field.Format.Stop
 End Sub
+
+
+' Clone one plaintext (sub)element into another.
+Private Sub Pln_Clone(ByRef pln1 As pePlain, ByRef pln2 As pePlain)
+	Let pln1.Text = pln2.Text
+End Sub
+
+
+' Clone one field (sub)element into another...
+Private Sub Fld_Clone(ByRef fld1 As peField, ByRef fld2 As peField)
+	Idx_Clone fld1.Index, fld2.Index
+	Idx_Clone fld1.Index, fld2.Index
+End Sub
+
+
+' ...and one of its index (sub)elements into another...
+Private Sub Idx_Clone(ByRef idx1 As peFieldIndex, ByRef idx2 As peFieldIndex)
+	Let idx2.Exists   = idx1.Exists
+	Let idx2.Syntax   = idx1.Syntax
+	Let idx2.Start    = idx1.Start
+	Let idx2.Stop     = idx1.Stop
+	Let idx2.Kind     = idx1.Kind
+	Let idx2.Position = idx1.Position
+	Let idx2.Key      = idx1.Key
+End Sub
+
+
+' ...and one of its format (sub)elements into another.
+Private Sub Fmt_Clone(ByRef fmt1 As peFieldFormat, ByRef fmt2 As peFieldFormat)
+	Let fmt2.Exists = fmt1.Exists
+	Let fmt2.Syntax = fmt1.Syntax
+	Let fmt2.Start  = fmt1.Start
+	Let fmt2.Stop   = fmt1.Stop
+End Sub
