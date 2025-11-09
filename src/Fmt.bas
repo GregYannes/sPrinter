@@ -546,6 +546,17 @@ End Function
 ' ## Support | Parsing ##
 ' #######################
 
+' Record the information of a generic element.
+Private Sub Elm_Close(ByRef elm As ParsingElement, _
+	ByRef format As String
+)
+	If elm.Start <= elm.Stop Then
+		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
+		elm.Syntax = VBA.Mid$(format, elm.Start, elmLen)
+	End If
+End Sub
+
+
 ' Close a field and record its elemental information.
 Private Function Fld_Close(ByRef fld As peField, _
 	ByRef format As String, _
