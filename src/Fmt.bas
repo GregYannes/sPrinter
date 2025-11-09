@@ -615,8 +615,8 @@ Private Sub Elm_Reset(ByRef e As ParsingElement)
 End Sub
 
 
-' Copy one element into another.
-Private Sub Elm_Copy(ByRef e1 As ParsingElement, ByRef e1 As ParsingElement)
+' Clone one element into another.
+Private Sub Elm_Clone(ByRef e1 As ParsingElement, ByRef e1 As ParsingElement)
 	Let e2.Syntax			= e1.Syntax
 	Let e2.Start			= e1.Start
 	Let e2.Stop			= e1.Stop
