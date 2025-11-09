@@ -621,22 +621,8 @@ Private Sub Elm_Clone(ByRef elm1 As ParsingElement, ByRef elm2 As ParsingElement
 	Let elm2.Start			= elm1.Start
 	Let elm2.Stop			= elm1.Stop
 	Let elm2.Kind			= elm1.Kind
-	'       .Plain			      .Plain
-	Let elm2.Plain.Text		= elm1.Plain.Text
-	'       .Field			      .Field
-	'       .Field.Index		      .Field.Index
-	Let elm2.Field.Index.Exists	= elm1.Field.Index.Exists
-	Let elm2.Field.Index.Syntax	= elm1.Field.Index.Syntax
-	Let elm2.Field.Index.Start	= elm1.Field.Index.Start
-	Let elm2.Field.Index.Stop	= elm1.Field.Index.Stop
-	Let elm2.Field.Index.Kind	= elm1.Field.Index.Kind
-	Let elm2.Field.Index.Position	= elm1.Field.Index.Position
-	Let elm2.Field.Index.Key	= elm1.Field.Index.Key
-	'       .Field.Format		      .Field.Format
-	Let elm2.Field.Format.Exists	= elm1.Field.Format.Exists
-	Let elm2.Field.Format.Syntax	= elm1.Field.Format.Syntax
-	Let elm2.Field.Format.Start	= elm1.Field.Format.Start
-	Let elm2.Field.Format.Stop	= elm1.Field.Format.Stop
+	Pln_Clone elm1.Plain, elm2.Plain
+	Fld_Clone elm1.Field, elm2.Field
 End Sub
 
 
