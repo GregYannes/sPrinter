@@ -647,7 +647,7 @@ End Sub
 ' Clone one field (sub)element into another...
 Private Sub Fld_Clone(ByRef fld1 As peField, ByRef fld2 As peField)
 	Idx_Clone fld1.Index, fld2.Index
-	Idx_Clone fld1.Index, fld2.Index
+	Fmt_Clone fld1.Format, fld2.Format
 End Sub
 
 
