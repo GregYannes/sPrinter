@@ -132,12 +132,6 @@ Public Type peField
 End Type
 
 
-' Element for parsing plain text in formatting.
-Public Type pePlain
-	Text As String		' The text to display literally.
-End Type
-
-
 ' Elements into which formats are parsed.
 Public Type ParsingElement
 	Syntax As String	' The syntax that was parsed to define this element.
@@ -146,7 +140,7 @@ Public Type ParsingElement
 	
 	' The subtype which extends this element:
 	Kind As ElementKind
-	Plain as pePlain	' Plain text which displays literally...
+	Plain as String		' Plain text which displays literally...
 	Field As peField	' ...or a field which embeds a value.
 End Type
 
@@ -563,12 +557,6 @@ Private Sub Elm_Close(ByRef elm As ParsingElement, _
 End Sub
 
 
-' ' Close a plaintext (sub)element and record its information.
-' Private Function Pln_Close(ByRef pln As pePlain) As ParsingStatus
-' 	' ...
-' End Sub
-
-
 ' Close a field (sub)element and record its information...
 Private Function Fld_Close(ByRef fld As peField, _
 	ByRef format As String, _
@@ -667,14 +655,8 @@ Private Sub Elm_Clone(ByRef elm1 As ParsingElement, ByRef elm2 As ParsingElement
 	Let elm2.Stop   = elm1.Stop
 	Let elm2.Kind   = elm1.Kind
 	
-	Pln_Clone elm1.Plain, elm2.Plain
+	Let elm2.Plain	= elm1.Plain
 	Fld_Clone elm1.Field, elm2.Field
-End Sub
-
-
-' Clone one plaintext (sub)element into another.
-Private Sub Pln_Clone(ByRef pln1 As pePlain, ByRef pln2 As pePlain)
-	Let pln1.Text = pln2.Text
 End Sub
 
 
