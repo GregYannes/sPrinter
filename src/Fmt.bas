@@ -653,8 +653,8 @@ Private Sub Elm_Clone(ByRef elm1 As ParsingElement, ByRef elm2 As ParsingElement
 	Let elm2.Syntax = elm1.Syntax
 	Let elm2.Start  = elm1.Start
 	Let elm2.Stop   = elm1.Stop
-	Let elm2.Kind   = elm1.Kind
 	
+	Let elm2.Kind   = elm1.Kind
 	Let elm2.Plain	= elm1.Plain
 	Fld_Clone elm1.Field, elm2.Field
 End Sub
