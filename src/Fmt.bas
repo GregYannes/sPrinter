@@ -557,6 +557,12 @@ Private Sub Elm_Close(ByRef elm As ParsingElement, _
 End Sub
 
 
+' ' Close plaintext and record its elemental information.
+' Private Function Pln_Close(ByRef pln As pePlain) As ParsingStatus
+' 	' ...
+' End Sub
+
+
 ' Close a field and record its elemental information.
 Private Function Fld_Close(ByRef fld As peField, _
 	ByRef format As String, _
@@ -611,6 +617,18 @@ IDX_ERROR:
 		Fld_Close = ParsingStatus.psErrorNonintegralIndex
 		Exit Function
 	End If
+End Function
+
+
+' ...along with its index (sub)element...
+Private Function Idx_Close(ByRef idx As peFieldIndex) As ParsingStatus
+	' ...
+End Function
+
+
+' ...and its format (sub)element.
+Private Function Fmt_Close(ByRef fmt As peFieldFormat) As ParsingStatus
+	' ...
 End Function
 
 
