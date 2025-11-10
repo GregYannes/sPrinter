@@ -548,7 +548,7 @@ End Function
 
 ' Close an element and record its information.
 Private Sub Elm_Close(ByRef elm As ParsingElement, _
-	ByRef format As String
+	ByRef format As String _
 )
 	If elm.Start <= elm.Stop Then
 		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
