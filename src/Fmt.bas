@@ -546,7 +546,7 @@ End Function
 ' ## Support | Parsing ##
 ' #######################
 
-' Record the information of a generic element.
+' Close an element and record its information.
 Private Sub Elm_Close(ByRef elm As ParsingElement, _
 	ByRef format As String
 )
@@ -557,13 +557,13 @@ Private Sub Elm_Close(ByRef elm As ParsingElement, _
 End Sub
 
 
-' ' Close plaintext and record its elemental information.
+' ' Close a plaintext (sub)element and record its information.
 ' Private Function Pln_Close(ByRef pln As pePlain) As ParsingStatus
 ' 	' ...
 ' End Sub
 
 
-' Close a field and record its elemental information.
+' Close a field (sub)element and record its information...
 Private Function Fld_Close(ByRef fld As peField, _
 	ByRef format As String, _
 	ByRef nQuo As Long, _
@@ -669,7 +669,7 @@ Private Sub Fld_Clone(ByRef fld1 As peField, ByRef fld2 As peField)
 End Sub
 
 
-' ...and one of its index (sub)elements into another...
+' ...and its index (sub)element into another...
 Private Sub Idx_Clone(ByRef idx1 As peFieldIndex, ByRef idx2 As peFieldIndex)
 	Let idx2.Exists   = idx1.Exists
 	Let idx2.Syntax   = idx1.Syntax
@@ -681,7 +681,7 @@ Private Sub Idx_Clone(ByRef idx1 As peFieldIndex, ByRef idx2 As peFieldIndex)
 End Sub
 
 
-' ...and one of its format (sub)elements into another.
+' ...and its format (sub)element into another.
 Private Sub Fmt_Clone(ByRef fmt1 As peFieldFormat, ByRef fmt2 As peFieldFormat)
 	Let fmt2.Exists = fmt1.Exists
 	Let fmt2.Syntax = fmt1.Syntax
