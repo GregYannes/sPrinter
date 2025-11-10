@@ -550,9 +550,15 @@ End Function
 Private Sub Elm_Close(ByRef elm As ParsingElement, _
 	ByRef format As String _
 )
+	' Record the syntax...
 	If elm.Start <= elm.Stop Then
 		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
 		elm.Syntax = VBA.Mid$(format, elm.Start, elmLen)
+		
+	' ...or clear invalid information.
+	Else
+		elm.Start = 0
+		elm.Stop = 0
 	End If
 End Sub
 
@@ -571,19 +577,29 @@ Private Function Fld_Close(ByRef fld As peField, _
 ) As ParsingStatus
 	Dim idxQuo As Boolean: idxQuo = False
 	
-	' Record the index.
+	' Record the index...
 	If fld.Index.Exists And fld.Index.Start <= fld.Index.Stop Then
 		fld.Index.Stop = fld.Index.Stop - 1
 		Dim idxLen As Long: idxLen = fld.Index.Stop - fld.Index.Start + 1
 		fld.Index.Syntax = VBA.Mid$(format, fld.Index.Start, idxLen)
 		idxQuo = (nQuo = 1)
+		
+	' ...or clear invalid information.
+	Else
+		fld.Index.Start = 0
+		fld.Index.Stop = 0
 	End If
 	
-	' Record the format.
+	' Record the format...
 	If fld.Format.Exists And fld.Format.Start <= fld.Format.Stop Then
 		fld.Format.Start = fld.Format.Start + 1
 		Dim fmtLen As Long: fmtLen = fld.Format.Stop - fld.Format.Start + 1
 		fld.Format.Syntax = VBA.Mid$(format, fld.Format.Start, fmtLen)
+		
+	' ...or clear invalid information.
+	Else
+		fld.Format.Start = 0
+		fld.Format.Stop = 0
 	End If
 	
 	' Ignore a missing index.
