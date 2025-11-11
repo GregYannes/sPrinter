@@ -540,36 +540,36 @@ End Function
 ' ## Support | Parsing ##
 ' #######################
 
-' Close an element and record its information.
-Private Function Elm_Close(ByRef elm As ParsingElement, _
-	ByRef format As String, _
-	ByRef nQuo As Long, _
-	ByRef idxEsc As Boolean _
-) As ParsingStatus
-	Dim status As ParsingStatus
-	Elm_Close = ParsingStatus.psSuccess
-	
-	' Record the syntax...
-	If elm.Start <= elm.Stop Then
-		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
-		elm.Syntax = VBA.Mid$(format, elm.Start, elmLen)
-		
-	' ...or clear invalid information.
-	Else
-		elm.Start = 0
-		elm.Stop = 0
-	End If
-	
-	' Record any error when closing its extended (sub)element.
-	Select Case elm.Kind
-	Case ElementKind.ekField
-		status = Fld_Close(elm.Field, format := format, nQuo := nQuo, idxEsc := idxEsc)
-	Case Else
-		status = ParsingStatus.psSuccess
-	End Select
-	
-	If Elm_Close = ParsingStatus.psSuccess Then Elm_Close = status
-End Function
+' ' Close an element and record its information.
+' Private Function Elm_Close(ByRef elm As ParsingElement, _
+' 	ByRef format As String, _
+' 	ByRef nQuo As Long, _
+' 	ByRef idxEsc As Boolean _
+' ) As ParsingStatus
+' 	Dim status As ParsingStatus
+' 	Elm_Close = ParsingStatus.psSuccess
+' 	
+' 	' Record the syntax...
+' 	If elm.Start <= elm.Stop Then
+' 		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
+' 		elm.Syntax = VBA.Mid$(format, elm.Start, elmLen)
+' 		
+' 	' ...or clear invalid information.
+' 	Else
+' 		elm.Start = 0
+' 		elm.Stop = 0
+' 	End If
+' 	
+' 	' Record any error when closing its extended (sub)element.
+' 	Select Case elm.Kind
+' 	Case ElementKind.ekField
+' 		status = Fld_Close(elm.Field, format := format, nQuo := nQuo, idxEsc := idxEsc)
+' 	Case Else
+' 		status = ParsingStatus.psSuccess
+' 	End Select
+' 	
+' 	If Elm_Close = ParsingStatus.psSuccess Then Elm_Close = status
+' End Function
 
 
 ' Close a field (sub)element and record its information...
