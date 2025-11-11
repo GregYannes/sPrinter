@@ -625,14 +625,78 @@ End Function
 
 
 ' ...along with its index (sub)element...
-Private Function Idx_Close(ByRef idx As peFieldIndex) As ParsingStatus
-	' ...
+Private Function Idx_Close(ByRef idx As peFieldIndex, _
+	ByRef format As String, _
+	ByRef nQuo As Long, _
+	ByRef idxEsc As Boolean _
+) As ParsingStatus
+	Dim idxQuo As Boolean: idxQuo = False
+	
+	' Record the index...
+	If idx.Exists And idx.Start <= idx.Stop Then
+		idx.Stop = idx.Stop - 1
+		Dim idxLen As Long: idxLen = idx.Stop - idx.Start + 1
+		idx.Syntax = VBA.Mid$(format, idx.Start, idxLen)
+		idxQuo = (nQuo = 1)
+		
+	' ...or clear invalid information.
+	Else
+		idx.Start = 0
+		idx.Stop = 0
+	End If
+	
+	' Ignore a missing index.
+	If Not idx.Exists Then
+		Fld_Close = ParsingStatus.psSuccess
+		Exit Function
+		
+	' Test for a key...
+	ElseIf idxQuo Or idxEsc Then
+		idx.Kind = IndexKind.ikKey
+		
+		Fld_Close = ParsingStatus.psSuccess
+		Exit Function
+		
+	' ...or an integral index.
+	Else
+		On Error GoTo IDX_ERROR
+		idx.Position = VBA.CLng(idx.Key)
+		On Error GoTo 0
+		
+		idx.Kind = IndexKind.ikPosition
+		idx.Key = VBA.vbNullString
+		
+		Fld_Close = ParsingStatus.psSuccess
+		Exit Function
+		
+IDX_ERROR:
+		On Error GoTo 0
+		' idx.Kind = IndexKind.[_Unknown]
+		
+		Fld_Close = ParsingStatus.psErrorNonintegralIndex
+		Exit Function
+	End If
 End Function
 
 
 ' ...and its format (sub)element.
-Private Function Fmt_Close(ByRef fmt As peFieldFormat) As ParsingStatus
-	' ...
+Private Function Fmt_Close(ByRef fmt As peFieldFormat, _
+	ByRef format As String _
+) As ParsingStatus
+	' Record the format...
+	If fmt.Exists And fmt.Start <= fmt.Stop Then
+		fmt.Start = fmt.Start + 1
+		Dim fmtLen As Long: fmtLen = fmt.Stop - fmt.Start + 1
+		fmt.Syntax = VBA.Mid$(format, fmt.Start, fmtLen)
+		
+	' ...or clear invalid information.
+	Else
+		fmt.Start = 0
+		fmt.Stop = 0
+	End If
+	
+	' This should always work.
+	Fmt_Close = ParsingStatus.psSuccess
 End Function
 
 
