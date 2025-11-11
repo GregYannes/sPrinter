@@ -544,6 +544,12 @@ End Function
 Private Function Elm_Close(ByRef elm As ParsingElement, _
 	ByRef format As String _
 ) As ParsingStatus
+' 	ByRef nQuo As Long, _
+' 	ByRef idxEsc As Boolean _
+' ) As ParsingStatus
+' 	Dim status As ParsingStatus
+' 	Elm_Close = ParsingStatus.psSuccess
+	
 	' Record the syntax...
 	If elm.Start <= elm.Stop Then
 		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
@@ -557,6 +563,12 @@ Private Function Elm_Close(ByRef elm As ParsingElement, _
 	
 	' This should always work.
 	Elm_Close = ParsingStatus.psSuccess
+	
+' 	' Record any error when closing its field.
+' ' 	If elm.Kind = ElementKind.ekField Then
+' 		status = Fld_Close(elm.Field, format := format, nQuo := nQuo, idxEsc := idxEsc)
+' 		If Fld_Close = ParsingStatus.psSuccess Then Fld_Close = status
+' ' 	End If
 End Function
 
 
