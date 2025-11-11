@@ -541,9 +541,9 @@ End Function
 ' #######################
 
 ' Close an element and record its information.
-Private Sub Elm_Close(ByRef elm As ParsingElement, _
+Private Function Elm_Close(ByRef elm As ParsingElement, _
 	ByRef format As String _
-)
+) As ParsingStatus
 	' Record the syntax...
 	If elm.Start <= elm.Stop Then
 		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
@@ -554,7 +554,10 @@ Private Sub Elm_Close(ByRef elm As ParsingElement, _
 		elm.Start = 0
 		elm.Stop = 0
 	End If
-End Sub
+	
+	' This should always work.
+	Elm_Close = ParsingStatus.psSuccess
+End Function
 
 
 ' Close a field (sub)element and record its information...
