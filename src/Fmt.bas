@@ -560,9 +560,6 @@ Private Function Elm_Close(ByRef elm As ParsingElement, _
 		elm.Stop = 0
 	End If
 	
-	' This should always work.
-	Elm_Close = ParsingStatus.psSuccess
-	
 	' Record any error when closing its field.
 	Select Case elm.Kind
 	Case ElementKind.ekField
