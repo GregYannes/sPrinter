@@ -564,10 +564,14 @@ Private Function Elm_Close(ByRef elm As ParsingElement, _
 	Elm_Close = ParsingStatus.psSuccess
 	
 	' Record any error when closing its field.
-' 	If elm.Kind = ElementKind.ekField Then
+	Select Case elm.Kind
+	Case ElementKind.ekField
 		status = Fld_Close(elm.Field, format := format, nQuo := nQuo, idxEsc := idxEsc)
+	Case Else
+		status = ParsingStatus.psSuccess
+	End Select
+	
 		If Fld_Close = ParsingStatus.psSuccess Then Fld_Close = status
-' 	End If
 End Function
 
 
