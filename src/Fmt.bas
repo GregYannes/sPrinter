@@ -563,64 +563,16 @@ Private Function Fld_Close(ByRef fld As peField, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
-	Dim idxQuo As Boolean: idxQuo = False
+	Dim status As ParsingStatus
+	Fld_Close = ParsingStatus.psSuccess
 	
-	' Record the index...
-	If fld.Index.Exists And fld.Index.Start <= fld.Index.Stop Then
-		fld.Index.Stop = fld.Index.Stop - 1
-		Dim idxLen As Long: idxLen = fld.Index.Stop - fld.Index.Start + 1
-		fld.Index.Syntax = VBA.Mid$(format, fld.Index.Start, idxLen)
-		idxQuo = (nQuo = 1)
-		
-	' ...or clear invalid information.
-	Else
-		fld.Index.Start = 0
-		fld.Index.Stop = 0
-	End If
+	' Record any error when closing its index...
+	status = Idx_Close(fld.Index, format := format, nQuo := nQuo, idxEsc := idxEsc)
+	If Fld_Close = ParsingStatus.psSuccess Then Fld_Close = status
 	
-	' Record the format...
-	If fld.Format.Exists And fld.Format.Start <= fld.Format.Stop Then
-		fld.Format.Start = fld.Format.Start + 1
-		Dim fmtLen As Long: fmtLen = fld.Format.Stop - fld.Format.Start + 1
-		fld.Format.Syntax = VBA.Mid$(format, fld.Format.Start, fmtLen)
-		
-	' ...or clear invalid information.
-	Else
-		fld.Format.Start = 0
-		fld.Format.Stop = 0
-	End If
-	
-	' Ignore a missing index.
-	If Not fld.Index.Exists Then
-		Fld_Close = ParsingStatus.psSuccess
-		Exit Function
-		
-	' Test for a key...
-	ElseIf idxQuo Or idxEsc Then
-		fld.Index.Kind = IndexKind.ikKey
-		
-		Fld_Close = ParsingStatus.psSuccess
-		Exit Function
-		
-	' ...or an integral index.
-	Else
-		On Error GoTo IDX_ERROR
-		fld.Index.Position = VBA.CLng(fld.Index.Key)
-		On Error GoTo 0
-		
-		fld.Index.Kind = IndexKind.ikPosition
-		fld.Index.Key = VBA.vbNullString
-		
-		Fld_Close = ParsingStatus.psSuccess
-		Exit Function
-		
-IDX_ERROR:
-		On Error GoTo 0
-		' fld.Index.Kind = IndexKind.[_Unknown]
-		
-		Fld_Close = ParsingStatus.psErrorNonintegralIndex
-		Exit Function
-	End If
+	' ...and its format.
+	status = Fmt_Close(fld.Format, format := format)
+	If Fld_Close = ParsingStatus.psSuccess Then Fld_Close = status
 End Function
 
 
