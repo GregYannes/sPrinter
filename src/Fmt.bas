@@ -568,7 +568,7 @@ Private Function Elm_Close(ByRef elm As ParsingElement, _
 		status = ParsingStatus.psSuccess
 	End Select
 	
-	If Fld_Close = ParsingStatus.psSuccess Then Fld_Close = status
+	If Elm_Close = ParsingStatus.psSuccess Then Elm_Close = status
 End Function
 
 
