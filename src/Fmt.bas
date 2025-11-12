@@ -540,6 +540,23 @@ End Function
 ' ## Support | Parsing ##
 ' #######################
 
+' Close an element and record its information.
+Private Sub Elm_Close(ByRef elm As ParsingElement, _
+	ByRef format As String _
+)
+	' Record the syntax...
+	If elm.Start <= elm.Stop Then
+		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
+		elm.Syntax = VBA.Mid$(format, elm.Start, elmLen)
+		
+	' ...or clear invalid information.
+	Else
+		elm.Start = 0
+		elm.Stop = 0
+	End If
+End Sub
+
+
 ' ' Close an element and record its information.
 ' Private Function Elm_Close(ByRef elm As ParsingElement, _
 ' 	ByRef format As String, _
