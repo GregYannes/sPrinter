@@ -71,16 +71,6 @@ Public Enum ElementKind
 End Enum
 
 
-' Contexts in which symbols are interpreted.
-Private Enum ParsingContext
-	[_Unknown]	' Uninitialized.
-	pcPlain		' Plain text.
-	pcField		' An embedded field...
-	pcFieldIndex	' ...its index...
-	pcFieldFormat	' ...and its format.
-End Enum
-
-
 ' Ways to defuse literal symbols rather than interpreting them.
 Private Enum ParsingDefusal
 	[_Off]		' No defusal.
@@ -187,7 +177,6 @@ Public Function Parse( _
 	
 	
 	' Track the current context for parsing...
-	Dim cxt As ParsingContext: cxt = ParsingContext.[_Unknown]
 	Dim dfu As ParsingDefusal: dfu = ParsingDefusal.[_Off]
 	
 	' ...and the current depth of nesting...
@@ -221,7 +210,7 @@ Public Function Parse( _
 	' Revisit the character.
 	SAME_CHAR:
 		' Interpret this character in context.
-		Select Case cxt
+		Select Case e.Kind
 		
 		
 		
@@ -229,7 +218,7 @@ Public Function Parse( _
 		' ## Inactive ##
 		' ##############
 		
-		Case ParsingContext.[_Unknown]
+		Case ElementKind.[_Unknown]
 			Select Case char
 			
 			' Parse into a field...
@@ -247,7 +236,7 @@ Public Function Parse( _
 		' ## Plain Text ##
 		' ################
 		
-		Case ParsingContext.pcPlain
+		Case ElementKind.ekPlain
 			Select Case dfu
 			
 			' Quote "inert" text...
@@ -295,7 +284,7 @@ Public Function Parse( _
 		' ## Field ##
 		' ###########
 		
-		Case ParsingContext.pcField
+		Case ElementKind.ekField
 			Select Case char
 			
 			' Parse out of the field...
@@ -310,101 +299,6 @@ Public Function Parse( _
 			Case Else
 				' ...
 			End Select
-			
-			
-			
-		' ###################
-		' ## Field | Index ##
-		' ###################
-		
-		Case ParsingContext.pcFieldIndex
-			Select Case dfu
-			
-			' Quote "inert" symbol...
-			Case ParsingDefusal.pdQuote
-				Select Case char
-				
-				' Terminate the quote...
-				Case closeQuote
-					' ...
-					
-				' ...or continue quoting.
-				Case Else
-					' ...
-				End Select
-				
-			' ...or escape literal symbol...
-			Case ParsingDefusal.pdEscape
-				' ...
-				
-			' ...or parse "active" symbol.
-			Case Else
-				Select Case char
-				
-				' Escape the next character...
-				Case escape
-					' ...
-					
-				' ...or nest into the field...
-				Case openField
-					' ...
-					
-				' ...or unnest out of the field...
-				Case closeField
-					' ...
-					
-				' ...or parse into a quoted key...
-				Case openQuote
-					' ...
-					
-				' ' ...or parse into a format...
-				' Case separator
-				' 	' ...
-					
-				' ...or display literally.
-				Case Else
-					' ...
-				End Select
-			End Select
-			
-			
-			
-		' ####################
-		' ## Field | Format ##
-		' ####################
-		
-		Case ParsingContext.pcFieldFormat
-			Select Case dfu
-			
-			' Include quoted symbol...
-			Case ParsingDefusal.pdQuote
-				' ...
-				
-			' ...or include escaped symbol...
-			Case ParsingDefusal.pdEscape
-				' ...
-				
-			' ...but parse "active" symbol.
-			Else
-				Select Case char
-				
-				' Escape the next character...
-				Case escape
-					' ...
-					
-				' ...or nest into the field...
-				Case openField
-					' ...
-					
-				' ...or unnest out of the field...
-				Case closeField
-					' ...
-					
-				' ...or parse into a quoted key.
-				Case openQuote
-					' ...
-				End Select
-			End Select
 		End Select
 		
 		
@@ -418,7 +312,6 @@ Public Function Parse( _
 		' Record the elemental information...
 		endStatus = Fld_Close(e.Field, _
 			format := format, _
-			cxt := cxt, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc _
 		)
@@ -462,11 +355,10 @@ EXIT_LOOP:
 	
 	
 	' Record any pending field information.
-	Select Case cxt
-	Case ParsingContext.pcField, ParsingContext.pcFieldIndex, ParsingContext.pcFieldFormat
+	Select Case e.Kind
+	Case ElementKind.ekField
 		endStatus = Fld_Close(e.Field, _
 			format := format, _
-			cxt := cxt, _
 			nQuo := nQuo, _
 			idxEsc := idxEsc _
 		)
@@ -519,7 +411,6 @@ End Function
 
 ' ' Reset any global trackers.
 ' Private Sub Reset( _
-' 	Optional ByRef cxt As ParsingContext, _
 ' 	Optional ByRef dfu As ParsingDefusal, _
 ' 	Optional ByRef fldDepth As Long, _
 ' 	Optional ByRef eIdx As Long, _
@@ -529,7 +420,6 @@ End Function
 ' 	Optional ByRef idxEsc As Boolean, _
 ' 	Optional ByRef endStatus As ParsingStatus _
 ' )
-' 	cxt = ParsingContext.[_Unknown]
 ' 	dfu = ParsingDefusal.[_Off]
 ' 	fldDepth = 0
 ' 	eIdx = 0
