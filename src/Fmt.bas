@@ -184,7 +184,7 @@ Public Function Parse( _
 	
 	' ...and the current element...
 	Dim eIdx As Long: eIdx = base - 1
-	Dim eLen As Long: eLen = 0
+	Dim e As ParsingElement
 	
 	' ...and the current characters.
 	Dim char As String
