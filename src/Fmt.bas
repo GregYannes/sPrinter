@@ -540,6 +540,44 @@ End Function
 ' ## Support | Parsing ##
 ' #######################
 
+' ' Reset any global trackers.
+' Private Sub Reset( _
+' 	Optional ByRef cxt As ParsingContext, _
+' 	Optional ByRef dfu As ParsingDefusal, _
+' 	Optional ByRef fldDepth As Long, _
+' 	Optional ByRef eIdx As Long, _
+' 	Optional ByRef e As ParsingElement, _
+' 	Optional ByRef char As String, _
+' 	Optional ByRef nQuo As Long, _
+' 	Optional ByRef idxEsc As Boolean, _
+' 	Optional ByRef endStatus As ParsingStatus _
+' )
+' 	cxt = ParsingContext.[_Unknown]
+' 	dfu = ParsingDefusal.[_Off]
+' 	fldDepth = 0
+' 	eIdx = 0
+' 	Elm_Reset e
+' 	char = VBA.vbNullString
+' 	nQuo = 0
+' 	idxEsc = False
+' 	endStatus = ParsingStatus.psSuccess
+' End Sub
+
+
+' ' Save an element.
+' Private Function Save( _
+' 	ByRef format As String, _
+' 	ByRef elements As ParsingElement(), _
+' 	ByRef eIdx As Long, _
+' 	ByRef e As ParsingElement, _
+' 	ByRef nQuo As Long, _
+' 	ByRef idxEsc As Boolean _
+' ) As ParsingStatus
+' 	Save = Elm_Close(e, format := format, nQuo := nQuo, idxEsc := idxEsc)
+' 	Elm_Clone e, elements(eIdx)
+' End Function
+
+
 ' Close an element and record its information.
 Private Sub Elm_Close(ByRef elm As ParsingElement, _
 	ByRef format As String _
