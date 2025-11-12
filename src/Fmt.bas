@@ -413,32 +413,6 @@ Public Function Parse( _
 	' ## Control ##
 	' #############
 	
-	' ' Save the information to the element.
-	' SAVE_ELEMENT:
-	' 	elements(eIdx).Kind = e_Kind
-	' 	elements(eIdx).Text = e_Text
-	' 	elements(eIdx).HasIndex = e_HasIndex
-	' 	elements(eIdx).Index = e_Index
-	' 	elements(eIdx).IndexRaw = e_IndexRaw
-	' '	elements(eIdx).IndexIsKey = e_IndexIsKey
-	' '	elements(eIdx).EscapesIndex = e_EscapesIndex
-	' '	elements(eIdx).QuotesIndex = e_QuotesIndex
-	' 	elements(eIdx).HasFormat = e_HasFormat
-	' 	elements(eIdx).Format = e_Format
-	' 	
-	' ' Reset the information.
-	' RESET_ELEMENT:
-	' 	e_Kind = ElementKind.[_Unknown]
-	' 	e_Text = VBA.vbNullString
-	' 	e_HasIndex = False
-	' 	e_Index = VBA.vbNullString
-	' 	e_IndexRaw = VBA.vbNullString
-	' 	e_IndexIsKey = False
-	' '	e_EscapesIndex = False
-	' ' 	e_QuotesIndex = False
-	' 	e_HasFormat = False
-	' 	e_Format = VBA.vbNullString
-		
 	' Parse out of the field.
 	END_FIELD:
 		' Record the elemental information...
