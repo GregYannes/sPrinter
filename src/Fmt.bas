@@ -464,6 +464,9 @@ Public Function Parse( _
 	Next charIndex
 	
 	
+' Escape the loop.
+EXIT_LOOP:
+	
 	' Deactivate error handling.
 	On Error GoTo 0
 	
