@@ -101,12 +101,18 @@ End Enum
 ' ## Types ##
 ' ###########
 
+' An expression for parsing.
+Public Type ParserExpression
+	Syntax As String	' The syntax that was parsed to define this expression.
+	Start As Long		' Where that syntax begins in the original code...
+	Stop AS Long		' ...and where it ends.
+End Type
+
+
 ' Element for parsing the index...
 Public Type ParserIndex
 	Exists As Boolean	' Whether this index exists in its field.
-	Syntax As String	' The syntax that was parsed to define this index.
-	Start As Long		' Where that syntax begins in the original string...
-	Stop As Long		' ...and where it ends.
+	Expression As ParsingExpression	' The expression that defines this index.
 	
 	' The type of index:
 	Kind As IndexKind
@@ -118,9 +124,7 @@ End Type
 ' ...and the custom format...
 Public Type ParserFormat
 	Exists As Boolean	' Whether this format exists in its field.
-	Syntax As String	' The syntax that was parsed to define this format.
-	Start As Long		' Where that syntax begins in the original string...
-	Stop As Long		' ...and where it ends.
+	Expression As ParsingExpression	' The expression that defines this format.
 End Type
 
 
@@ -133,9 +137,7 @@ End Type
 
 ' Elements into which formats are parsed.
 Public Type ParserElement
-	Syntax As String	' The syntax that was parsed to define this element.
-	Start As Long		' Where that syntax begins in the original string...
-	Stop As Long		' ...and where it ends.
+	Expression As ParsingExpression	' The expression that defines this element.
 	
 	' The subtype which extends this element:
 	Kind As ElementKind
@@ -610,11 +612,17 @@ Private Sub Elm_Reset(ByRef elm As ParserElement)
 End Sub
 
 
+' Clone one expression into another.
+Private Sub Expr_Clone(ByRef expr1 As ParserExpression, ByRef expr2 As ParserExpression)
+	Let expr2.Syntax = expr1.Syntax
+	Let expr2.Start  = expr1.Start
+	Let expr2.Stop   = expr1.Stop
+End Sub
+
+
 ' Clone one element into another.
 Private Sub Elm_Clone(ByRef elm1 As ParserElement, ByRef elm2 As ParserElement)
-	Let elm2.Syntax = elm1.Syntax
-	Let elm2.Start  = elm1.Start
-	Let elm2.Stop   = elm1.Stop
+	Expr_Clone elm1.Expression, elm2.Expression
 	
 	Let elm2.Kind   = elm1.Kind
 	Let elm2.Plain	= elm1.Plain
@@ -632,9 +640,7 @@ End Sub
 ' ...and its index (sub)element into another...
 Private Sub Idx_Clone(ByRef idx1 As ParserIndex, ByRef idx2 As ParserIndex)
 	Let idx2.Exists   = idx1.Exists
-	Let idx2.Syntax   = idx1.Syntax
-	Let idx2.Start    = idx1.Start
-	Let idx2.Stop     = idx1.Stop
+	Expr_Clone idx1.Expression, idx2.Expression
 	Let idx2.Kind     = idx1.Kind
 	Let idx2.Position = idx1.Position
 	Let idx2.Key      = idx1.Key
@@ -644,7 +650,5 @@ End Sub
 ' ...and its format (sub)element into another.
 Private Sub Fmt_Clone(ByRef fmt1 As ParserFormat, ByRef fmt2 As ParserFormat)
 	Let fmt2.Exists = fmt1.Exists
-	Let fmt2.Syntax = fmt1.Syntax
-	Let fmt2.Start  = fmt1.Start
-	Let fmt2.Stop   = fmt1.Stop
+	Expr_Clone fmt1.Expression, fmt2.Expression
 End Sub
