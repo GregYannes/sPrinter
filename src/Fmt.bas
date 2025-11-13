@@ -47,51 +47,51 @@ Private Const STX_SEP As String = ":"			' Separate specifiers in a field.
 
 ' Engine used for formatting.
 Public Enum FormatMode
-	fmVbFormat	' The Format() function in VBA.
-	fmXlText	' The Text() function in Excel.
+	fmtVbFormat	' The Format() function in VBA.
+	fmtXlText	' The Text() function in Excel.
 End Enum
 
 
 ' Outcomes of parsing.
 Public Enum ParsingStatus
-	psSuccess = 0			' Report success.
-	psError = 1000			' Report a general syntax error.
-	psErrorHangingEscape = 1001	' Report a hanging escape...
-	psErrorUnenclosedField = 1002	' ...or an incomplete field...
-	psErrorUnenclosedQuote = 1003	' ...or an incomplete quote...
-	psErrorNonintegralIndex = 1004	' ...or an index that is not an integer.
+	stsSuccess = 0			' Report success.
+	stsError = 1000			' Report a general syntax error.
+	stsErrorHangingEscape = 1001	' Report a hanging escape...
+	stsErrorUnenclosedField = 1002	' ...or an incomplete field...
+	stsErrorUnenclosedQuote = 1003	' ...or an incomplete quote...
+	stsErrorNonintegralIndex = 1004	' ...or an index that is not an integer.
 End Enum
 
 
 ' Kinds of elements which may be parsed.
 Public Enum ElementKind
 	[_Unknown]	' Uninitialized.
-	ekPlain		' Plain text which is displayed as is.
-	ekField		' Field that is formatted and embedded.
+	elmPlain	' Plain text which is displayed as is.
+	elmField	' Field that is formatted and embedded.
 End Enum
 
 
 ' Ways to defuse literal symbols rather than interpreting them.
 Private Enum ParsingDefusal
 	[_Off]		' No defusal.
-	pdEscape	' Defuse only the next character...
-	pdQuote		' ...or all characters within quotes.
+	dfuEscape	' Defuse only the next character...
+	dfuQuote	' ...or all characters within quotes.
 End Enum
 
 
 ' Kinds of indices for extracting values.
 Private Enum IndexKind
 	[_Unknown]	' Uninitialized.
-	ikPosition	' Integer for a position...
-	ikKey		' ...or text for a key.
+	idxPosition	' Integer for a position...
+	idxKey		' ...or text for a key.
 End Enum
 
 
 ' Positional arguments passed to an embedded field.
 Private Enum FieldArgument
 	[_None]
-	faIndex		' The index at which to extract the value.
-	faFormat	' The formatting applied to the value.
+	argIndex	' The index at which to extract the value.
+	argFormat	' The formatting applied to the value.
 	[_All]
 End Enum
 
@@ -174,7 +174,7 @@ Public Function Parse( _
 	If fmtLen = 0 Then
 		charIndex = 0
 		Erase elements
-		Parse = ParsingStatus.psSuccess
+		Parse = ParsingStatus.stsSuccess
 		Exit Function
 	End If
 	
@@ -199,7 +199,7 @@ Public Function Parse( _
 	Dim char As String
 	Dim nQuo As Long: nQuo = 0
 	Dim idxEsc As Boolean: idxEsc = False
-	Dim endStatus As ParsingStatus: endStatus = ParsingStatus.psSuccess
+	Dim endStatus As ParsingStatus: endStatus = ParsingStatus.stsSuccess
 	
 	
 	
@@ -245,11 +245,11 @@ Public Function Parse( _
 		' ## Plain Text ##
 		' ################
 		
-		Case ElementKind.ekPlain
+		Case ElementKind.elmPlain
 			Select Case dfu
 			
 			' Quote "inert" text...
-			Case ParsingDefusal.pdQuote
+			Case ParsingDefusal.dfuQuote
 				Select Case char
 				
 				' Terminate the quote...
@@ -262,8 +262,8 @@ Public Function Parse( _
 				End Select
 				
 			' ...or escape literal text...
-			Case ParsingDefusal.pdEscape
 				' ...
+			Case ParsingDefusal.dfuEscape
 				
 			' ...or parse "active" text.
 			Case Else
@@ -293,8 +293,8 @@ Public Function Parse( _
 		' ## Field ##
 		' ###########
 		
-		Case ElementKind.ekField
 			Select Case char
+		Case ElementKind.elmField
 			
 			' Parse out of the field...
 			Case closeField
@@ -326,8 +326,8 @@ Public Function Parse( _
 		)
 		
 		' ...and short-circuit for an index of the wrong type.
-		If endStatus = ParsingStatus.psErrorNonintegralIndex Then Exit Do
-		endStatus = ParsingStatus.psSuccess
+		If endStatus = ParsingStatus.stsErrorNonintegralIndex Then Exit Do
+		endStatus = ParsingStatus.stsSuccess
 		
 		' Increment the element.
 		eIdx = eIdx + 1
@@ -365,7 +365,7 @@ EXIT_LOOP:
 	
 	' Record any pending field information.
 	Select Case e.Kind
-	Case ElementKind.ekField
+	Case ElementKind.elmField
 		endStatus = Fld_Close(e.Field, _
 			format := format, _
 			nQuo := nQuo, _
@@ -378,25 +378,25 @@ EXIT_LOOP:
 	Select Case dfu
 	
 	' Report status: hanging escape...
-	Case ParsingDefusal.pdEscape
-		Parse = ParsingStatus.psErrorHangingEscape
+	Case ParsingDefusal.dfuEscape
+		Parse = ParsingStatus.stsErrorHangingEscape
 		
 	' ...or an unclosed quote...
-	Case ParsingDefusal.pdQuote
-		Parse = ParsingStatus.psErrorUnenclosedQuote
+	Case ParsingDefusal.dfuQuote
+		Parse = ParsingStatus.stsErrorUnenclosedQuote
 		
 	Case Else
 		' ...or an unclosed field...
 		If fldDepth <> 0 Then
-			Parse = ParsingStatus.psErrorUnenclosedField
+			Parse = ParsingStatus.stsErrorUnenclosedField
 			
 		' ...or a index of the wrong type...
-		ElseIf endStatus = ParsingStatus.psErrorNonintegralIndex Then
-			Parse = ParsingStatus.psErrorNonintegralIndex
+		ElseIf endStatus = ParsingStatus.stsErrorNonintegralIndex Then
+			Parse = ParsingStatus.stsErrorNonintegralIndex
 			
 		' ...or a successful parsing.
 		Else
-			Parse = ParsingStatus.psSuccess
+			Parse = ParsingStatus.stsSuccess
 		End If
 	End Select
 	
@@ -405,7 +405,7 @@ EXIT_LOOP:
 	
 ' Report a generic syntax error.
 STX_ERROR:
-	Parse = ParsingStatus.psError
+	Parse = ParsingStatus.stsError
 End Function
 
 
@@ -436,7 +436,7 @@ End Function
 ' 	char = VBA.vbNullString
 ' 	nQuo = 0
 ' 	idxEsc = False
-' 	endStatus = ParsingStatus.psSuccess
+' 	endStatus = ParsingStatus.stsSuccess
 ' End Sub
 
 
@@ -478,7 +478,7 @@ Private Function Elm_Close(ByRef elm As ParserElement, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
 	Dim status As ParsingStatus
-	Elm_Close = ParsingStatus.psSuccess
+	Elm_Close = ParsingStatus.stsSuccess
 	
 	' Record the syntax...
 	If elm.Start <= elm.Stop Then
@@ -493,13 +493,13 @@ Private Function Elm_Close(ByRef elm As ParserElement, _
 	
 	' Record any error when closing its extended (sub)element.
 	Select Case elm.Kind
-	Case ElementKind.ekField
+	Case ElementKind.elmField
 		status = Fld_Close(elm.Field, format := format, nQuo := nQuo, idxEsc := idxEsc)
 	Case Else
-		status = ParsingStatus.psSuccess
+		status = ParsingStatus.stsSuccess
 	End Select
 	
-	If Elm_Close = ParsingStatus.psSuccess Then Elm_Close = status
+	If Elm_Close = ParsingStatus.stsSuccess Then Elm_Close = status
 End Function
 
 
@@ -510,15 +510,15 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
 	Dim status As ParsingStatus
-	Fld_Close = ParsingStatus.psSuccess
+	Fld_Close = ParsingStatus.stsSuccess
 	
 	' Record any error when closing its index...
 	status = Idx_Close(fld.Index, format := format, nQuo := nQuo, idxEsc := idxEsc)
-	If Fld_Close = ParsingStatus.psSuccess Then Fld_Close = status
+	If Fld_Close = ParsingStatus.stsSuccess Then Fld_Close = status
 	
 	' ...and its format.
 	status = Fmt_Close(fld.Format, format := format)
-	If Fld_Close = ParsingStatus.psSuccess Then Fld_Close = status
+	If Fld_Close = ParsingStatus.stsSuccess Then Fld_Close = status
 End Function
 
 
@@ -545,14 +545,14 @@ Private Function Idx_Close(ByRef idx As ParserIndex, _
 	
 	' Ignore a missing index.
 	If Not idx.Exists Then
-		Fld_Close = ParsingStatus.psSuccess
+		Fld_Close = ParsingStatus.stsSuccess
 		Exit Function
 		
 	' Test for a key...
 	ElseIf idxQuo Or idxEsc Then
-		idx.Kind = IndexKind.ikKey
+		idx.Kind = IndexKind.idxKey
 		
-		Fld_Close = ParsingStatus.psSuccess
+		Fld_Close = ParsingStatus.stsSuccess
 		Exit Function
 		
 	' ...or an integral index.
@@ -561,17 +561,17 @@ Private Function Idx_Close(ByRef idx As ParserIndex, _
 		idx.Position = VBA.CLng(idx.Key)
 		On Error GoTo 0
 		
-		idx.Kind = IndexKind.ikPosition
+		idx.Kind = IndexKind.idxPosition
 		idx.Key = VBA.vbNullString
 		
-		Fld_Close = ParsingStatus.psSuccess
+		Fld_Close = ParsingStatus.stsSuccess
 		Exit Function
 		
 IDX_ERROR:
 		On Error GoTo 0
 		' idx.Kind = IndexKind.[_Unknown]
 		
-		Fld_Close = ParsingStatus.psErrorNonintegralIndex
+		Fld_Close = ParsingStatus.stsErrorNonintegralIndex
 		Exit Function
 	End If
 End Function
@@ -594,7 +594,7 @@ Private Function Fmt_Close(ByRef fmt As ParserFormat, _
 	End If
 	
 	' This should always work.
-	Fmt_Close = ParsingStatus.psSuccess
+	Fmt_Close = ParsingStatus.stsSuccess
 End Function
 
 
