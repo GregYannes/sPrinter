@@ -102,7 +102,7 @@ End Enum
 ' ###########
 
 ' Element for parsing the index...
-Public Type peFieldIndex
+Public Type ParserIndex
 	Exists As Boolean	' Whether this index exists in its field.
 	Syntax As String	' The syntax that was parsed to define this index.
 	Start As Long		' Where that syntax begins in the original string...
@@ -116,7 +116,7 @@ End Type
 
 
 ' ...and the custom format...
-Public Type peFieldFormat
+Public Type ParserFormat
 	Exists As Boolean	' Whether this format exists in its field.
 	Syntax As String	' The syntax that was parsed to define this format.
 	Start As Long		' Where that syntax begins in the original string...
@@ -125,14 +125,14 @@ End Type
 
 
 ' ...of a field embedded in formatting.
-Public Type peField
-	Index As peFieldIndex	' Any index for this field...
-	Format As peFieldFormat	' ...along with any format.
+Public Type ParserField
+	Index As ParserIndex	' Any index for this field...
+	Format As ParserFormat	' ...along with any format.
 End Type
 
 
 ' Elements into which formats are parsed.
-Public Type ParsingElement
+Public Type ParserElement
 	Syntax As String	' The syntax that was parsed to define this element.
 	Start As Long		' Where that syntax begins in the original string...
 	Stop As Long		' ...and where it ends.
@@ -140,7 +140,7 @@ Public Type ParsingElement
 	' The subtype which extends this element:
 	Kind As ElementKind
 	Plain as String		' Plain text which displays literally...
-	Field As peField	' ...or a field which embeds a value.
+	Field As ParserField	' ...or a field which embeds a value.
 End Type
 
 
@@ -152,7 +152,7 @@ End Type
 ' .
 Public Function Parse( _
 	ByRef format As String, _
-	ByRef elements() As ParsingElement, _
+	ByRef elements() As ParserElement, _
 	Optional ByRef charIndex As Long, _
 	Optional ByVal base As Long = 1, _
 	Optional ByVal escape As String = STX_ESC, _
@@ -193,7 +193,7 @@ Public Function Parse( _
 	
 	' ...and the current element...
 	Dim eIdx As Long: eIdx = base - 1
-	Dim e As ParsingElement
+	Dim e As ParserElement
 	
 	' ...and the current characters.
 	Dim char As String
@@ -423,7 +423,7 @@ End Function
 ' 	Optional ByRef dfu As ParsingDefusal, _
 ' 	Optional ByRef fldDepth As Long, _
 ' 	Optional ByRef eIdx As Long, _
-' 	Optional ByRef e As ParsingElement, _
+' 	Optional ByRef e As ParserElement, _
 ' 	Optional ByRef char As String, _
 ' 	Optional ByRef nQuo As Long, _
 ' 	Optional ByRef idxEsc As Boolean, _
@@ -443,9 +443,9 @@ End Function
 ' ' Save an element.
 ' Private Function Save( _
 ' 	ByRef format As String, _
-' 	ByRef elements As ParsingElement(), _
+' 	ByRef elements As ParserElement(), _
 ' 	ByRef eIdx As Long, _
-' 	ByRef e As ParsingElement, _
+' 	ByRef e As ParserElement, _
 ' 	ByRef nQuo As Long, _
 ' 	ByRef idxEsc As Boolean _
 ' ) As ParsingStatus
@@ -455,7 +455,7 @@ End Function
 
 
 ' ' Close an element and record its information.
-' Private Sub Elm_Close(ByRef elm As ParsingElement, _
+' Private Sub Elm_Close(ByRef elm As ParserElement, _
 ' 	ByRef format As String _
 ' )
 ' 	' Record the syntax...
@@ -472,7 +472,7 @@ End Function
 
 
 ' Close an element and record its information.
-Private Function Elm_Close(ByRef elm As ParsingElement, _
+Private Function Elm_Close(ByRef elm As ParserElement, _
 	ByRef format As String, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean _
@@ -504,7 +504,7 @@ End Function
 
 
 ' Close a field (sub)element and record its information...
-Private Function Fld_Close(ByRef fld As peField, _
+Private Function Fld_Close(ByRef fld As ParserField, _
 	ByRef format As String, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean _
@@ -523,7 +523,7 @@ End Function
 
 
 ' ...along with its index (sub)element...
-Private Function Idx_Close(ByRef idx As peFieldIndex, _
+Private Function Idx_Close(ByRef idx As ParserIndex, _
 	ByRef format As String, _
 	ByRef nQuo As Long, _
 	ByRef idxEsc As Boolean _
@@ -578,7 +578,7 @@ End Function
 
 
 ' ...and its format (sub)element.
-Private Function Fmt_Close(ByRef fmt As peFieldFormat, _
+Private Function Fmt_Close(ByRef fmt As ParserFormat, _
 	ByRef format As String _
 ) As ParsingStatus
 	' Record the format...
@@ -604,14 +604,14 @@ End Function
 ' ########################
 
 ' Reset an element.
-Private Sub Elm_Reset(ByRef elm As ParsingElement)
-	Dim reset As ParsingElement
+Private Sub Elm_Reset(ByRef elm As ParserElement)
+	Dim reset As ParserElement
 	Let elm = reset
 End Sub
 
 
 ' Clone one element into another.
-Private Sub Elm_Clone(ByRef elm1 As ParsingElement, ByRef elm2 As ParsingElement)
+Private Sub Elm_Clone(ByRef elm1 As ParserElement, ByRef elm2 As ParserElement)
 	Let elm2.Syntax = elm1.Syntax
 	Let elm2.Start  = elm1.Start
 	Let elm2.Stop   = elm1.Stop
@@ -623,14 +623,14 @@ End Sub
 
 
 ' Clone one field (sub)element into another...
-Private Sub Fld_Clone(ByRef fld1 As peField, ByRef fld2 As peField)
+Private Sub Fld_Clone(ByRef fld1 As ParserField, ByRef fld2 As ParserField)
 	Idx_Clone fld1.Index,  fld2.Index
 	Fmt_Clone fld1.Format, fld2.Format
 End Sub
 
 
 ' ...and its index (sub)element into another...
-Private Sub Idx_Clone(ByRef idx1 As peFieldIndex, ByRef idx2 As peFieldIndex)
+Private Sub Idx_Clone(ByRef idx1 As ParserIndex, ByRef idx2 As ParserIndex)
 	Let idx2.Exists   = idx1.Exists
 	Let idx2.Syntax   = idx1.Syntax
 	Let idx2.Start    = idx1.Start
@@ -642,7 +642,7 @@ End Sub
 
 
 ' ...and its format (sub)element into another.
-Private Sub Fmt_Clone(ByRef fmt1 As peFieldFormat, ByRef fmt2 As peFieldFormat)
+Private Sub Fmt_Clone(ByRef fmt1 As ParserFormat, ByRef fmt2 As ParserFormat)
 	Let fmt2.Exists = fmt1.Exists
 	Let fmt2.Syntax = fmt1.Syntax
 	Let fmt2.Start  = fmt1.Start
