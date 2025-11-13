@@ -87,6 +87,15 @@ Private Enum IndexKind
 End Enum
 
 
+' Positional arguments passed to an embedded field.
+Private Enum FieldArgument
+	[_None]
+	faIndex		' The index at which to extract the value.
+	faFormat	' The formatting applied to the value.
+	[_All]
+End Enum
+
+
 
 ' ###########
 ' ## Types ##
