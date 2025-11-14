@@ -318,24 +318,6 @@ Public Function Parse( _
 	' ## Control ##
 	' #############
 	
-	' Parse out of the field.
-	END_FIELD:
-		' Record the elemental information...
-		endStatus = Fld_Close(e.Field, _
-			format := format, _
-			nQuo := nQuo, _
-			idxEsc := idxEsc _
-		)
-		
-		' ...and short-circuit for an index of the wrong type.
-		If endStatus = ParsingStatus.stsErrorInvalidIndex Then Exit Do
-		endStatus = ParsingStatus.stsSuccess
-		
-		' Increment the element.
-		eIdx = eIdx + 1
-		
-		GoTo NEXT_CHAR
-		
 	' Increment the character.
 	NEXT_CHAR:
 		
