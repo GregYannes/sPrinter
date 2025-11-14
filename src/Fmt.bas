@@ -59,7 +59,7 @@ Public Enum ParsingStatus
 	stsErrorHangingEscape = 1001	' Report a hanging escape...
 	stsErrorUnenclosedField = 1002	' ...or an incomplete field...
 	stsErrorUnenclosedQuote = 1003	' ...or an incomplete quote...
-	stsErrorNonintegralIndex = 1004	' ...or an index that is not an integer.
+	stsErrorInvalidIndex = 1004	' ...or an index that is not an integer.
 End Enum
 
 
@@ -328,7 +328,7 @@ Public Function Parse( _
 		)
 		
 		' ...and short-circuit for an index of the wrong type.
-		If endStatus = ParsingStatus.stsErrorNonintegralIndex Then Exit Do
+		If endStatus = ParsingStatus.stsErrorInvalidIndex Then Exit Do
 		endStatus = ParsingStatus.stsSuccess
 		
 		' Increment the element.
@@ -393,8 +393,8 @@ EXIT_LOOP:
 			Parse = ParsingStatus.stsErrorUnenclosedField
 			
 		' ...or a index of the wrong type...
-		ElseIf endStatus = ParsingStatus.stsErrorNonintegralIndex Then
-			Parse = ParsingStatus.stsErrorNonintegralIndex
+		ElseIf endStatus = ParsingStatus.stsErrorInvalidIndex Then
+			Parse = ParsingStatus.stsErrorInvalidIndex
 			
 		' ...or a successful parsing.
 		Else
@@ -592,7 +592,7 @@ IDX_ERROR:
 		On Error GoTo 0
 		' idx.Kind = IndexKind.[_Unknown]
 		
-		Fld_Close = ParsingStatus.stsErrorNonintegralIndex
+		Fld_Close = ParsingStatus.stsErrorInvalidIndex
 		Exit Function
 	End If
 End Function
