@@ -93,6 +93,9 @@ Private Enum FieldArgument
 	argIndex	' The index at which to extract the value.
 	argFormat	' The formatting applied to the value.
 	[_All]
+	
+	[_First] = FieldArgument.[_None] + 1	' The first argument.
+	[_Last]  = FieldArgument.[_All] - 1	' The last argument.
 End Enum
 
 
