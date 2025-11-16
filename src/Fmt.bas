@@ -114,19 +114,17 @@ End Type
 
 ' Element for parsing the index...
 Public Type ParserIndex
-	Exists As Boolean	' Whether this index exists in its field.
+	Exists As Boolean		' Whether this index exists in its field.
 	Expression As ParsingExpression	' The expression that defines this index.
-	
-	' The type of index:
-	Kind As IndexKind
-	Position As Long	' A positional integer...
-	Key As String		' ...or a textual key.
+	Kind As IndexKind		' The type of index:
+	Position As Long		'   - A positional integer...
+	Key As String			'   - ...or a textual key.
 End Type
 
 
 ' ...and the custom format...
 Public Type ParserFormat
-	Exists As Boolean	' Whether this format exists in its field.
+	Exists As Boolean		' Whether this format exists in its field.
 	Expression As ParsingExpression	' The expression that defines this format.
 End Type
 
@@ -141,11 +139,9 @@ End Type
 ' Elements into which formats are parsed.
 Public Type ParserElement
 	Expression As ParsingExpression	' The expression that defines this element.
-	
-	' The subtype which extends this element:
-	Kind As ElementKind
-	Plain as String		' Plain text which displays literally...
-	Field As ParserField	' ...or a field which embeds a value.
+	Kind As ElementKind		' The subtype which extends this element:
+	Plain as String			'   - Plain text which displays literally...
+	Field As ParserField		'   - ...or a field which embeds a value.
 End Type
 
 
