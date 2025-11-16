@@ -194,7 +194,7 @@ Public Function Parse( _
 	Dim dfu As ParsingDefusal: dfu = ParsingDefusal.[_Off]
 	
 	' ...and the current depth of nesting...
-	Dim fldDepth As Long: fldDepth = 0
+	Dim depth As Long: depth = 0
 	
 	' ...and the current element...
 	Dim eIdx As Long: eIdx = base - 1
@@ -374,7 +374,7 @@ EXIT_LOOP:
 		
 	Case Else
 		' ...or an unclosed field...
-		If fldDepth <> 0 Then
+		If depth <> 0 Then
 			Parse = ParsingStatus.stsErrorUnenclosedField
 			
 		' ...or a index of the wrong type...
@@ -408,7 +408,7 @@ End Function
 ' ' Reset any global trackers.
 ' Private Sub Reset( _
 ' 	Optional ByRef dfu As ParsingDefusal, _
-' 	Optional ByRef fldDepth As Long, _
+' 	Optional ByRef depth As Long, _
 ' 	Optional ByRef eIdx As Long, _
 ' 	Optional ByRef e As ParserElement, _
 ' 	Optional ByRef char As String, _
@@ -417,7 +417,7 @@ End Function
 ' 	Optional ByRef endStatus As ParsingStatus _
 ' )
 ' 	dfu = ParsingDefusal.[_Off]
-' 	fldDepth = 0
+' 	depth = 0
 ' 	eIdx = 0
 ' 	Elm_Reset e
 ' 	char = VBA.vbNullString
