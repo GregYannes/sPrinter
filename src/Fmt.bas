@@ -76,6 +76,7 @@ Private Enum ParsingDefusal
 	[_Off]		' No defusal.
 	dfuEscape	' Defuse only the next character...
 	dfuQuote	' ...or all characters within quotes.
+	dfuNest		' ...or all expressions within a nested field.
 End Enum
 
 
