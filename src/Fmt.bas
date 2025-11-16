@@ -54,12 +54,12 @@ End Enum
 
 ' Outcomes of parsing.
 Public Enum ParsingStatus
-	stsSuccess = 0			' Report success.
-	stsError = 1000			' Report a general syntax error.
-	stsErrorHangingEscape = 1001	' Report a hanging escape...
+	stsSuccess              =    0	' Report success.
+	stsError                = 1000	' Report a general syntax error.
+	stsErrorHangingEscape   = 1001	' Report a hanging escape...
 	stsErrorUnenclosedField = 1002	' ...or an incomplete field...
 	stsErrorUnenclosedQuote = 1003	' ...or an incomplete quote...
-	stsErrorInvalidIndex = 1004	' ...or an index that is not an integer.
+	stsErrorInvalidIndex    = 1004	' ...or an index that is not an integer.
 End Enum
 
 
@@ -89,10 +89,10 @@ End Enum
 
 ' Positional arguments passed to an embedded field.
 Private Enum FieldArgument
-	[_None]
-	argIndex	' The index at which to extract the value.
-	argFormat	' The formatting applied to the value.
-	[_All]
+	[_None]					' No arguments.
+	argIndex				' The index at which to extract the value.
+	argFormat				' The formatting applied to the value.
+	[_All]					' All arguments.
 	
 	[_First] = FieldArgument.[_None] + 1	' The first argument.
 	[_Last]  = FieldArgument.[_All] - 1	' The last argument.
