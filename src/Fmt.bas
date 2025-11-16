@@ -72,11 +72,12 @@ End Enum
 
 
 ' Ways to defuse literal symbols rather than interpreting them.
+' NOTE: These may be combined (+) so they apply simultaneously.
 Private Enum ParsingDefusal
-	[_Off]		' No defusal.
-	dfuEscape	' Defuse only the next character...
-	dfuQuote	' ...or all characters within quotes.
-	dfuNest		' ...or all expressions within a nested field.
+	[_Off]			' No defusal.
+	dfuEscape = 2 ^ 0	' Defuse only the next character...
+	dfuQuote  = 2 ^ 1	' ...or all characters within quotes...
+	dfuNest   = 2 ^ 2	' ...or all expressions within a nested field.
 End Enum
 
 
@@ -391,6 +392,17 @@ EXIT_LOOP:
 STX_ERROR:
 	Parse = ParsingStatus.stsError
 End Function
+
+
+
+' ###############
+' ## Utilities ##
+' ###############
+
+' Test if a combination (dfuNest + dfuEscape) includes a particular enumeration (dfuEscape).
+Public Function Enum_Has(ByRef enum1 As Long, ByRef enum2 As Long) As Boolean
+	Enum_Is = enum1 And enum2
+End Sub
 
 
 
