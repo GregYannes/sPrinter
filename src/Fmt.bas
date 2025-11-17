@@ -156,7 +156,7 @@ End Type
 Public Function Parse( _
 	ByRef format As String, _
 	ByRef elements() As ParserElement, _
-	Optional ByRef charIndex As Long, _
+	Optional ByRef expression As ParserExpression, _
 	Optional ByVal base As Long = 1, _
 	Optional ByVal escape As String = STX_ESC, _
 	Optional ByVal openField As String = STX_FLD_OPEN, _
@@ -175,8 +175,8 @@ Public Function Parse( _
 	
 	' Short-circuit for unformatted input.
 	If fmtLen = 0 Then
-		charIndex = 0
 		Erase elements
+		Expr_Reset expression
 		Parse = ParsingStatus.stsSuccess
 		Exit Function
 	End If
@@ -197,8 +197,10 @@ Public Function Parse( _
 	' ...and the current element...
 	Dim eIdx As Long: eIdx = base - 1
 	Dim e As ParserElement
+	Expr_Reset expression
 	
 	' ...and the current characters.
+	Dim charIndex As Long
 	Dim char As String
 	Dim nQuo As Long: nQuo = 0
 	Dim idxEsc As Boolean: idxEsc = False
