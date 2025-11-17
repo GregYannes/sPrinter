@@ -456,6 +456,25 @@ End Function
 ' End Function
 
 
+' Close an expression and record its information.
+Private Function Expr_Close(ByRef expr As ParserExpression, _
+	ByRef format As String _
+) As ParsingStatus
+	' Record the syntax...
+	If expr.Start <= expr.Stop Then
+		Dim exprLen As Long: exprLen = expr.Stop - expr.Start + 1
+		expr.Syntax = VBA.Mid$(format, expr.Start, exprLen)
+		
+	' ...or clear invalid information.
+	Else
+		Expr_Reset expr
+	End If
+	
+	' This should always work.
+	Expr_Close = ParsingStatus.stsSuccess
+End Function
+
+
 ' ' Close an element and record its information.
 ' Private Sub Elm_Close(ByRef elm As ParserElement, _
 ' 	ByRef format As String _
@@ -604,6 +623,13 @@ End Function
 ' ########################
 ' ## Support | Elements ##
 ' ########################
+
+' Reset an expression.
+Private Sub Expr_Reset(ByRef expr As ParserExpression)
+	Dim reset As ParserExpression
+	Let expr = reset
+End Sub
+
 
 ' Reset an element.
 Private Sub Elm_Reset(ByRef elm As ParserElement)
