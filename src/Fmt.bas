@@ -195,7 +195,7 @@ Public Function Parse( _
 	Dim depth As Long: depth = 0
 	
 	' ...and the current element...
-	Dim eIdx As Long: eIdx = base - 1
+	Dim eIdx As Long: eIdx = base
 	Dim e As ParserElement
 	Expr_Reset expression
 	
