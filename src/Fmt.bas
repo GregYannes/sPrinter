@@ -480,16 +480,8 @@ End Function
 ' Private Sub Elm_Close(ByRef elm As ParserElement, _
 ' 	ByRef format As String _
 ' )
-' 	' Record the syntax...
-' 	If elm.Start <= elm.Stop Then
-' 		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
-' 		elm.Syntax = VBA.Mid$(format, elm.Start, elmLen)
-' 		
-' 	' ...or clear invalid information.
-' 	Else
-' 		elm.Start = 0
-' 		elm.Stop = 0
-' 	End If
+' 	' Close the expression.
+' 	Expr_Close elm.Expression, format := format
 ' End Sub
 
 
@@ -502,16 +494,9 @@ Private Function Elm_Close(ByRef elm As ParserElement, _
 	Dim status As ParsingStatus
 	Elm_Close = ParsingStatus.stsSuccess
 	
-	' Record the syntax...
-	If elm.Start <= elm.Stop Then
-		Dim elmLen As Long: elmLen = elm.Stop - elm.Start + 1
-		elm.Syntax = VBA.Mid$(format, elm.Start, elmLen)
-		
-	' ...or clear invalid information.
-	Else
-		elm.Start = 0
-		elm.Stop = 0
-	End If
+	' Record any error when closing its expression.
+	status = Expr_Close(elm.Expression, format := format)
+	If Elm_Close = ParsingStatus.stsSuccess Then Elm_Close = status
 	
 	' Record any error when closing its extended (sub)element.
 	Select Case elm.Kind
@@ -553,16 +538,16 @@ Private Function Idx_Close(ByRef idx As ParserIndex, _
 	Dim idxQuo As Boolean: idxQuo = False
 	
 	' Record the index...
-	If idx.Exists And idx.Start <= idx.Stop Then
-		idx.Stop = idx.Stop - 1
-		Dim idxLen As Long: idxLen = idx.Stop - idx.Start + 1
-		idx.Syntax = VBA.Mid$(format, idx.Start, idxLen)
+	If idx.Exists And idx.Expression.Start <= idx.Expression.Stop Then
+		idx.Expression.Stop = idx.Expression.Stop - 1
+		Dim idxLen As Long: idxLen = idx.Expression.Stop - idx.Expression.Start + 1
+		idx.Expression.Syntax = VBA.Mid$(format, idx.Expression.Start, idxLen)
 		idxQuo = (nQuo = 1)
 		
 	' ...or clear invalid information.
 	Else
-		idx.Start = 0
-		idx.Stop = 0
+		idx.Expression.Start = 0
+		idx.Expression.Stop = 0
 	End If
 	
 	' Ignore a missing index.
@@ -604,15 +589,15 @@ Private Function Fmt_Close(ByRef fmt As ParserFormat, _
 	ByRef format As String _
 ) As ParsingStatus
 	' Record the format...
-	If fmt.Exists And fmt.Start <= fmt.Stop Then
-		fmt.Start = fmt.Start + 1
-		Dim fmtLen As Long: fmtLen = fmt.Stop - fmt.Start + 1
-		fmt.Syntax = VBA.Mid$(format, fmt.Start, fmtLen)
+	If fmt.Exists And fmt.Expression.Start <= fmt.Expression.Stop Then
+		fmt.Expression.Start = fmt.Expression.Start + 1
+		Dim fmtLen As Long: fmtLen = fmt.Expression.Stop - fmt.Expression.Start + 1
+		fmt.Expression.Syntax = VBA.Mid$(format, fmt.Expression.Start, fmtLen)
 		
 	' ...or clear invalid information.
 	Else
-		fmt.Start = 0
-		fmt.Stop = 0
+		fmt.Expression.Start = 0
+		fmt.Expression.Stop = 0
 	End If
 	
 	' This should always work.
