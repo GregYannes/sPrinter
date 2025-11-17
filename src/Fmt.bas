@@ -114,6 +114,14 @@ Public Type ParserExpression
 End Type
 
 
+' ' An argument for parsing.
+' Public Type ParserArgument
+' 	Exists As Boolean		' Whether this argument exists in the call.
+' 	Expression As ParserExpression	' The expression that defines this argument.
+' 	Value As Variant		' The value to which this argument evaluates.
+' End Type
+
+
 ' Element for parsing the index...
 Public Type ParserIndex
 	Exists As Boolean		' Whether this index exists in its field.
