@@ -114,14 +114,6 @@ Public Type ParserExpression
 End Type
 
 
-' ' An argument for parsing.
-' Public Type ParserArgument
-' 	Exists As Boolean		' Whether this argument exists in the call.
-' 	Expression As ParserExpression	' The expression that defines this argument.
-' 	Value As Variant		' The value to which this argument evaluates.
-' End Type
-
-
 ' Element for parsing the index...
 Public Type ParserIndex
 	Exists As Boolean		' Whether this index exists in its field.
@@ -484,14 +476,6 @@ Private Function Expr_Close(ByRef expr As ParserExpression, _
 End Function
 
 
-' ' Close an argument and record its information.
-' Private Function Arg_Close(ByRef arg As ParserArgument, _
-' 	ByRef format As String _
-' ) As ParsingStatus
-' 	' ...
-' End Function
-
-
 ' ' Close an element and record its information.
 ' Private Sub Elm_Close(ByRef elm As ParserElement, _
 ' 	ByRef format As String _
@@ -646,14 +630,6 @@ Private Sub Expr_Clone(ByRef expr1 As ParserExpression, ByRef expr2 As ParserExp
 	Let expr2.Start  = expr1.Start
 	Let expr2.Stop   = expr1.Stop
 End Sub
-
-
-' ' Clone one argument into another.
-' Private Sub Arg_Clone(ByRef arg1 As ParserArgument, ByRef arg2 As ParserArgument)
-' 	Let arg2.Exists = arg1.Exists
-' 	Expr_Clone arg1.Expression, arg2.Expression
-' 	Assign arg2.Value, arg1.Value
-' End Sub
 
 
 ' Clone one element into another.
