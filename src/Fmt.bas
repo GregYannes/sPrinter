@@ -190,9 +190,8 @@ Public Function Parse( _
 	
 	' Track the current context for parsing...
 	Dim dfu As ParsingDefusal: dfu = ParsingDefusal.[_Off]
-	
-	' ...and the current depth of nesting...
 	Dim depth As Long: depth = 0
+	Dim endStatus As ParsingStatus: endStatus = ParsingStatus.stsSuccess
 	
 	' ...and the current element...
 	Dim eIdx As Long: eIdx = base
@@ -209,7 +208,6 @@ Public Function Parse( _
 	Dim char As String
 	Dim nQuo As Long: nQuo = 0
 	Dim idxEsc As Boolean: idxEsc = False
-	Dim endStatus As ParsingStatus: endStatus = ParsingStatus.stsSuccess
 	
 	
 	
