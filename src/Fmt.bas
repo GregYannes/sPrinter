@@ -199,15 +199,15 @@ Public Function Parse( _
 	Expr_Reset expression
 	
 	' ...and the current (field) argument...
+	Dim args(FIRST_ARG To LAST_ARG) As ParserExpression
 	Dim argIdx As FieldArgument: argIdx = FieldArgument.[_None]
 	Dim arg As ParserExpression
-	Dim args(FIRST_ARG To LAST_ARG) As ParserExpression
+	Dim nDfu As Long: nDfu = 0
+	Dim idxEsc As Boolean: idxEsc = False
 	
 	' ...and the current characters.
 	Dim charIndex As Long
 	Dim char As String
-	Dim nDfu As Long: nDfu = 0
-	Dim idxEsc As Boolean: idxEsc = False
 	
 	
 	
