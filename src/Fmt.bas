@@ -228,16 +228,16 @@ Public Function Parse( _
 		
 	' Revisit the character.
 	SAME_CHAR:
-		' Interpret this character in context.
-		Select Case e.Kind
-		
-		
 		
 		' ##############
 		' ## Inactive ##
 		' ##############
 		
-		Case ElementKind.[_Unknown]
+		' Identify and parse into the next element.
+		If depth = 0 Then
+			' ...
+			
+			
 			Select Case char
 			
 			' Parse into a field...
@@ -248,18 +248,25 @@ Public Function Parse( _
 			Case Else
 				' ...
 			End Select
-			
-			
-			
+		End If
+		
+		
+		' Interpret this character in context.
+		Select Case e.Kind
+		
+		
+		
 		' ################
 		' ## Plain Text ##
 		' ################
 		
 		Case ElementKind.elmPlain
-			Select Case dfu
-			
-			' Quote "inert" text...
-			Case ParsingDefusal.dfuQuote
+			' Escape a literal character...
+			If Enum_Has(ParsingDefusal.dfuEscape) Then
+				' ...
+				
+			' ...or quote "inert" text...
+			ElseIf Enum_Has(dfu, ParsingDefusal.dfuQuote) Then
 				Select Case char
 				
 				' Terminate the quote...
@@ -271,20 +278,18 @@ Public Function Parse( _
 					' ...
 				End Select
 				
-			' ...or escape literal text...
-				' ...
-			Case ParsingDefusal.dfuEscape
-				
-			' ...or parse "active" text.
+			' ...or parse "active" expressions.
 			Case Else
 				Select Case char
 				
 				' Quote the next characters...
 				Case openQuote
+					' TODO: Swap this with escaping.
 					' ...
 					
 				' ...escape the next character...
 				Case escape
+					' TODO: Swap this with quoting.
 					' ...
 					
 				' ...or parse into a field...
@@ -303,20 +308,99 @@ Public Function Parse( _
 		' ## Field ##
 		' ###########
 		
-			Select Case char
 		Case ElementKind.elmField
 			
-			' Parse out of the field...
-			Case closeField
+			' Handle the field contents.
+			If depth = 1 Then
+				Select Case char
+				
+				' Parse out of the field...
+				Case closeField
+					' ...
+					
+				' ...or parse into the next argument...
+				Case separator
+					' ...
+					
+				' ...or parse into the current argument.
+				Case Else
+					' ...
+				End Select
+			End If
+			
+			
+			' Escape a literal character...
+			If Enum_Has(dfu, ParsingDefusal.dfuEscape) Then
 				' ...
 				
-			' ...or parse into the format...
-			Case separator
-				' ...
+			' ...or quote "inert" text...
+			ElseIf Enum_Has(dfu, ParsingDefusal.dfuQuote) Then
+				Select Case char
 				
-			' ...or parse the index.
+				' Terminate the quote...
+				Case closeQuote
+					' ...
+					
+				' ...or continue quoting.
+				Case Else
+					' ...
+				End Select
+				
+			' ...or nest expressions...
+			ElseIf Enum_Has(dfu, ParsingDefusal.dfuNest) Then
+				Select case char
+				
+				' Quote the next characters...
+				Case openQuote
+					' TODO: Swap this with escaping.
+					' ...
+					
+				' ...or escape the next character...
+				Case escape
+					' TODO: Swap this with quoting.
+					' ...
+					
+				' ...or nest deeper...
+				Case openField
+					' ...
+					
+				' ...or unnest shallower...
+				Case closeField
+					' ...
+					
+				' ...or display literally.
+				Case Else
+					' ...
+				End Select
+				
+			' ...or parse "active" expressions.
 			Case Else
-				' ...
+				Select Case char
+				
+				' Quote the next characters...
+				Case openQuote
+					' ...
+					
+				' ...or escape the next characters...
+				Case escape
+					' ...
+					
+				' ...or nest the next syntax...
+				Case openField
+					' ...
+					
+				' ...or parse out of the field...
+				Case closeField
+					' ...
+					
+				' ...or parse to the next argument...
+				Case separator
+					' ...
+					
+				' ...or parse this argument.
+				Case Else
+					' ...
+				End Select
 			End Select
 		End Select
 		
