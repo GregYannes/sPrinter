@@ -199,7 +199,7 @@ Public Function Parse( _
 	Expr_Reset expression
 	
 	' ...and the current (field) argument...
-	Dim args(FIRST_ARG To LAST_ARG) As ParserExpression
+	Dim args(FieldArgument.[_First] To FieldArgument.[_Last]) As ParserExpression
 	Dim argIdx As FieldArgument: argIdx = FieldArgument.[_None]
 	Dim arg As ParserExpression
 	Dim nDfu As Long: nDfu = 0
