@@ -47,9 +47,24 @@ Private Const STX_SEP As String = ":"			' Separate specifiers in a field.
 
 ' Engine used for formatting.
 Public Enum FormatMode
+	[_Unknown]	' Uninitialized.
 	fmtVbFormat	' The Format() function in VBA.
 	fmtXlText	' The Text() function in Excel.
 End Enum
+
+
+' ' Syntax for parsing.
+' Private Enum ParsingSymbol
+' '	=============	====	  =============		=========
+' '	Label		Code	  Name			Character
+' '	=============	====	  =============		=========
+' 	symEscape     =	  92	' Backslash		\
+' 	symOpenField  =	 173	' Opening brace		{
+' 	symCloseField =	 175	' Closing brace		}
+' 	symopenQuote  =	  34	' Double quotes		"
+' 	symCloseQuote =	  34	' Double quotes		"
+' 	symSeparator  =	  58	' Colon			:
+' End Enum
 
 
 ' Outcomes of parsing.
@@ -194,9 +209,8 @@ Public Function Parse( _
 	Dim endStatus As ParsingStatus: endStatus = ParsingStatus.stsSuccess
 	
 	' ...and the current element...
-	Dim eIdx As Long: eIdx = base
+	Dim eIdx As Long: eIdx = base - 1
 	Dim e As ParserElement
-	Expr_Reset expression
 	
 	' ...and the current (field) argument...
 	Dim args(FieldArgument.[_First] To FieldArgument.[_Last]) As ParserExpression
@@ -224,7 +238,7 @@ Public Function Parse( _
 		' Extract the current character.
 		char = VBA.Mid$(format, charIndex, 1)
 		
-	' Revisit the character.
+	' Revisit the character from scratch.
 	SAME_CHAR:
 		
 		' ##############
@@ -233,18 +247,45 @@ Public Function Parse( _
 		
 		' Identify and parse into the next element.
 		If depth = 0 Then
-			' ...
+			' ' Prepare the global trackers:
+			' Expr_Reset expression	' Clear the expression.
+			' eIdx = eIdx + 1		' Increment the element in the array.
+			' Elm_Reset e		' Clear the element contents.
 			
+			' Enter parsing.
+			depth = depth + 1
+			
+			' Locate the element.
+			expression.Start = charIndex
+			expression.Stop = expression.Start
 			
 			Select Case char
 			
 			' Parse into a field...
 			Case openField
-				' ...
+				' ' Prepare the global (field) trackers:
+				' Erase args				' Clear the array of arguments.
+				' argIdx = FieldArgument.[_None]	' Reset to no arguments.
+				' nDfu = 0				' Reset to no quotations.
+				' idxEsc = False			' Reset to unescaped.
+				
+				' Nest deeper into the field.
+				depth = depth + 1
+				
+				' Identify the element as a field.
+				e.Kind = ElementKind.elmField
+				
+				' Advance to the next character in the field.
+				GoTo NEXT_CHAR
 				
 			' ...or interpret as text.
 			Case Else
-				' ...
+				' Identify the element as plaintext.
+				e.Kind = ElementKind.elmPlain
+				
+				' Revisit this character in plaintext.
+				expression.Stop = expression.Stop - 1
+				GoTo SAME_CHAR
 			End Select
 		End If
 		
@@ -261,7 +302,17 @@ Public Function Parse( _
 		Case ElementKind.elmPlain
 			' Escape a literal character...
 			If Enum_Has(ParsingDefusal.dfuEscape) Then
-				' ...
+				' Deactivate escaping.
+				dfu = dfu - ParsingDefusal.dfuEscape
+				
+				' Extend the location...
+				expression.Stop = expression.Stop + 1
+				
+				' ...and the contents.
+				e.Plain = e.Plain & char
+				
+				' Advance to the next character.
+				GoTo NEXT_CHAR
 				
 			' ...or quote "inert" text...
 			ElseIf Enum_Has(dfu, ParsingDefusal.dfuQuote) Then
@@ -269,11 +320,25 @@ Public Function Parse( _
 				
 				' Terminate the quote...
 				Case closeQuote
-					' ...
+					' Deactivate quoting.
+					dfu = dfu - ParsingDefusal.dfuQuote
+					
+					' Extend the location.
+					expression.Stop = expression.Stop + 1
+					
+					' Advance to the next character.
+					GoTo NEXT_CHAR
 					
 				' ...or continue quoting.
 				Case Else
-					' ...
+					' Extend the location...
+					expression.Stop = expression.Stop + 1
+					
+					' ...and the contents.
+					e.Plain = e.Plain & char
+					
+					' Advance to the next character.
+					GoTo NEXT_CHAR
 				End Select
 				
 			' ...or parse "active" expressions.
@@ -282,19 +347,51 @@ Public Function Parse( _
 				
 				' Escape the next character...
 				Case escape
-					' ...
+					' Activate escaping.
+					dfu = dfu + ParsingDefusal.dfuEscape
+					
+					' Extend the location.
+					expression.Stop = expression.Stop + 1
+					
+					' Advance to the next character.
+					GoTo NEXT_CHAR
 					
 				' ...or quote the next characters...
 				Case openQuote
-					' ...
+					' Activate quoting.
+					dfu = dfu + ParsingDefusal.dfuQuote
+					
+					' Extend the location.
+					expression.Stop = expression.Stop + 1
+					
+					' Advance to the next character.
+					GoTo NEXT_CHAR
 					
 				' ...or parse into a field...
 				Case openField
-					' ...
+					' Save this plaintext element to the array...
+					endStatus = Elm_Close(e, format := format, nDfu := nDfu, idxEsc := idxEsc)
+					Elm_Clone e, elements(eIdx)
+					
+					' ...but short-circuit for any errors.
+					If endStatus <> ParsingStatus.stsSuccess Then GoTo EXIT_LOOP
+					
+					' Exit parsing so we can reenter the field.
+					depth = depth - 1
+					
+					' Revisit this character from scratch.
+					GoTo SAME_CHAR
 					
 				' ...or display literally.
 				Case Else
-					' ...
+					' Extend the location...
+					expression.Stop = expression.Stop + 1
+					
+					' ...and the contents.
+					e.Plain = e.Plain & char
+					
+					' Advance to the next character.
+					GoTo NEXT_CHAR
 				End Select
 			End Select
 			
@@ -308,26 +405,56 @@ Public Function Parse( _
 			
 			' Handle the field contents.
 			If depth = 1 Then
+				' Prepare the global (argument) trackers.
+				Arg_Reset arg	' Clear the argument contents.
+				
 				Select Case char
 				
 				' Parse out of the field...
 				Case closeField
-					' ...
+					' Extend the (element) location.
+					expression.Stop = expression.Stop + 1
+					
+					' Exit parsing so we can reenter the next element.
+					depth = depth - 1
+					
+					' Advance to the next character.
+					GoTo NEXT_CHAR
 					
 				' ...or parse into the next argument...
 				Case separator
-					' ...
+					' Extend the (element) location.
+					expression.Stop = expression.Stop + 1
 					
 				' ...or parse into the current argument.
 				Case Else
+					' Enter the argument.
+					depth = depth + 1
+					
 					' ...
+					
+					' Revisit this character in the argument.
+					GoTo SAME_CHAR
 				End Select
 			End If
 			
 			
 			' Escape a literal character...
 			If Enum_Has(dfu, ParsingDefusal.dfuEscape) Then
-				' ...
+				' Deactivate escaping.
+				dfu = dfu - ParsingDefusal.dfuEscape
+				
+				' Extend the location of this field...
+				expression.Stop = expression.Stop + 1
+				
+				' ...and of this argument...
+				arg.Stop = arg.Stop + 1
+				
+				' ...along with its (defused) contents.
+				arg.Syntax = arg.Syntax & char
+				
+				' Advance to the next character.
+				GoTo NEXT_CHAR
 				
 			' ...or quote "inert" text...
 			ElseIf Enum_Has(dfu, ParsingDefusal.dfuQuote) Then
@@ -335,11 +462,31 @@ Public Function Parse( _
 				
 				' Terminate the quote...
 				Case closeQuote
-					' ...
+					' Deactivate quoting.
+					dfu = dfu - ParsingDefusal.dfuQuote
+					
+					' Extend the location of this field...
+					expression.Stop = expression.Stop + 1
+					
+					' ...and of this argument.
+					arg.Stop = arg.Stop + 1
+					
+					' Advance to the next character.
+					GoTo NEXT_CHAR
 					
 				' ...or continue quoting.
 				Case Else
-					' ...
+					' Extend the location of this field...
+					expression.Stop = expression.Stop + 1
+					
+					' ...and of this argument...
+					arg.Stop = arg.Stop + 1
+					
+					' ...along with its (defused) contents.
+					arg.Syntax = arg.Syntax & char
+					
+					' Advance to the next character.
+					GoTo NEXT_CHAR
 				End Select
 				
 			' ...or nest expressions...
@@ -348,18 +495,32 @@ Public Function Parse( _
 				
 				' Escape the next character...
 				Case escape
+					' Activate escaping.
+					dfu = dfu + ParsingDefusal.dfuEscape
+					
 					' ...
 					
 				' ...or quote the next characters...
 				Case openQuote
+					' Activate quoting.
+					dfu = dfu + ParsingDefusal.dfuQuote
+					
 					' ...
 					
 				' ...or nest deeper...
 				Case openField
+					' Nest deeper into the nesting.
+					depth = depth + 1
+					
 					' ...
 					
 				' ...or unnest shallower...
 				Case closeField
+					' Unnest shallower out of the nesting.
+					depth = depth - 1
+					
+					If depth <= 1 Then dfu = dfu - ParsingDefusal.dfuNest
+					
 					' ...
 					
 				' ...or display literally.
@@ -385,11 +546,57 @@ Public Function Parse( _
 					
 				' ...or parse out of the field...
 				Case closeField
-					' ...
+					' Continue argument if still nested...
+					If depth > 0 Then
+						arg.Stop = arg.Stop + 1
+						arg.Syntax = arg.Syntax & char
+						GoTo NEXT_CHAR
+					End If
+					
+					' ...but otherwise save any argument...
+					If argIdx > FieldArguments.[_None] Then Expr_Clone arg, args(argIdx)
+					
+					' ...along with the element.
+					endStatus = Elm_Close(e, format := format, nDfu := nDfu, idxEsc := idxEsc)	' argIdx := argIdx, args := args
+					Elm_Clone e, elements(eIdx)
+					
+					' Short-circuit for errors.
+					If endStatus <> ParsingStatus.stsSuccess Then GoTo EXIT_LOOP
+					
+					' Update global trackers.
+					depth = depth - 1
+					eIdx = eIdx + 1
+					Elm_Reset e
+					argIdx = FieldArgument.[_None]
+					Expr_Reset arg
+					Erase args
+					nDfu = 0
+					idxEsc = False
+					
+					' Increment character.
+					GoTo NEXT_CHAR
 					
 				' ...or parse to the next argument...
 				Case separator
-					' ...
+					' Continue argument if still nested...
+					If depth > 0 Then
+						arg.Stop = arg.Stop + 1
+						arg.Syntax = arg.Syntax & char
+						GoTo NEXT_CHAR
+					End If
+					
+					' ...but otherwise save argument.
+					Expr_Clone arg, args(argIdx)
+					
+					' Update global trackers.
+					depth = depth - 1
+					argIdx = argIdx + 1
+					Expr_Reset arg
+					arg.Start = charIndex + 1
+					arg.Stop = arg.Start - 1
+					
+					' Increment character.
+					GoTo NEXT_CHAR
 					
 				' ...or parse this argument.
 				Case Else
@@ -423,7 +630,7 @@ EXIT_LOOP:
 	' ####################
 	
 	' Resize to the elements we actually parsed.
-	If elements(eIdx).Kind = ElementKind.[_Unknown] Then
+	If e.Kind = ElementKind.[_Unknown] Then
 		eIdx = eIdx - 1
 	End If
 	
@@ -483,6 +690,16 @@ End Function
 ' ###############
 ' ## Utilities ##
 ' ###############
+
+' ' Assign any value (scalar or objective) to a variable.
+' Public Sub Assign(ByRef var As Variant, ByRef val As Variant)
+' 	If VBA.IsObject(val) Then
+' 		Set var = val
+' 	Else
+' 		Let var = val
+' 	End If
+' End Sub
+
 
 ' Test if a combination (dfuNest + dfuEscape) includes a particular enumeration (dfuEscape).
 Public Function Enum_Has(ByRef enum1 As Long, ByRef enum2 As Long) As Boolean
