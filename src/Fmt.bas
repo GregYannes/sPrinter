@@ -101,6 +101,14 @@ Private Enum FieldArgument
 End Enum
 
 
+' ' Ways to interpret (negative) positional indices.
+' Public Enum PositionKind
+' 	[_Unknown]	' Uninitialized.
+' 	posAbsolute	' Negative index (-1) is extracted directly...
+' 	posRelative	' ...or measured (1st) from the end.
+' End Enum
+
+
 
 ' ###########
 ' ## Types ##
