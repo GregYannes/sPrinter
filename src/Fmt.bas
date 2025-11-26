@@ -47,6 +47,7 @@ Private Const STX_SEP As String = ":"			' Separate specifiers in a field.
 
 ' Engine used for formatting.
 Public Enum FormatMode
+' 	[_Unknown]	' Uninitialized.
 	fmtVbFormat	' The Format() function in VBA.
 	fmtXlText	' The Text() function in Excel.
 End Enum
