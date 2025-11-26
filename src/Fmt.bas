@@ -94,6 +94,9 @@ End Enum
 Private Enum FieldArgument
 	[_None]					' No arguments.
 	argIndex				' The index at which to extract the value.
+	' argPosition				' How to interpret a negative index.
+	' argDay1				' The first day of the week, passed to Format() as "FirstDayOfWeek".
+	' argWeek1				' The first week of the year, passed to Format() as "FirstWeekOfYear".
 	argFormat				' The formatting applied to the value.
 	[_All]					' All arguments.
 	
