@@ -547,6 +547,81 @@ End Sub
 ' End Function
 
 
+' ' Interpret specifiers for field arguments.
+' Private Function Fld_Spec( _
+' 	ByVal spec As String, _
+' 	ByVal arg As FieldArgument, _
+' 	ByRef exists As Boolean _
+' ) As Long
+' 	' spec = VBA.Trim(spec)
+' 	spec = VBA.UCase(spec)
+' 	
+' 	' 		============	==========	======================
+' 	' 		Abbreviation	Name      	Enumeration
+' 	' 		============	==========	======================
+' 	Select Case arg
+' 	
+' 	' ' How to interpret a negative index.
+' 	' Case FieldArgument.argPosition
+' 	' 	Select Case spec
+' 	' 	' 	============	==========	======================
+' 	' ' 	Case	"?", 		"UNKNOWN",	"[_UNKNOWN]":		Fld_Spec = PositionKind.[_Unknown]
+' 	' 	Case	"ABS",		"ABSOLUTE",	"POSABSOLUTE":		Fld_Spec = PositionKind.posAbsolute
+' 	' 	Case	"REL",		"RELATIVE",	"POSRELATIVE":		Fld_Spec = PositionKind.posRelative
+' 		' 	============	==========	======================
+' 		Case Else:												GoTo NO_MATCH
+' 	' 	Case Else:							Fld_Spec = PositionKind.[_Unknown]:	GoTo NO_MATCH
+' 	' 	End Select
+' 		
+' 	' ' The "FirstDayOfWeek" for Format().
+' 	' Case FieldArgument.argDay1
+' 	' 	Select Case spec
+' 	' 	' 	============	==========	======================
+' 	' 	Case	"SYS",		"SYSTEM",	"VBUSESYSTEMDAYOFWEEK":	Fld_Spec = VBA.VbDayOfWeek.vbUseSystemDayOfWeek
+' 	' 	Case	"SUN",		"SUNDAY",	"VBSUNDAY":		Fld_Spec = VBA.VbDayOfWeek.vbSunday
+' 	' 	Case	"MON",		"MONDAY",	"VBMONDAY":		Fld_Spec = VBA.VbDayOfWeek.vbMonday
+' 	' 	Case	"TUE",		"TUESDAY",	"VBTUESDAY":		Fld_Spec = VBA.VbDayOfWeek.vbTuesday
+' 	' 	Case	"WED",		"WEDNESDAY",	"VBWEDNESDAY":		Fld_Spec = VBA.VbDayOfWeek.vbWednesday
+' 	' 	Case	"THU",		"THURSDAY",	"VBTHURSDAY":		Fld_Spec = VBA.VbDayOfWeek.vbThursday
+' 	' 	Case	"FRI",		"FRIDAY",	"VBFRIDAY":		Fld_Spec = VBA.VbDayOfWeek.vbFriday
+' 	' 	Case	"SAT",		"SATURDAY",	"VBSATURDAY":		Fld_Spec = VBA.VbDayOfWeek.vbSaturday
+' 	' 	' 	============	==========	======================
+' 	' 	Case Else:												GoTo NO_MATCH
+' 	' 	End Select
+' 		
+' 	' ' The "FirstWeekOfYear" for Format().
+' 	' Case FieldArgument.argWeek1
+' 	' 	Select Case spec
+' 	' 	' 	============	==========	======================
+' 	' 	Case	"SYS",		"SYSTEM",	"VBUSESYSTEM":		Fld_Spec = VBA.VbFirstWeekOfYear.vbUseSystem
+' 	' 	Case	"J1",		"JAN1",		"VBFIRSTJAN1":		Fld_Spec = VBA.VbFirstWeekOfYear.vbFirstJan1
+' 	' 	Case	"4D",		"FOURDAYS",	"VBFIRSTFOURDAYS":	Fld_Spec = VBA.VbFirstWeekOfYear.vbFirstFourDays
+' 	' 	Case	"FW",		"FULLWEEK",	"VBFIRSTFULLWEEK":	Fld_Spec = VBA.VbFirstWeekOfYear.vbFirstFullWeek
+' 	' 	' 	============	==========	======================
+' 	' 	Case Else:												GoTo NO_MATCH
+' 	' 	End Select
+' 		
+' 	' .
+' 	Case FieldArgument.argFormat
+' 		Select Case spec
+' 		' 	============	==========	======================
+' 	' ' 	Case	"?",		"UNKNOWN",	"[_Unknown]":		Fld_Spec = FormatMode.[_Unknown]
+' 		Case	"XL",		"EXCEL",	"FMTEXCELTEXT":		Fld_Spec = FormatMode.fmtExcelText
+' 		Case	"VB",		"VBA",		"FMTVBFORMAT":		Fld_Spec = FormatMode.fmtVbFormat
+' 		' 	============	==========	======================
+' 		Case Else:												GoTo NO_MATCH
+' 	' 	Case Else:							Fld_Spec = FormatMode.[_Unknown]:	GoTo NO_MATCH
+' 		End Select
+' 	End Select
+' 	
+' 	exists = True
+' 	Exit Function
+' 	
+' NO_MATCH:
+' 	exists = False
+' End Function
+
+
 ' Close an expression and record its information.
 Private Function Expr_Close(ByRef expr As ParserExpression, _
 	ByRef format As String _
