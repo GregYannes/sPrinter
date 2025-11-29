@@ -96,14 +96,6 @@ Private Enum ParsingDefusal
 End Enum
 
 
-' Kinds of indices for extracting values.
-Private Enum IndexKind
-	[_Unknown]	' Uninitialized.
-	idxPosition	' Integer for a position...
-	idxKey		' ...or text for a key.
-End Enum
-
-
 ' Positional arguments passed to an embedded field.
 Private Enum FieldArgument
 	[_None]					' No arguments.
@@ -140,33 +132,15 @@ Public Type ParserExpression
 End Type
 
 
-' Element for parsing the index...
-Public Type ParserIndex
-	Exists As Boolean		' Whether this index exists in its field.
-	Expression As ParsingExpression	' The expression that defines this index.
-	Kind As IndexKind		' The type of index:
-	Position As Long		'   - A positional integer...
-	Key As String			'   - ...or a textual key.
-End Type
-
-
-' ...and the custom format...
-Public Type ParserFormat
-	Exists As Boolean		' Whether this format exists in its field.
-	Expression As ParsingExpression	' The expression that defines this format.
-End Type
-
-
-' ...of a field embedded in formatting.
+' Element for parsing a field embedded in formatting.
 Public Type ParserField
-	Index As ParserIndex	' Any index for this field...
-	Format As ParserFormat	' ...along with any format.
+	Index As Variant	' Any index for this field...
+	Format As String	' ...along with any format.
 End Type
 
 
 ' Elements into which formats are parsed.
 Public Type ParserElement
-	Expression As ParsingExpression	' The expression that defines this element.
 	Kind As ElementKind		' The subtype which extends this element:
 	Plain as String			'   - Plain text which displays literally...
 	Field As ParserField		'   - ...or a field which embeds a value.
