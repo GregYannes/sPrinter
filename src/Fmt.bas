@@ -226,13 +226,16 @@ Public Function Parse( _
 		
 	' Revisit the character.
 	SAME_CHAR:
+		' Interpret this character in context.
+		Select Case e.Kind
+		
+		
 		
 		' ##############
 		' ## Inactive ##
 		' ##############
 		
-		' Identify and parse into the next element.
-		If depth = 0 Then
+		Case ElementKind.[_Unknown]
 			' ...
 			
 			
@@ -247,10 +250,6 @@ Public Function Parse( _
 				' ...
 			End Select
 		End If
-		
-		
-		' Interpret this character in context.
-		Select Case e.Kind
 		
 		
 		
