@@ -304,26 +304,6 @@ Public Function Parse( _
 		' ###########
 		
 		Case ElementKind.elmField
-			
-			' Handle the field contents.
-			If depth = 1 Then
-				Select Case char
-				
-				' Parse out of the field...
-				Case closeField
-					' ...
-					
-				' ...or parse into the next argument...
-				Case separator
-					' ...
-					
-				' ...or parse into the current argument.
-				Case Else
-					' ...
-				End Select
-			End If
-			
-			
 			' Escape a literal character...
 			If Enum_Has(dfu, ParsingDefusal.dfuEscape) Then
 				' ...
