@@ -766,8 +766,6 @@ End Sub
 
 ' Clone one element into another.
 Private Sub Elm_Clone(ByRef elm1 As ParserElement, ByRef elm2 As ParserElement)
-	Expr_Clone elm1.Expression, elm2.Expression
-	
 	Let elm2.Kind   = elm1.Kind
 	Let elm2.Plain	= elm1.Plain
 	Fld_Clone elm1.Field, elm2.Field
@@ -776,6 +774,6 @@ End Sub
 
 ' Clone one field (sub)element into another.
 Private Sub Fld_Clone(ByRef fld1 As ParserField, ByRef fld2 As ParserField)
-	Idx_Clone fld1.Index,  fld2.Index
-	Fmt_Clone fld1.Format, fld2.Format
+	Let fld2.Index = fld1.Index
+	Let fld2.Format = fld1.Format
 End Sub
