@@ -135,6 +135,9 @@ End Type
 ' Element for parsing a field embedded in formatting.
 Public Type ParserField
 	Index As Variant	' Any index for this field...
+' 	Position As PositionKind
+' 	Day1 As VBA.VbDayOfWeek
+' 	Week1 As VBA.VbFirstWeekOfYear
 	Format As String	' ...along with any format.
 End Type
 
@@ -775,5 +778,8 @@ End Sub
 ' Clone one field (sub)element into another.
 Private Sub Fld_Clone(ByRef fld1 As ParserField, ByRef fld2 As ParserField)
 	Let fld2.Index = fld1.Index
+' 	Let fld2.Position = fld1.Position
+' 	Let fld2.Day1 = fld1.Day1
+' 	Let fld2.Week1 = fld1.Week1
 	Let fld2.Format = fld1.Format
 End Sub
