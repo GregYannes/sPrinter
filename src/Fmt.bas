@@ -617,29 +617,29 @@ End Function
 ' End Sub
 
 
-' Close an element and record its information.
-Private Function Elm_Close(ByRef elm As ParserElement, _
-	ByRef format As String, _
-	ByRef nDfu As Long, _
-	ByRef idxEsc As Boolean _
-) As ParsingStatus
-	Dim status As ParsingStatus
-	Elm_Close = ParsingStatus.stsSuccess
-	
-	' Record any error when closing its expression.
-	status = Expr_Close(elm.Expression, format := format)
-	If Elm_Close = ParsingStatus.stsSuccess Then Elm_Close = status
-	
-	' Record any error when closing its extended (sub)element.
-	Select Case elm.Kind
-	Case ElementKind.elmField
-		status = Fld_Close(elm.Field, format := format, nDfu := nDfu, idxEsc := idxEsc)
-	Case Else
-		status = ParsingStatus.stsSuccess
-	End Select
-	
-	If Elm_Close = ParsingStatus.stsSuccess Then Elm_Close = status
-End Function
+' ' Close an element and record its information.
+' Private Function Elm_Close(ByRef elm As ParserElement, _
+' 	ByRef format As String, _
+' 	ByRef nDfu As Long, _
+' 	ByRef idxEsc As Boolean _
+' ) As ParsingStatus
+' 	Dim status As ParsingStatus
+' 	Elm_Close = ParsingStatus.stsSuccess
+' 	
+' 	' Record any error when closing its expression.
+' 	status = Expr_Close(elm.Expression, format := format)
+' 	If Elm_Close = ParsingStatus.stsSuccess Then Elm_Close = status
+' 	
+' 	' Record any error when closing its extended (sub)element.
+' 	Select Case elm.Kind
+' 	Case ElementKind.elmField
+' 		status = Fld_Close(elm.Field, format := format, nDfu := nDfu, idxEsc := idxEsc)
+' 	Case Else
+' 		status = ParsingStatus.stsSuccess
+' 	End Select
+' 	
+' 	If Elm_Close = ParsingStatus.stsSuccess Then Elm_Close = status
+' End Function
 
 
 ' Close a field (sub)element and record its information...
@@ -661,7 +661,7 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 End Function
 
 
-' ...along with its index (sub)element...
+' ...along with its index (sub)element.
 Private Function Idx_Close(ByRef idx As ParserIndex, _
 	ByRef format As String, _
 	ByRef nDfu As Long, _
@@ -716,25 +716,25 @@ IDX_ERROR:
 End Function
 
 
-' ...and its format (sub)element.
-Private Function Fmt_Close(ByRef fmt As ParserFormat, _
-	ByRef format As String _
-) As ParsingStatus
-	' Record the format...
-	If fmt.Exists And fmt.Expression.Start <= fmt.Expression.Stop Then
-		fmt.Expression.Start = fmt.Expression.Start + 1
-		Dim fmtLen As Long: fmtLen = fmt.Expression.Stop - fmt.Expression.Start + 1
-		fmt.Expression.Syntax = VBA.Mid$(format, fmt.Expression.Start, fmtLen)
-		
-	' ...or clear invalid information.
-	Else
-		fmt.Expression.Start = 0
-		fmt.Expression.Stop = 0
-	End If
-	
-	' This should always work.
-	Fmt_Close = ParsingStatus.stsSuccess
-End Function
+' ' ...and its format (sub)element.
+' Private Function Fmt_Close(ByRef fmt As ParserFormat, _
+' 	ByRef format As String _
+' ) As ParsingStatus
+' 	' Record the format...
+' 	If fmt.Exists And fmt.Expression.Start <= fmt.Expression.Stop Then
+' 		fmt.Expression.Start = fmt.Expression.Start + 1
+' 		Dim fmtLen As Long: fmtLen = fmt.Expression.Stop - fmt.Expression.Start + 1
+' 		fmt.Expression.Syntax = VBA.Mid$(format, fmt.Expression.Start, fmtLen)
+' 		
+' 	' ...or clear invalid information.
+' 	Else
+' 		fmt.Expression.Start = 0
+' 		fmt.Expression.Stop = 0
+' 	End If
+' 	
+' 	' This should always work.
+' 	Fmt_Close = ParsingStatus.stsSuccess
+' End Function
 
 
 
