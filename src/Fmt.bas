@@ -47,7 +47,7 @@ Private Const STX_SEP As String = ":"			' Separate specifiers in a field.
 
 ' Engine used for formatting.
 Public Enum FormatMode
-' 	[_Unknown]	' Uninitialized.
+' 	[_Unknown] = 0	' Uninitialized.
 	fmtVbFormat	' The Format() function in VBA.
 	fmtXlText	' The Text() function in Excel.
 End Enum
@@ -80,7 +80,7 @@ End Enum
 
 ' Kinds of elements which may be parsed.
 Public Enum ElementKind
-	[_Unknown]	' Uninitialized.
+	[_Unknown] = 0	' Uninitialized.
 	elmPlain	' Plain text which is displayed as is.
 	elmField	' Field that is formatted and embedded.
 End Enum
@@ -89,7 +89,7 @@ End Enum
 ' Ways to defuse literal symbols rather than interpreting them.
 ' NOTE: These may be combined (+) so they apply simultaneously.
 Private Enum ParsingDefusal
-	[_Off]			' No defusal.
+	[_Off]    = 0		' No defusal.
 	dfuEscape = 2 ^ 0	' Defuse only the next character...
 	dfuQuote  = 2 ^ 1	' ...or all characters within quotes...
 	dfuNest   = 2 ^ 2	' ...or all expressions within a nested field.
@@ -113,7 +113,7 @@ End Enum
 
 ' ' Ways to interpret (negative) positional indices.
 ' Public Enum PositionKind
-' 	[_Unknown]	' Uninitialized.
+' 	[_Unknown] = 0	' Uninitialized.
 ' 	posAbsolute	' Negative index (-1) is extracted directly...
 ' 	posRelative	' ...or measured (1st) from the end.
 ' End Enum
