@@ -774,25 +774,8 @@ Private Sub Elm_Clone(ByRef elm1 As ParserElement, ByRef elm2 As ParserElement)
 End Sub
 
 
-' Clone one field (sub)element into another...
+' Clone one field (sub)element into another.
 Private Sub Fld_Clone(ByRef fld1 As ParserField, ByRef fld2 As ParserField)
 	Idx_Clone fld1.Index,  fld2.Index
 	Fmt_Clone fld1.Format, fld2.Format
-End Sub
-
-
-' ...and its index (sub)element into another...
-Private Sub Idx_Clone(ByRef idx1 As ParserIndex, ByRef idx2 As ParserIndex)
-	Let idx2.Exists   = idx1.Exists
-	Expr_Clone idx1.Expression, idx2.Expression
-	Let idx2.Kind     = idx1.Kind
-	Let idx2.Position = idx1.Position
-	Let idx2.Key      = idx1.Key
-End Sub
-
-
-' ...and its format (sub)element into another.
-Private Sub Fmt_Clone(ByRef fmt1 As ParserFormat, ByRef fmt2 As ParserFormat)
-	Let fmt2.Exists = fmt1.Exists
-	Expr_Clone fmt1.Expression, fmt2.Expression
 End Sub
