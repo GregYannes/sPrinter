@@ -503,20 +503,6 @@ End Sub
 ' End Sub
 
 
-' ' Save an element.
-' Private Function Save( _
-' 	ByRef format As String, _
-' 	ByRef elements As ParserElement(), _
-' 	ByRef eIdx As Long, _
-' 	ByRef e As ParserElement, _
-' 	ByRef nDfu As Long, _
-' 	ByRef idxEsc As Boolean _
-' ) As ParsingStatus
-' 	Save = Elm_Close(e, format := format, nDfu := nDfu, idxEsc := idxEsc)
-' 	Elm_Clone e, elements(eIdx)
-' End Function
-
-
 ' ' Interpret specifiers for field arguments.
 ' Private Function Fld_Spec( _
 ' 	ByVal spec As String, _
@@ -611,40 +597,6 @@ Private Function Expr_Close(ByRef expr As ParserExpression, _
 End Function
 
 
-' ' Close an element and record its information.
-' Private Sub Elm_Close(ByRef elm As ParserElement, _
-' 	ByRef format As String _
-' )
-' 	' Close the expression.
-' 	Expr_Close elm.Expression, format := format
-' End Sub
-
-
-' ' Close an element and record its information.
-' Private Function Elm_Close(ByRef elm As ParserElement, _
-' 	ByRef format As String, _
-' 	ByRef nDfu As Long, _
-' 	ByRef idxEsc As Boolean _
-' ) As ParsingStatus
-' 	Dim status As ParsingStatus
-' 	Elm_Close = ParsingStatus.stsSuccess
-' 	
-' 	' Record any error when closing its expression.
-' 	status = Expr_Close(elm.Expression, format := format)
-' 	If Elm_Close = ParsingStatus.stsSuccess Then Elm_Close = status
-' 	
-' 	' Record any error when closing its extended (sub)element.
-' 	Select Case elm.Kind
-' 	Case ElementKind.elmField
-' 		status = Fld_Close(elm.Field, format := format, nDfu := nDfu, idxEsc := idxEsc)
-' 	Case Else
-' 		status = ParsingStatus.stsSuccess
-' 	End Select
-' 	
-' 	If Elm_Close = ParsingStatus.stsSuccess Then Elm_Close = status
-' End Function
-
-
 ' Close a field (sub)element and record its information...
 Private Function Fld_Close(ByRef fld As ParserField, _
 	ByRef format As String, _
@@ -717,27 +669,6 @@ IDX_ERROR:
 		Exit Function
 	End If
 End Function
-
-
-' ' ...and its format (sub)element.
-' Private Function Fmt_Close(ByRef fmt As ParserFormat, _
-' 	ByRef format As String _
-' ) As ParsingStatus
-' 	' Record the format...
-' 	If fmt.Exists And fmt.Expression.Start <= fmt.Expression.Stop Then
-' 		fmt.Expression.Start = fmt.Expression.Start + 1
-' 		Dim fmtLen As Long: fmtLen = fmt.Expression.Stop - fmt.Expression.Start + 1
-' 		fmt.Expression.Syntax = VBA.Mid$(format, fmt.Expression.Start, fmtLen)
-' 		
-' 	' ...or clear invalid information.
-' 	Else
-' 		fmt.Expression.Start = 0
-' 		fmt.Expression.Stop = 0
-' 	End If
-' 	
-' 	' This should always work.
-' 	Fmt_Close = ParsingStatus.stsSuccess
-' End Function
 
 
 
