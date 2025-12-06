@@ -100,9 +100,9 @@ End Enum
 Private Enum FieldArgument
 	[_None]					' No arguments.
 	argIndex				' The index at which to extract the value.
-	' argPosition				' How to interpret a negative index.
-	' argDay1				' The first day of the week, passed to Format() as "FirstDayOfWeek".
-	' argWeek1				' The first week of the year, passed to Format() as "FirstWeekOfYear".
+' 	argPosition				' How to interpret a negative index.
+' 	argDay1					' The first day of the week, passed to Format() as "FirstDayOfWeek".
+' 	argWeek1				' The first week of the year, passed to Format() as "FirstWeekOfYear".
 	argFormat				' The formatting applied to the value.
 	[_All]					' All arguments.
 	
@@ -134,11 +134,11 @@ End Type
 
 ' Element for parsing a field embedded in formatting.
 Public Type ParserField
-	Index As Variant	' Any index for this field...
-' 	Position As PositionKind
-' 	Day1 As VBA.VbDayOfWeek
-' 	Week1 As VBA.VbFirstWeekOfYear
-	Format As String	' ...along with any format.
+	Index As Variant		' Any index to extract the value...
+' 	Position As PositionKind	' ...and how to interpret that index.
+' 	Day1 As VBA.VbDayOfWeek		' The convention for weekdays...
+' 	Week1 As VBA.VbFirstWeekOfYear	' ...and calendar weeks...
+	Format As String		' ...for any format applied to the value.
 End Type
 
 
@@ -777,9 +777,9 @@ End Sub
 
 ' Clone one field (sub)element into another.
 Private Sub Fld_Clone(ByRef fld1 As ParserField, ByRef fld2 As ParserField)
-	Let fld2.Index = fld1.Index
+	Let fld2.Index    = fld1.Index
 ' 	Let fld2.Position = fld1.Position
-' 	Let fld2.Day1 = fld1.Day1
-' 	Let fld2.Week1 = fld1.Week1
-	Let fld2.Format = fld1.Format
+' 	Let fld2.Day1     = fld1.Day1
+' 	Let fld2.Week1    = fld1.Week1
+	Let fld2.Format   = fld1.Format
 End Sub
