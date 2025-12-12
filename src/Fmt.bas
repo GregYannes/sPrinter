@@ -101,6 +101,7 @@ Private Enum FieldArgument
 	[_None]					' No arguments.
 	argIndex				' The index at which to extract the value.
 ' 	argPosition				' How to interpret a negative index.
+' 	argMode					' The engine used for formatting.
 ' 	argDay1					' The first day of the week, passed to Format() as "FirstDayOfWeek".
 ' 	argWeek1				' The first week of the year, passed to Format() as "FirstWeekOfYear".
 	argFormat				' The formatting applied to the value.
@@ -136,6 +137,7 @@ End Type
 Public Type ParserField
 	Index As Variant		' Any index to extract the value...
 ' 	Position As PositionKind	' ...and how to interpret that index.
+' 	Mode As FormatMode		' The engine used for formatting.
 ' 	Day1 As VBA.VbDayOfWeek		' The convention for weekdays...
 ' 	Week1 As VBA.VbFirstWeekOfYear	' ...and calendar weeks...
 	Format As String		' ...for any format applied to the value.
@@ -564,8 +566,8 @@ End Sub
 ' 	' 	Case Else:												GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
-' 	' .
-' 	Case FieldArgument.argFormat
+' 	' ' The engine used for formatting.
+' 	Case FieldArgument.argMode
 ' 		Select Case spec
 ' 		' 	============	==========	======================
 ' 	' ' 	Case	"?",		"UNKNOWN",	"[_Unknown]":		Fld_Specify = FormatMode.[_Unknown]
