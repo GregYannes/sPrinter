@@ -477,6 +477,13 @@ End Sub
 ' ## Support ##
 ' #############
 
+' ' Get a missing (Variant) argument.
+' Private Function Missing(Optional ByRef x As Variant) As Variant
+' 	Let Missing = x
+' End Function
+
+
+
 ' #######################
 ' ## Support | Parsing ##
 ' #######################
@@ -623,7 +630,7 @@ Private Function Idx_Close(ByRef idx As ParserExpression, _
 	ByRef idxDfu As ParserExpression, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
-	Dim noIdx As Variant
+	Dim noIdx As Variant  ' noIdx = Missing()
 	Dim dfuSyntax As String
 	
 	' Save the defused syntax...
