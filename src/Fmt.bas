@@ -617,7 +617,7 @@ End Function
 
 
 ' ...along with its index (sub)element.
-Private Function Idx_Close(ByRef idx As ParserIndex, _
+Private Function Idx_Close(ByRef idx As ParserExpression, _
 	ByRef format As String, _
 	ByRef nDfu As Long, _
 	ByRef idxEsc As Boolean _
