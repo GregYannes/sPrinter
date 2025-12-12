@@ -618,56 +618,49 @@ End Function
 
 ' ...along with its index (sub)element.
 Private Function Idx_Close(ByRef idx As ParserExpression, _
+	ByRef val As Variant, _
 	ByRef format As String, _
 	ByRef idxDfu As ParserExpression, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
-	Dim idxQuo As Boolean: idxQuo = False
+	Dim noIdx As Variant
+	Dim dfuSyntax As String
 	
-	' Record the index...
-	If idx.Exists And idx.Expression.Start <= idx.Expression.Stop Then
-		idx.Expression.Stop = idx.Expression.Stop - 1
-		Dim idxLen As Long: idxLen = idx.Expression.Stop - idx.Expression.Start + 1
-		idx.Expression.Syntax = VBA.Mid$(format, idx.Expression.Start, idxLen)
-		idxQuo = (nDfu = 1)
-		
-	' ...or clear invalid information.
-	Else
-		idx.Expression.Start = 0
-		idx.Expression.Stop = 0
+	' Save the defused syntax...
+	dfuSyntax = idx.Syntax
+	
+	' ...before recording the original syntax.
+	Expr_Close idx, format := format
+	
+	' Short-circuit for a missing index.
+	If idx.Syntax = VBA.vbNullString Then
+		Let var = noIdx
+		Idx_Close = ParsingStatus.stsSuccess
+		Exit Function
 	End If
 	
-	' Ignore a missing index.
-	If Not idx.Exists Then
-		Fld_Close = ParsingStatus.stsSuccess
-		Exit Function
-		
-	' Test for a key...
-	ElseIf idxQuo Or idxEsc Then
-		idx.Kind = IndexKind.idxKey
-		
-		Fld_Close = ParsingStatus.stsSuccess
-		Exit Function
+	' Check if the index is encapsulated in a single quotation ("...") or nesting ({...}).
+	Dim idxCap As Boolean: idxCap = (idxDfu.Start = idx.Start And idxDfu.Stop = idx.Stop)
+	
+	' Interpret as an (encapsulated) key...
+	If idxCap Or idxEsc Then
+		Let val = VBA.CStr(dfuSyntax)
 		
 	' ...or an integral index.
 	Else
 		On Error GoTo IDX_ERROR
-		idx.Position = VBA.CLng(idx.Key)
+		Let val = VBA.CLng(idx.Syntax)
 		On Error GoTo 0
-		
-		idx.Kind = IndexKind.idxPosition
-		idx.Key = VBA.vbNullString
-		
-		Fld_Close = ParsingStatus.stsSuccess
-		Exit Function
-		
-IDX_ERROR:
-		On Error GoTo 0
-		' idx.Kind = IndexKind.[_Unknown]
-		
-		Fld_Close = ParsingStatus.stsErrorInvalidIndex
-		Exit Function
 	End If
+	
+	' Report success.
+	Idx_Close = ParsingStatus.stsSuccess
+	Exit Function
+	
+	
+' Report the error for an invalid index.
+IDX_ERROR:
+	Idx_Close = ParsingStatus.stsErrorInvalidIndex
 End Function
 
 
