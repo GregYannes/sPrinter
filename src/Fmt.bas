@@ -627,6 +627,7 @@ End Function
 Private Function Idx_Close(ByRef idx As ParserExpression, _
 	ByRef val As Variant, _
 	ByRef format As String, _
+	ByRef expression As ParserExpression, _
 	ByRef idxDfu As ParserExpression, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
@@ -667,6 +668,7 @@ Private Function Idx_Close(ByRef idx As ParserExpression, _
 	
 ' Report the error for an invalid index.
 IDX_ERROR:
+	Expr_Clone idx, expression
 	Idx_Close = ParsingStatus.stsErrorInvalidIndex
 End Function
 
