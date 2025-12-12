@@ -205,7 +205,7 @@ Public Function Parse( _
 	Dim args(FieldArgument.[_First] To FieldArgument.[_Last]) As ParserExpression
 	Dim argIdx As FieldArgument: argIdx = FieldArgument.[_None]
 	Dim arg As ParserExpression
-	Dim nDfu As Long: nDfu = 0
+	Dim idxDfu As ParserExpression
 	Dim idxEsc As Boolean: idxEsc = False
 	
 	' ...and the current characters.
@@ -420,7 +420,7 @@ EXIT_LOOP:
 	Case ElementKind.elmField
 		endStatus = Fld_Close(e.Field, _
 			format := format, _
-			nDfu := nDfu, _
+			idxDfu := idxDfu, _
 			idxEsc := idxEsc _
 		)
 	End Select
@@ -488,7 +488,7 @@ End Sub
 ' 	Optional ByRef eIdx As Long, _
 ' 	Optional ByRef e As ParserElement, _
 ' 	Optional ByRef char As String, _
-' 	Optional ByRef nDfu As Long, _
+' 	Optional ByRef idxDfu As ParserExpression, _
 ' 	Optional ByRef idxEsc As Boolean, _
 ' 	Optional ByRef endStatus As ParsingStatus _
 ' )
@@ -497,7 +497,7 @@ End Sub
 ' 	eIdx = 0
 ' 	Elm_Reset e
 ' 	char = VBA.vbNullString
-' 	nDfu = 0
+' 	Expr_Reset idxDfu
 ' 	idxEsc = False
 ' 	endStatus = ParsingStatus.stsSuccess
 ' End Sub
@@ -600,7 +600,7 @@ End Function
 ' Close a field (sub)element and record its information...
 Private Function Fld_Close(ByRef fld As ParserField, _
 	ByRef format As String, _
-	ByRef nDfu As Long, _
+	ByRef idxDfu As ParserExpression, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
 	Dim status As ParsingStatus
@@ -619,7 +619,7 @@ End Function
 ' ...along with its index (sub)element.
 Private Function Idx_Close(ByRef idx As ParserExpression, _
 	ByRef format As String, _
-	ByRef nDfu As Long, _
+	ByRef idxDfu As ParserExpression, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
 	Dim idxQuo As Boolean: idxQuo = False
