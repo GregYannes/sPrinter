@@ -75,6 +75,7 @@ Public Enum ParsingStatus
 	stsErrorUnenclosedField = 1002	' ...or an incomplete field...
 	stsErrorUnenclosedQuote = 1003	' ...or an incomplete quote...
 	stsErrorInvalidIndex    = 1004	' ...or an index that is not an integer.
+' 	stsErrorInvalidSpecifier = 1005	' ...or an unrecognized specifier.
 End Enum
 
 
