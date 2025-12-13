@@ -538,6 +538,18 @@ End Sub
 ' 	' ' 	Case Else:							Fld_Specify = PositionKind.[_Unknown]:	GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
+' 	' ' The engine used for formatting.
+' 	' Case FieldArgument.argMode
+' 	' 	Select Case spec
+' 	' 	' 	============	==========	======================
+' 	' ' 	Case	"?",		"UNKNOWN",	"[_Unknown]":		Fld_Specify = FormatMode.[_Unknown]
+' 	' 	Case	"XL",		"EXCEL",	"FMTEXCELTEXT":		Fld_Specify = FormatMode.fmtExcelText
+' 	' 	Case	"VB",		"VBA",		"FMTVBFORMAT":		Fld_Specify = FormatMode.fmtVbFormat
+' 	' 	' 	============	==========	======================
+' 	' 	Case Else:												GoTo NO_MATCH
+' 	' ' 	Case Else:							Fld_Specify = FormatMode.[_Unknown]:	GoTo NO_MATCH
+' 	' 	End Select
+' 		
 ' 	' ' The "FirstDayOfWeek" for Format().
 ' 	' Case FieldArgument.argDay1
 ' 	' 	Select Case spec
@@ -564,18 +576,6 @@ End Sub
 ' 	' 	Case	"FW",		"FULLWEEK",	"VBFIRSTFULLWEEK":	Fld_Specify = VBA.VbFirstWeekOfYear.vbFirstFullWeek
 ' 	' 	' 	============	==========	======================
 ' 	' 	Case Else:												GoTo NO_MATCH
-' 	' 	End Select
-' 		
-' 	' ' The engine used for formatting.
-' 	' Case FieldArgument.argMode
-' 	' 	Select Case spec
-' 	' 	' 	============	==========	======================
-' 	' ' 	Case	"?",		"UNKNOWN",	"[_Unknown]":		Fld_Specify = FormatMode.[_Unknown]
-' 	' 	Case	"XL",		"EXCEL",	"FMTEXCELTEXT":		Fld_Specify = FormatMode.fmtExcelText
-' 	' 	Case	"VB",		"VBA",		"FMTVBFORMAT":		Fld_Specify = FormatMode.fmtVbFormat
-' 	' 	' 	============	==========	======================
-' 	' 	Case Else:												GoTo NO_MATCH
-' 	' ' 	Case Else:							Fld_Specify = FormatMode.[_Unknown]:	GoTo NO_MATCH
 ' 	' 	End Select
 ' 	End Select
 ' 	
