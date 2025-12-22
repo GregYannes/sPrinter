@@ -627,8 +627,8 @@ End Function
 
 
 ' ...along with its index (sub)element.
-Private Function Idx_Close(ByRef idx As ParserExpression, _
-	ByRef val As Variant, _
+Private Function Fld_CloseIndex(ByRef fld As ParserField, _
+	ByRef idx As ParserExpression, _
 	ByRef format As String, _
 	ByRef expression As ParserExpression, _
 	ByRef idxDfu As ParserExpression, _
@@ -645,8 +645,8 @@ Private Function Idx_Close(ByRef idx As ParserExpression, _
 	
 	' Short-circuit for a missing index.
 	If idx.Syntax = VBA.vbNullString Then
-		Let var = noIdx
-		Idx_Close = ParsingStatus.stsSuccess
+		Let fld.Index = noIdx
+		Fld_CloseIndex = ParsingStatus.stsSuccess
 		Exit Function
 	End If
 	
@@ -655,24 +655,24 @@ Private Function Idx_Close(ByRef idx As ParserExpression, _
 	
 	' Interpret as an (encapsulated) key...
 	If idxCap Or idxEsc Then
-		Let val = VBA.CStr(dfuSyntax)
+		Let fld.Index = VBA.CStr(dfuSyntax)
 		
 	' ...or an integral index.
 	Else
 		On Error GoTo IDX_ERROR
-		Let val = VBA.CLng(idx.Syntax)
+		Let fld.Index = VBA.CLng(idx.Syntax)
 		On Error GoTo 0
 	End If
 	
 	' Report success.
-	Idx_Close = ParsingStatus.stsSuccess
+	Fld_CloseIndex = ParsingStatus.stsSuccess
 	Exit Function
 	
 	
 ' Report the error for an invalid index.
 IDX_ERROR:
 	Expr_Clone idx, expression
-	Idx_Close = ParsingStatus.stsErrorInvalidIndex
+	Fld_CloseIndex = ParsingStatus.stsErrorInvalidIndex
 End Function
 
 
