@@ -517,7 +517,7 @@ End Sub
 ' Private Function Fld_Specify( _
 ' 	ByVal spec As String, _
 ' 	ByVal arg As FieldArgument, _
-' 	ByRef exists As Boolean _
+' 	Optional ByRef exists As Boolean _
 ' ) As Long
 ' 	' spec = VBA.Trim(spec)
 ' 	spec = VBA.UCase(spec)
