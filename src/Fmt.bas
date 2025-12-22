@@ -519,7 +519,6 @@ End Sub
 ' 	ByVal arg As FieldArgument, _
 ' 	Optional ByRef exists As Boolean _
 ' ) As Long
-' 	' spec = VBA.Trim(spec)
 ' 	spec = VBA.UCase(spec)
 ' 	
 ' 	' 		============	==========	======================
