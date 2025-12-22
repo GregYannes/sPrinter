@@ -589,22 +589,20 @@ End Sub
 
 
 ' Close an expression and record its information.
-Private Function Expr_Close(ByRef expr As ParserExpression, _
+Private Sub Expr_Close(ByRef expr As ParserExpression, _
 	ByRef format As String _
-) As ParsingStatus
+)
 	' Record the syntax...
-	If expr.Start <= expr.Stop Then
+	If expr.Start > 0 And expr.Start <= expr.Stop Then
 		Dim exprLen As Long: exprLen = expr.Stop - expr.Start + 1
 		expr.Syntax = VBA.Mid$(format, expr.Start, exprLen)
 		
 	' ...or clear invalid information.
 	Else
-		Expr_Reset expr
+		expr.Syntax = VBA.vbNullString
+		expr.Stop = 0
 	End If
-	
-	' This should always work.
-	Expr_Close = ParsingStatus.stsSuccess
-End Function
+End Sub
 
 
 ' Close a field (sub)element and record its information...
