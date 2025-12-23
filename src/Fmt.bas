@@ -690,7 +690,7 @@ IDX_ERROR:
 End Function
 
 
-' ' ...and any of its specifier arguments.
+' ' ...and any of its specifier arguments...
 ' Private Function Fld_CloseSpecifier(ByRef fld As ParserField, _
 ' 	ByRef arg As FieldArgument, _
 ' 	ByRef spec As ParserExpression, _
@@ -734,6 +734,33 @@ End Function
 ' 	Expr_Clone spec, expression
 ' 	Fld_CloseSpecifier = ParsingStatus.stsErrorInvalidSpecifier
 ' End Function
+
+
+' ...and its format argument.
+Private Function Fld_CloseFormat(ByRef fld As ParserField, _
+	ByRef fmt As ParserExpression, _
+	ByRef format As String, _
+	ByRef expression As ParserExpression _
+) As ParsingStatus
+	' Define fallback for missing argument.
+	Dim noFmt As String
+	
+	' Record the original syntax...
+	Expr_Close fmt, format := format
+	
+	' ...and short-circuit for a missing format.
+	If fmt.Syntax = VBA.vbNullString Then
+		Let fmt.Syntax = noFmt
+		Fld_CloseFormat = ParsingStatus.stsSuccess
+		Exit Function
+	End If
+	
+	' Assign that syntax to the argument...
+	fld.Format = fmt.Syntax
+	
+	' ...and report success.
+	Fld_CloseFormat = ParsingStatus.stsSuccess
+End Function
 
 
 
