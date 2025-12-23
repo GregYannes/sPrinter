@@ -730,7 +730,7 @@ End Function
 ' 	
 ' ' Report the error for an invalid specifier.
 ' SPEC_ERROR:
-' 	Expr_Clone arg, expression
+' 	Expr_Clone spec, expression
 ' 	Fld_CloseSpecifier = ParsingStatus.stsErrorInvalidSpecifier
 ' End Function
 
