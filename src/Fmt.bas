@@ -535,7 +535,6 @@ End Sub
 ' 	' 	Case	"REL",		"RELATIVE",	"POSRELATIVE":		Arg_Specifier = PositionKind.posRelative
 ' 	' 	' 	============	==========	======================
 ' 	' 	Case Else:													GoTo NO_MATCH
-' 	' ' 	Case Else:							Arg_Specifier = PositionKind.[_Unknown]:	GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
 ' 	' ' The engine used for formatting.
@@ -547,7 +546,6 @@ End Sub
 ' 	' 	Case	"VB",		"VBA",		"FMTVBFORMAT":		Arg_Specifier = FormatMode.fmtVbFormat
 ' 	' 	' 	============	==========	======================
 ' 	' 	Case Else:												GoTo NO_MATCH
-' 	' ' 	Case Else:							Arg_Specifier = FormatMode.[_Unknown]:	GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
 ' 	' ' The "FirstDayOfWeek" for Format().
@@ -563,7 +561,6 @@ End Sub
 ' 	' 	Case	"FRI",		"FRIDAY",	"VBFRIDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbFriday
 ' 	' 	Case	"SAT",		"SATURDAY",	"VBSATURDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbSaturday
 ' 	' 	' 	============	==========	======================
-' 	' 	' TODO: The vbUseSystemDayOfWeek is 0 under the hood; and Format() defaults to vbSunday.
 ' 	' 	Case Else:												GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
@@ -576,7 +573,6 @@ End Sub
 ' 	' 	Case	"4D",		"FOURDAYS",	"VBFIRSTFOURDAYS":	Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstFourDays
 ' 	' 	Case	"FW",		"FULLWEEK",	"VBFIRSTFULLWEEK":	Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstFullWeek
 ' 	' 	' 	============	==========	======================
-' 	' 	' TODO: The vbUseSystem is 0 under the hood; and Format() defaults to vbFirstJan1.
 ' 	' 	Case Else:												GoTo NO_MATCH
 ' 	' 	End Select
 ' 	End Select
