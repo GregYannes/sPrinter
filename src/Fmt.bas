@@ -514,9 +514,8 @@ End Sub
 
 
 ' ' Interpret specifiers for field arguments.
-' Private Function Arg_Specifier( _
+' Private Function Arg_Specifier(ByRef arg As FieldArgument, _
 ' 	ByVal spec As String, _
-' 	ByVal arg As FieldArgument, _
 ' 	Optional ByRef exists As Boolean _
 ' ) As Long
 ' 	spec = VBA.UCase(spec)
