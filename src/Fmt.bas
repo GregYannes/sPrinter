@@ -534,7 +534,7 @@ End Sub
 ' 	' 	Case	"ABS",		"ABSOLUTE",	"POSABSOLUTE":		Arg_Specifier = PositionKind.posAbsolute
 ' 	' 	Case	"REL",		"RELATIVE",	"POSRELATIVE":		Arg_Specifier = PositionKind.posRelative
 ' 	' 	' 	============	==========	======================
-' 	' 	Case Else:													GoTo NO_MATCH
+' 	' 	Case Else: GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
 ' 	' ' The engine used for formatting.
@@ -545,7 +545,7 @@ End Sub
 ' 	' 	Case	"XL",		"EXCEL",	"FMTEXCELTEXT":		Arg_Specifier = FormatMode.fmtExcelText
 ' 	' 	Case	"VB",		"VBA",		"FMTVBFORMAT":		Arg_Specifier = FormatMode.fmtVbFormat
 ' 	' 	' 	============	==========	======================
-' 	' 	Case Else:												GoTo NO_MATCH
+' 	' 	Case Else: GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
 ' 	' ' The "FirstDayOfWeek" for Format().
@@ -561,7 +561,7 @@ End Sub
 ' 	' 	Case	"FRI",		"FRIDAY",	"VBFRIDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbFriday
 ' 	' 	Case	"SAT",		"SATURDAY",	"VBSATURDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbSaturday
 ' 	' 	' 	============	==========	======================
-' 	' 	Case Else:												GoTo NO_MATCH
+' 	' 	Case Else: GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
 ' 	' ' The "FirstWeekOfYear" for Format().
@@ -573,7 +573,7 @@ End Sub
 ' 	' 	Case	"4D",		"FOURDAYS",	"VBFIRSTFOURDAYS":	Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstFourDays
 ' 	' 	Case	"FW",		"FULLWEEK",	"VBFIRSTFULLWEEK":	Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstFullWeek
 ' 	' 	' 	============	==========	======================
-' 	' 	Case Else:												GoTo NO_MATCH
+' 	' 	Case Else: GoTo NO_MATCH
 ' 	' 	End Select
 ' 	End Select
 ' 	
