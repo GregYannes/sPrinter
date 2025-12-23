@@ -648,11 +648,11 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	ByRef idxDfu As ParserExpression, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
+	' Define fallback for missing argument.
 	Dim noIdx As Variant  ' noIdx = Missing()
-	Dim dfuSyntax As String
 	
 	' Save the defused syntax...
-	dfuSyntax = idx.Syntax
+	Dim dfuSyntax As String: dfuSyntax = idx.Syntax
 	
 	' ...before recording the original syntax.
 	Expr_Close idx, format := format
@@ -697,12 +697,12 @@ End Function
 ' 	ByRef format As String, _
 ' 	ByRef expression As ParserExpression _
 ' ) As ParsingStatus
+' 	' Define fallback for missing argument.
 ' 	Dim noArg As Variant: noArg = -1
-' 	Dim specStx As String
 ' 	
 ' 	' Record and extract the original syntax.
 ' 	Expr_Close spec, format := format
-' 	specStx = spec.Syntax
+' 	Dim specStx As String: specStx = spec.Syntax
 ' 	
 ' 	' Clean that syntax...
 ' 	specStx = VBA.Trim(specStx)
