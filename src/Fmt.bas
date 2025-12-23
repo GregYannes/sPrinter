@@ -707,9 +707,10 @@ End Function
 ' 	' Clean that syntax...
 ' 	specStx = VBA.Trim(specStx)
 ' 	
-' 	' ...and short-circuit if that argument is missing altogether.
+' 	' ...and short-circuit for a missing argument altogether.
 ' 	If specStx = VBA.vbNullString Then
 ' 		Let Fld_Arg(fld, arg) = noArg
+' 		Fld_CloseSpecifier = ParsingStatus.stsSuccess
 ' 		Exit Function
 ' 	End If
 ' 	
