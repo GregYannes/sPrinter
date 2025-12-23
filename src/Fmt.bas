@@ -514,7 +514,7 @@ End Sub
 
 
 ' ' Interpret specifiers for field arguments.
-' Private Function Fld_Specify( _
+' Private Function Arg_Specifier( _
 ' 	ByVal spec As String, _
 ' 	ByVal arg As FieldArgument, _
 ' 	Optional ByRef exists As Boolean _
@@ -530,38 +530,38 @@ End Sub
 ' 	' Case FieldArgument.argPosition
 ' 	' 	Select Case spec
 ' 	' 	' 	============	==========	======================
-' 	' ' 	Case	"?", 		"UNKNOWN",	"[_UNKNOWN]":		Fld_Specify = PositionKind.[_Unknown]
-' 	' 	Case	"ABS",		"ABSOLUTE",	"POSABSOLUTE":		Fld_Specify = PositionKind.posAbsolute
-' 	' 	Case	"REL",		"RELATIVE",	"POSRELATIVE":		Fld_Specify = PositionKind.posRelative
+' 	' ' 	Case	"?", 		"UNKNOWN",	"[_UNKNOWN]":		Arg_Specifier = PositionKind.[_Unknown]
+' 	' 	Case	"ABS",		"ABSOLUTE",	"POSABSOLUTE":		Arg_Specifier = PositionKind.posAbsolute
+' 	' 	Case	"REL",		"RELATIVE",	"POSRELATIVE":		Arg_Specifier = PositionKind.posRelative
 ' 	' 	' 	============	==========	======================
-' 	' 	Case Else:												GoTo NO_MATCH
-' 	' ' 	Case Else:							Fld_Specify = PositionKind.[_Unknown]:	GoTo NO_MATCH
+' 	' 	Case Else:													GoTo NO_MATCH
+' 	' ' 	Case Else:							Arg_Specifier = PositionKind.[_Unknown]:	GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
 ' 	' ' The engine used for formatting.
 ' 	' Case FieldArgument.argMode
 ' 	' 	Select Case spec
 ' 	' 	' 	============	==========	======================
-' 	' ' 	Case	"?",		"UNKNOWN",	"[_Unknown]":		Fld_Specify = FormatMode.[_Unknown]
-' 	' 	Case	"XL",		"EXCEL",	"FMTEXCELTEXT":		Fld_Specify = FormatMode.fmtExcelText
-' 	' 	Case	"VB",		"VBA",		"FMTVBFORMAT":		Fld_Specify = FormatMode.fmtVbFormat
+' 	' ' 	Case	"?",		"UNKNOWN",	"[_Unknown]":		Arg_Specifier = FormatMode.[_Unknown]
+' 	' 	Case	"XL",		"EXCEL",	"FMTEXCELTEXT":		Arg_Specifier = FormatMode.fmtExcelText
+' 	' 	Case	"VB",		"VBA",		"FMTVBFORMAT":		Arg_Specifier = FormatMode.fmtVbFormat
 ' 	' 	' 	============	==========	======================
 ' 	' 	Case Else:												GoTo NO_MATCH
-' 	' ' 	Case Else:							Fld_Specify = FormatMode.[_Unknown]:	GoTo NO_MATCH
+' 	' ' 	Case Else:							Arg_Specifier = FormatMode.[_Unknown]:	GoTo NO_MATCH
 ' 	' 	End Select
 ' 		
 ' 	' ' The "FirstDayOfWeek" for Format().
 ' 	' Case FieldArgument.argDay1
 ' 	' 	Select Case spec
 ' 	' 	' 	============	==========	======================
-' 	' 	Case	"SYS",		"SYSTEM",	"VBUSESYSTEMDAYOFWEEK":	Fld_Specify = VBA.VbDayOfWeek.vbUseSystemDayOfWeek
-' 	' 	Case	"SUN",		"SUNDAY",	"VBSUNDAY":		Fld_Specify = VBA.VbDayOfWeek.vbSunday
-' 	' 	Case	"MON",		"MONDAY",	"VBMONDAY":		Fld_Specify = VBA.VbDayOfWeek.vbMonday
-' 	' 	Case	"TUE",		"TUESDAY",	"VBTUESDAY":		Fld_Specify = VBA.VbDayOfWeek.vbTuesday
-' 	' 	Case	"WED",		"WEDNESDAY",	"VBWEDNESDAY":		Fld_Specify = VBA.VbDayOfWeek.vbWednesday
-' 	' 	Case	"THU",		"THURSDAY",	"VBTHURSDAY":		Fld_Specify = VBA.VbDayOfWeek.vbThursday
-' 	' 	Case	"FRI",		"FRIDAY",	"VBFRIDAY":		Fld_Specify = VBA.VbDayOfWeek.vbFriday
-' 	' 	Case	"SAT",		"SATURDAY",	"VBSATURDAY":		Fld_Specify = VBA.VbDayOfWeek.vbSaturday
+' 	' 	Case	"SYS",		"SYSTEM",	"VBUSESYSTEMDAYOFWEEK":	Arg_Specifier = VBA.VbDayOfWeek.vbUseSystemDayOfWeek
+' 	' 	Case	"SUN",		"SUNDAY",	"VBSUNDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbSunday
+' 	' 	Case	"MON",		"MONDAY",	"VBMONDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbMonday
+' 	' 	Case	"TUE",		"TUESDAY",	"VBTUESDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbTuesday
+' 	' 	Case	"WED",		"WEDNESDAY",	"VBWEDNESDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbWednesday
+' 	' 	Case	"THU",		"THURSDAY",	"VBTHURSDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbThursday
+' 	' 	Case	"FRI",		"FRIDAY",	"VBFRIDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbFriday
+' 	' 	Case	"SAT",		"SATURDAY",	"VBSATURDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbSaturday
 ' 	' 	' 	============	==========	======================
 ' 	' 	' TODO: The vbUseSystemDayOfWeek is 0 under the hood; and Format() defaults to vbSunday.
 ' 	' 	Case Else:												GoTo NO_MATCH
@@ -571,10 +571,10 @@ End Sub
 ' 	' Case FieldArgument.argWeek1
 ' 	' 	Select Case spec
 ' 	' 	' 	============	==========	======================
-' 	' 	Case	"SYS",		"SYSTEM",	"VBUSESYSTEM":		Fld_Specify = VBA.VbFirstWeekOfYear.vbUseSystem
-' 	' 	Case	"J1",		"JAN1",		"VBFIRSTJAN1":		Fld_Specify = VBA.VbFirstWeekOfYear.vbFirstJan1
-' 	' 	Case	"4D",		"FOURDAYS",	"VBFIRSTFOURDAYS":	Fld_Specify = VBA.VbFirstWeekOfYear.vbFirstFourDays
-' 	' 	Case	"FW",		"FULLWEEK",	"VBFIRSTFULLWEEK":	Fld_Specify = VBA.VbFirstWeekOfYear.vbFirstFullWeek
+' 	' 	Case	"SYS",		"SYSTEM",	"VBUSESYSTEM":		Arg_Specifier = VBA.VbFirstWeekOfYear.vbUseSystem
+' 	' 	Case	"J1",		"JAN1",		"VBFIRSTJAN1":		Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstJan1
+' 	' 	Case	"4D",		"FOURDAYS",	"VBFIRSTFOURDAYS":	Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstFourDays
+' 	' 	Case	"FW",		"FULLWEEK",	"VBFIRSTFULLWEEK":	Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstFullWeek
 ' 	' 	' 	============	==========	======================
 ' 	' 	' TODO: The vbUseSystem is 0 under the hood; and Format() defaults to vbFirstJan1.
 ' 	' 	Case Else:												GoTo NO_MATCH
