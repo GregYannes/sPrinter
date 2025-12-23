@@ -698,24 +698,24 @@ End Function
 ' 	ByRef expression As ParserExpression _
 ' ) As ParsingStatus
 ' 	Dim noArg As Variant: noArg = -1
-' 	Dim specTxt As String
+' 	Dim specStx As String
 ' 	
 ' 	' Record and extract the original syntax.
 ' 	Expr_Close spec, format := format
-' 	specTxt = spec.Syntax
+' 	specStx = spec.Syntax
 ' 	
 ' 	' Clean that syntax...
-' 	specTxt = VBA.Trim(specTxt)
+' 	specStx = VBA.Trim(specStx)
 ' 	
 ' 	' ...and short-circuit if that argument is missing altogether.
-' 	If specTxt = VBA.vbNullString Then
+' 	If specStx = VBA.vbNullString Then
 ' 		Let Fld_Arg(fld, arg) = noArg
 ' 		Exit Function
 ' 	End If
 ' 	
 ' 	' Look up the specifier that matches this syntax...
 ' 	Dim val As Long, exists As Boolean
-' 	val = Arg_Specifier(arg, spec := specTxt, exists := exists)
+' 	val = Arg_Specifier(arg, spec := specStx, exists := exists)
 ' 	
 ' 	' ...and short-circuit for no match.
 ' 	If Not exists Then GoTo SPEC_ERROR
