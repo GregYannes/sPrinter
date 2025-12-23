@@ -518,7 +518,6 @@ End Sub
 ' 	ByVal spec As String, _
 ' 	ByVal arg As FieldArgument, _
 ' 	Optional ByRef exists As Boolean _
-' ' 	Optional ByRef fld As ParserField _
 ' ) As Long
 ' 	spec = VBA.UCase(spec)
 ' 	
@@ -538,8 +537,6 @@ End Sub
 ' 	' 	Case Else:												GoTo NO_MATCH
 ' 	' ' 	Case Else:							Fld_Specify = PositionKind.[_Unknown]:	GoTo NO_MATCH
 ' 	' 	End Select
-' 	' ' 	
-' 	' ' 	fld.Position = Fld_Specify
 ' 		
 ' 	' ' The engine used for formatting.
 ' 	' Case FieldArgument.argMode
@@ -552,8 +549,6 @@ End Sub
 ' 	' 	Case Else:												GoTo NO_MATCH
 ' 	' ' 	Case Else:							Fld_Specify = FormatMode.[_Unknown]:	GoTo NO_MATCH
 ' 	' 	End Select
-' 	' ' 	
-' 	' ' 	fld.Mode = Fld_Specify
 ' 		
 ' 	' ' The "FirstDayOfWeek" for Format().
 ' 	' Case FieldArgument.argDay1
@@ -571,8 +566,6 @@ End Sub
 ' 	' 	' TODO: The vbUseSystemDayOfWeek is 0 under the hood; and Format() defaults to vbSunday.
 ' 	' 	Case Else:												GoTo NO_MATCH
 ' 	' 	End Select
-' 	' ' 	
-' 	' ' 	fld.Day1 = Fld_Specify
 ' 		
 ' 	' ' The "FirstWeekOfYear" for Format().
 ' 	' Case FieldArgument.argWeek1
@@ -586,8 +579,6 @@ End Sub
 ' 	' 	' TODO: The vbUseSystem is 0 under the hood; and Format() defaults to vbFirstJan1.
 ' 	' 	Case Else:												GoTo NO_MATCH
 ' 	' 	End Select
-' 	' ' 	
-' 	' ' 	fld.Week1 = Fld_Specify
 ' 	End Select
 ' 	
 ' 	exists = True
