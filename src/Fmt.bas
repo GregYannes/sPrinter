@@ -640,7 +640,7 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 End Function
 
 
-' ...along with its index (sub)element.
+' ...along with its index argument...
 Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	ByRef idx As ParserExpression, _
 	ByRef format As String, _
@@ -688,6 +688,51 @@ IDX_ERROR:
 	Expr_Clone idx, expression
 	Fld_CloseIndex = ParsingStatus.stsErrorInvalidIndex
 End Function
+
+
+' ' ...and any of its specifier arguments.
+' Private Function Fld_CloseSpecifier(ByRef fld As ParserField, _
+' 	ByVal arg As FieldArgument, _
+' 	ByRef spec As ParserExpression, _
+' 	ByRef format As String, _
+' 	ByRef expression As ParserExpression _
+' ) As ParsingStatus
+' 	Dim noArg As Variant: noArg = -1
+' 	Dim specTxt As String
+' 	
+' 	' Record and extract the original syntax.
+' 	Expr_Close spec, format := format
+' 	specTxt = spec.Syntax
+' 	
+' 	' Clean that syntax...
+' 	specTxt = VBA.Trim(specTxt)
+' 	
+' 	' ...and short-circuit if that argument is missing altogether.
+' 	If specTxt = VBA.vbNullString Then
+' 		Let Fld_Arg(fld, arg) = noArg
+' 		Exit Function
+' 	End If
+' 	
+' 	' Look up the specifier that matches this syntax...
+' 	Dim val As Long, exists As Boolean
+' 	val = Arg_Specifier(arg, spec := specTxt, exists := exists)
+' 	
+' 	' ...and short-circuit for no match.
+' 	If Not exists Then GoTo SPEC_ERROR
+' 	
+' 	' Assign any valid specifier to the argument...
+' 	Let Fld_Arg(fld, arg) = val
+' 	
+' 	' ...and report success.
+' 	Fld_CloseSpecifier = ParsingStatus.stsSuccess
+' 	Exit Function
+' 	
+' 	
+' ' Report the error for an invalid specifier.
+' SPEC_ERROR:
+' 	Expr_Clone arg, expression
+' 	Fld_CloseSpecifier = ParsingStatus.stsErrorInvalidSpecifier
+' End Function
 
 
 
