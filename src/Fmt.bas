@@ -568,6 +568,7 @@ End Sub
 ' 	' 	Case	"FRI",		"FRIDAY",	"VBFRIDAY":		Fld_Specify = VBA.VbDayOfWeek.vbFriday
 ' 	' 	Case	"SAT",		"SATURDAY",	"VBSATURDAY":		Fld_Specify = VBA.VbDayOfWeek.vbSaturday
 ' 	' 	' 	============	==========	======================
+' 	' 	' TODO: The vbUseSystemDayOfWeek is 0 under the hood; and Format() defaults to vbSunday.
 ' 	' 	Case Else:												GoTo NO_MATCH
 ' 	' 	End Select
 ' 	' ' 	
@@ -582,6 +583,7 @@ End Sub
 ' 	' 	Case	"4D",		"FOURDAYS",	"VBFIRSTFOURDAYS":	Fld_Specify = VBA.VbFirstWeekOfYear.vbFirstFourDays
 ' 	' 	Case	"FW",		"FULLWEEK",	"VBFIRSTFULLWEEK":	Fld_Specify = VBA.VbFirstWeekOfYear.vbFirstFullWeek
 ' 	' 	' 	============	==========	======================
+' 	' 	' TODO: The vbUseSystem is 0 under the hood; and Format() defaults to vbFirstJan1.
 ' 	' 	Case Else:												GoTo NO_MATCH
 ' 	' 	End Select
 ' 	' ' 	
