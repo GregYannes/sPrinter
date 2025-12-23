@@ -590,7 +590,7 @@ End Sub
 
 ' Set an argument for a field.
 Private Property Let Fld_Arg(ByRef fld As ParserField, _
-	ByVal arg As FieldArgument, _
+	ByRef arg As FieldArgument, _
 	ByRef val As Variant _
 )
 	Select Case arg
@@ -692,7 +692,7 @@ End Function
 
 ' ' ...and any of its specifier arguments.
 ' Private Function Fld_CloseSpecifier(ByRef fld As ParserField, _
-' 	ByVal arg As FieldArgument, _
+' 	ByRef arg As FieldArgument, _
 ' 	ByRef spec As ParserExpression, _
 ' 	ByRef format As String, _
 ' 	ByRef expression As ParserExpression _
