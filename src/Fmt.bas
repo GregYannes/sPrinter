@@ -598,6 +598,22 @@ End Sub
 ' End Function
 
 
+' Set an argument for a field.
+Private Property Let Fld_Arg(ByRef fld As ParserField, _
+	ByVal arg As FieldArgument, _
+	ByRef val As Variant _
+)
+	Select Case arg
+	Case FieldArgument.argIndex:	Let fld.Index    = val
+	Case FieldArgument.argPosition:	Let fld.Position = val
+	Case FieldArgument.argMode:	Let fld.Mode     = val
+	Case FieldArgument.argDay1:	Let fld.Day1     = val
+	Case FieldArgument.argWeek1:	Let fld.Week1    = val
+	Case FieldArgument.argFormat:	Let fld.Format   = val
+	End Select
+End Property
+
+
 ' Close an expression and record its information.
 Private Sub Expr_Close(ByRef expr As ParserExpression, _
 	ByRef format As String _
