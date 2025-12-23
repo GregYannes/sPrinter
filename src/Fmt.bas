@@ -76,6 +76,7 @@ Public Enum ParsingStatus
 	stsErrorUnenclosedQuote  = 1003	' ...or an incomplete quote...
 	stsErrorInvalidIndex     = 1004	' ...or an index that is not an integer...
 ' 	stsErrorInvalidSpecifier = 1005	' ...or an unrecognized specifier.
+' 	stsErrorInvalidFormat    = 1006 ' ...or an invalid format.
 End Enum
 
 
@@ -760,6 +761,12 @@ Private Function Fld_CloseFormat(ByRef fld As ParserField, _
 	
 	' ...and report success.
 	Fld_CloseFormat = ParsingStatus.stsSuccess
+' 	Exit Function
+' 	
+' 	
+' FMT_ERROR:
+' 	Expr_Clone fmt, expression
+' 	Fld_CloseFormat = ParsingStatus.stsErrorInvalidFormat
 End Function
 
 
