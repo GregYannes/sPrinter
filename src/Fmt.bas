@@ -796,6 +796,7 @@ End Sub
 Private Sub Fld_Clone(ByRef fld1 As ParserField, ByRef fld2 As ParserField)
 	Let fld2.Index    = fld1.Index
 ' 	Let fld2.Position = fld1.Position
+' 	Let fld2.Mode     = fld1.Mode
 ' 	Let fld2.Day1     = fld1.Day1
 ' 	Let fld2.Week1    = fld1.Week1
 	Let fld2.Format   = fld1.Format
