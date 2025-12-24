@@ -620,19 +620,86 @@ End Sub
 ' Close a field (sub)element and record its information...
 Private Function Fld_Close(ByRef fld As ParserField, _
 	ByRef format As String, _
+	ByRef expression As ParserExpression, _
+	ByRef args() As ParserExpression, _
+	ByRef argIdx As Long, _
 	ByRef idxDfu As ParserExpression, _
 	ByRef idxEsc As Boolean _
 ) As ParsingStatus
-	Dim status As ParsingStatus
+	' Short-circuit for no arguments.
+	If argIdx = FieldArgument.[_None] Then
+		Fld_Reset fld
+		Fld_Close = ParsingStatus.stsSuccess
+		Exit Function
+	End If
+	
+	
+	' Process each argument...
+	Dim arg As ParserExpression
 	Fld_Close = ParsingStatus.stsSuccess
 	
-	' Record any error when closing its index...
-	status = Idx_Close(fld.Index, format := format, nDfu := nDfu, idxEsc := idxEsc)
-	If Fld_Close = ParsingStatus.stsSuccess Then Fld_Close = status
+	' ...except the (trailing) format.
+	Dim iTo As Long: iTo = argIdx - 1
 	
-	' ...and its format.
-	status = Fmt_Close(fld.Format, format := format)
-	If Fld_Close = ParsingStatus.stsSuccess Then Fld_Close = status
+	Dim i As Long
+	For i = FieldArgument.[_First] To iTo
+		' Extract the argument by position.
+		arg = args(i)
+		' Expr_Clone args(i), arg
+		
+		
+		Select Case i
+		
+		' Process the index argument.
+		Case FieldArgument.argIndex
+			Fld_Close = Fld_CloseIndex(fld, _
+				idx := arg, _
+				format := format, _
+				expression := expression, _
+				idxDfu := idxDfu, _
+				idxEsc := idxEsc _
+			)
+			
+		' ' Process a specifier argument.
+		' Case FieldArgument.argPosition, FieldArgument.argMode, FieldArgument.argDay1, FieldArgument.argWeek1
+		' 	Fld_Close = Fld_CloseSpecifier(fld, _
+		' 		arg := i, _
+		' 		spec := arg, _
+		' 		format := format, _
+		' 		expression := expression _
+		' 	)
+		End Select
+		
+		' Short-circuit for error.
+		If Fld_Close <> ParsingStatus.stsSuccess Then GoTo FLD_ERROR
+	Next i
+	
+	
+	' Process the (trailing) format.
+	If argIdx > FieldArgument.[_First] Then
+		' Extract the final argument...
+		arg = args(argIdx)
+		' Expr_Clone args(argIdx), arg
+		
+		' ...and process this format.
+		Fld_Close = Fld_CloseFormat(fld, _
+			fmt := arg, _
+			format := format, _
+			expression := expression _
+		)
+	End If
+	
+	' Short-circuit for error...
+	If Fld_Close <> ParsingStatus.stsSuccess Then GoTo FLD_ERROR
+	
+	' ...and otherwise report success.
+	Expr_Reset expression
+	Exit Function
+	
+	
+' Report an error when parsing the arguments.
+FLD_ERROR:
+	Expr_Clone arg, expression 
 End Function
 
 
