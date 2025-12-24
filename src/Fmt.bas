@@ -158,7 +158,7 @@ End Type
 ' ## API ##
 ' #########
 
-' .
+' Parse a format string into an array of syntax elements.
 Public Function Parse( _
 	ByRef format As String, _
 	ByRef elements() As ParserElement, _
