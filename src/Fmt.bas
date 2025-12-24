@@ -531,8 +531,16 @@ Public Function Parse( _
 				
 				' Escape the next character...
 				Case escape
-					' Confirm the argument.
-					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
+					' Confirm the argument...
+					If argIdx = FieldArgument.[_None] Then
+						argIdx = argIdx + 1
+						arg.Start = charIndex
+						arg.Stop = arg.Start
+						
+					' ...or extend its location.
+					Else
+						arg.Stop = arg.Stop + 1
+					End If
 					
 					' Activate escaping.
 					dfu = dfu + ParsingDefusal.dfuEscape
@@ -540,19 +548,24 @@ Public Function Parse( _
 					' Note any escaping in the index argument.
 					If depth = 1 And argIdx = FieldArgument.argIndex Then idxEsc = True
 					
-					' Extend the location of this field...
+					' Extend the location of this field.
 					expression.Stop = expression.Stop + 1
-					
-					' ...and of this argument.
-					arg.Stop = arg.Stop + 1
 					
 					' Advance to the next character.
 					GoTo NEXT_CHAR
 					
 				' ...or quote the next characters...
 				Case openQuote
-					' Confirm the argument.
-					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
+					' Confirm the argument...
+					If argIdx = FieldArgument.[_None] Then
+						argIdx = argIdx + 1
+						arg.Start = charIndex
+						arg.Stop = arg.Start
+						
+					' ...or extend its location.
+					Else
+						arg.Stop = arg.Stop + 1
+					End If
 					
 					' Activate quoting.
 					dfu = dfu + ParsingDefusal.dfuQuote
@@ -560,19 +573,24 @@ Public Function Parse( _
 					' Locate any quoting in the index argument.
 					If depth = 1 And argIndex = FieldArgument.argIndex Then idxDfu.Start = charIndex
 					
-					' Extend the location of this field...
+					' Extend the location of this field.
 					expression.Stop = expression.Stop + 1
-					
-					' ...and of this argument.
-					arg.Stop = arg.Stop + 1
 					
 					' Advance to the next character.
 					GoTo NEXT_CHAR
 					
 				' ...or nest the next syntax...
 				Case openField
-					' Confirm the argument.
-					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
+					' Confirm the argument...
+					If argIdx = FieldArgument.[_None] Then
+						argIdx = argIdx + 1
+						arg.Start = charIndex
+						arg.Stop = arg.Start
+						
+					' ...or extend its location.
+					Else
+						arg.Stop = arg.Stop + 1
+					End If
 					
 					' Locate any nesting in the index argument.
 					If depth = 1 And argIndex = FieldArgument.argIndex Then idxDfu.Start = charIndex
@@ -583,11 +601,8 @@ Public Function Parse( _
 					' Activate nesting.
 					dfu = dfu + ParsingDefusal.dfuNest
 					
-					' Extend the location of this field...
+					' Extend the location of this field.
 					expression.Stop = expression.Stop + 1
-					
-					' ...and of this argument.
-					arg.Stop = arg.Stop + 1
 					
 					' Advance to the next character.
 					GoTo NEXT_CHAR
@@ -662,16 +677,21 @@ Public Function Parse( _
 					
 				' ...or parse this argument.
 				Case Else
-					' Confirm the argument.
-					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
+					' Confirm the argument...
+					If argIdx = FieldArgument.[_None] Then
+						argIdx = argIdx + 1
+						arg.Start = charIndex
+						arg.Stop = arg.Start
+						
+					' ...or extend its location.
+					Else
+						arg.Stop = arg.Stop + 1
+					End If
 					
 					' Extend the location of this field...
 					expression.Stop = expression.Stop + 1
 					
-					' ...and of this argument...
-					arg.Stop = arg.Stop + 1
-					
-					' ...along with its contents.
+					' ...and the contents of this argument.
 					arg.Syntax = arg.Syntax & char
 					
 					' Advance to the next character.
