@@ -493,6 +493,7 @@ End Sub
 
 ' ' Reset any global trackers.
 ' Private Sub Reset( _
+' ' 	Optional ByRef expression As ParserExpression, _
 ' 	Optional ByRef dfu As ParsingDefusal, _
 ' 	Optional ByRef depth As Long, _
 ' 	Optional ByRef eIdx As Long, _
@@ -502,6 +503,7 @@ End Sub
 ' 	Optional ByRef idxEsc As Boolean, _
 ' 	Optional ByRef endStatus As ParsingStatus _
 ' )
+' ' 	Expr_Reset expression
 ' 	dfu = ParsingDefusal.[_Off]
 ' 	depth = 0
 ' 	eIdx = 0
