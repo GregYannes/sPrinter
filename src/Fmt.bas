@@ -843,7 +843,7 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 	Fld_Close = ParsingStatus.stsSuccess
 	
 	' ...except the (trailing) format.
-	Dim iTo As Long: iTo = argIdx - 1
+	Dim iTo As Long: iTo = Application.WorksheetFunction.Max(FieldArgument.[_First], argIdx - 1)
 	
 	Dim i As Long
 	For i = FieldArgument.[_First] To iTo
