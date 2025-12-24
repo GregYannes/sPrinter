@@ -272,17 +272,16 @@ Public Function Parse( _
 				' expression.Stop = expression.Stop - 1
 				GoTo SAME_CHAR
 			End Select
-		End If
-		
-		
-		
+			
+			
+			
 		' ################
 		' ## Plain Text ##
 		' ################
 		
 		Case ElementKind.elmPlain
 			' Escape a literal character...
-			If Enum_Has(ParsingDefusal.dfuEscape) Then
+			If Enum_Has(dfu, ParsingDefusal.dfuEscape) Then
 				' Deactivate escaping.
 				dfu = dfu - ParsingDefusal.dfuEscape
 				
@@ -323,7 +322,7 @@ Public Function Parse( _
 				End Select
 				
 			' ...or parse "active" expressions.
-			Case Else
+			Else
 				Select Case char
 				
 				' Escape the next character...
@@ -374,7 +373,7 @@ Public Function Parse( _
 					' Advance to the next character.
 					GoTo NEXT_CHAR
 				End Select
-			End Select
+			End If
 			
 			
 			
@@ -410,7 +409,7 @@ Public Function Parse( _
 					dfu = dfu - ParsingDefusal.dfuQuote
 						
 					' Locate any quoting in the index argument.
-					If depth = 1 And argIndex = FieldArguments.argIndex Then idxDfu.Stop = charIndex
+					If depth = 1 And argIndex = FieldArgument.argIndex Then idxDfu.Stop = charIndex
 					
 					' Extend the location of this field...
 					expression.Stop = expression.Stop + 1
@@ -499,7 +498,7 @@ Public Function Parse( _
 						dfu = dfu - ParsingDefusal.dfuNest
 						
 						' ...and locate any nesting in the index argument.
-						If argIdx = FieldArguments.argIndex Then idxDfu.Stop = charIndex
+						If argIdx = FieldArgument.argIndex Then idxDfu.Stop = charIndex
 					End If
 					
 					' Extend the location of this field...
@@ -527,19 +526,19 @@ Public Function Parse( _
 				End Select
 				
 			' ...or parse "active" expressions.
-			Case Else
+			Else
 				Select Case char
 				
 				' Escape the next character...
 				Case escape
 					' Confirm the argument.
-					If argIdx = FieldArguments.[_None] Then argIdx = argIdx + 1
+					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
 					
 					' Activate escaping.
 					dfu = dfu + ParsingDefusal.dfuEscape
 					
 					' Note any escaping in the index argument.
-					If depth = 1 And argIdx = FieldArguments.argIndex Then idxEsc = True
+					If depth = 1 And argIdx = FieldArgument.argIndex Then idxEsc = True
 					
 					' Extend the location of this field...
 					expression.Stop = expression.Stop + 1
@@ -553,13 +552,13 @@ Public Function Parse( _
 				' ...or quote the next characters...
 				Case openQuote
 					' Confirm the argument.
-					If argIdx = FieldArguments.[_None] Then argIdx = argIdx + 1
+					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
 					
 					' Activate quoting.
 					dfu = dfu + ParsingDefusal.dfuQuote
 					
 					' Locate any quoting in the index argument.
-					If depth = 1 And argIndex = FieldArguments.argIndex Then idxDfu.Start = charIndex
+					If depth = 1 And argIndex = FieldArgument.argIndex Then idxDfu.Start = charIndex
 					
 					' Extend the location of this field...
 					expression.Stop = expression.Stop + 1
@@ -573,7 +572,7 @@ Public Function Parse( _
 				' ...or nest the next syntax...
 				Case openField
 					' Confirm the argument.
-					If argIdx = FieldArguments.[_None] Then argIdx = argIdx + 1
+					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
 					
 					' Nest deeper into the field.
 					depth = depth + 1
@@ -582,7 +581,7 @@ Public Function Parse( _
 					dfu = dfu + ParsingDefusal.dfuNest
 					
 					' Locate any nesting in the index argument.
-					If depth = 1 And argIndex = FieldArguments.argIndex Then idxDfu.Start = charIndex
+					If depth = 1 And argIndex = FieldArgument.argIndex Then idxDfu.Start = charIndex
 					
 					' Extend the location of this field...
 					expression.Stop = expression.Stop + 1
@@ -602,7 +601,7 @@ Public Function Parse( _
 					expression.Stop = expression.Stop + 1
 					
 					' Save (and reset) any argument to the array...
-					If argIdx > FieldArguments.[_None] Then
+					If argIdx > FieldArgument.[_None] Then
 						Expr_Clone arg, args(argIdx)
 						Expr_Reset arg
 					End If
@@ -631,13 +630,13 @@ Public Function Parse( _
 				' ...or parse to the next argument...
 				Case separator
 					' Confirm the argument.
-					If argIdx = FieldArguments.[_None] Then argIdx = argIdx + 1
+					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
 					
 					' Extend the location of this field.
 					expression.Stop = expression.Stop + 1
 					
 					' Begin a new argument...
-					If argIdx < FieldArguments.[_Last] Then
+					If argIdx < FieldArgument.[_Last] Then
 						' Save (and reset) the argument.
 						Expr_Clone arg, args(argIdx)
 						Expr_Reset arg
@@ -664,7 +663,7 @@ Public Function Parse( _
 				' ...or parse this argument.
 				Case Else
 					' Confirm the argument.
-					If argIdx = FieldArguments.[_None] Then argIdx = argIdx + 1
+					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
 					
 					' Extend the location of this field...
 					expression.Stop = expression.Stop + 1
@@ -678,7 +677,7 @@ Public Function Parse( _
 					' Advance to the next character.
 					GoTo NEXT_CHAR
 				End Select
-			End Select
+			End If
 		End Select
 		
 		
@@ -731,7 +730,7 @@ EXIT_LOOP:
 			
 		' ...but otherwise report the specific error.
 		Else
-			Parse = ParsingStatus.stsUnenclosedQuote
+			Parse = ParsingStatus.stsErrorUnenclosedQuote
 		End If
 		
 	' ...or an unenclosed field.
@@ -785,8 +784,8 @@ End Function
 
 ' Test if a combination (dfuNest + dfuEscape) includes a particular enumeration (dfuEscape).
 Public Function Enum_Has(ByRef enum1 As Long, ByRef enum2 As Long) As Boolean
-	Enum_Is = enum1 And enum2
-End Sub
+	Enum_Has = enum1 And enum2
+End Function
 
 
 
