@@ -804,25 +804,6 @@ End Function
 ' ## Support | Parsing ##
 ' #######################
 
-' ' Reset any global trackers.
-' Private Sub Reset( _
-' 	Optional ByRef dfu As ParsingDefusal, _
-' 	Optional ByRef depth As Long, _
-' 	Optional ByRef eIdx As Long, _
-' 	Optional ByRef char As String, _
-' 	Optional ByRef idxEsc As Boolean, _
-' 	Optional ByRef endStatus As ParsingStatus _
-' )
-' 	dfu = ParsingDefusal.[_Off]
-' 	depth = 0
-' 	eIdx = 0
-' 	char = VBA.vbNullString
-' 	idxEsc = False
-' 	endStatus = ParsingStatus.stsSuccess
-' End Sub
-
-
-
 ' #################################
 ' ## Support | Parsing | Closure ##
 ' #################################
