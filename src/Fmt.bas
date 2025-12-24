@@ -162,7 +162,7 @@ End Type
 Public Function Parse( _
 	ByRef format As String, _
 	ByRef elements() As ParserElement, _
-	Optional ByRef expression As ParserExpression, _
+	ByRef expression As ParserExpression, _
 	Optional ByVal base As Long = 1, _
 	Optional ByVal escape As String = STX_ESC, _
 	Optional ByVal openField As String = STX_FLD_OPEN, _
@@ -806,23 +806,17 @@ End Function
 
 ' ' Reset any global trackers.
 ' Private Sub Reset( _
-' ' 	Optional ByRef expression As ParserExpression, _
 ' 	Optional ByRef dfu As ParsingDefusal, _
 ' 	Optional ByRef depth As Long, _
 ' 	Optional ByRef eIdx As Long, _
-' 	Optional ByRef e As ParserElement, _
 ' 	Optional ByRef char As String, _
-' 	Optional ByRef idxDfu As ParserExpression, _
 ' 	Optional ByRef idxEsc As Boolean, _
 ' 	Optional ByRef endStatus As ParsingStatus _
 ' )
-' ' 	Expr_Reset expression
 ' 	dfu = ParsingDefusal.[_Off]
 ' 	depth = 0
 ' 	eIdx = 0
-' 	Elm_Reset e
 ' 	char = VBA.vbNullString
-' 	Expr_Reset idxDfu
 ' 	idxEsc = False
 ' 	endStatus = ParsingStatus.stsSuccess
 ' End Sub
