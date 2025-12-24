@@ -1101,6 +1101,13 @@ End Sub
 ' ## Support | Elements | Fields ##
 ' #################################
 
+' Reset a field.
+Private Sub Fld_Reset(ByRef fld As ParserField)
+	Dim reset As ParserField
+	Let fld = reset
+End Sub
+
+
 ' Clone one field (sub)element into another.
 Private Sub Fld_Clone(ByRef fld1 As ParserField, ByRef fld2 As ParserField)
 	Let fld2.Index    = fld1.Index
