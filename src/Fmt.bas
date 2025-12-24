@@ -675,6 +675,7 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	End If
 	
 	' Report success.
+	Expr_Reset expression
 	Fld_CloseIndex = ParsingStatus.stsSuccess
 	Exit Function
 	
@@ -721,6 +722,7 @@ End Function
 ' 	Let Fld_Arg(fld, arg) = val
 ' 	
 ' 	' ...and report success.
+' 	Expr_Reset expression
 ' 	Fld_CloseSpecifier = ParsingStatus.stsSuccess
 ' 	Exit Function
 ' 	
@@ -755,6 +757,7 @@ Private Function Fld_CloseFormat(ByRef fld As ParserField, _
 	fld.Format = fmt.Syntax
 	
 	' ...and report success.
+	Expr_Reset expression
 	Fld_CloseFormat = ParsingStatus.stsSuccess
 End Function
 
