@@ -230,7 +230,7 @@ Public Function Parse( _
 		' Extract the current character.
 		char = VBA.Mid$(format, charIndex, 1)
 		
-	' Revisit the character.
+	' Revisit the character from scratch.
 	SAME_CHAR:
 		' Interpret this character in context.
 		Select Case e.Kind
@@ -690,7 +690,7 @@ Public Function Parse( _
 	' ## Control ##
 	' #############
 	
-	' Increment the character.
+	' Advance to the next character.
 	NEXT_CHAR:
 		
 	Next charIndex
