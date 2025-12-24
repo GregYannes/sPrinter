@@ -804,10 +804,6 @@ End Function
 ' ## Support | Parsing ##
 ' #######################
 
-' #################################
-' ## Support | Parsing | Closure ##
-' #################################
-
 ' Close an expression and record its information.
 Private Sub Expr_Close(ByRef expr As ParserExpression, _
 	ByRef format As String _
