@@ -574,14 +574,14 @@ Public Function Parse( _
 					' Confirm the argument.
 					If argIdx = FieldArgument.[_None] Then argIdx = argIdx + 1
 					
+					' Locate any nesting in the index argument.
+					If depth = 1 And argIndex = FieldArgument.argIndex Then idxDfu.Start = charIndex
+					
 					' Nest deeper into the field.
 					depth = depth + 1
 					
 					' Activate nesting.
 					dfu = dfu + ParsingDefusal.dfuNest
-					
-					' Locate any nesting in the index argument.
-					If depth = 1 And argIndex = FieldArgument.argIndex Then idxDfu.Start = charIndex
 					
 					' Extend the location of this field...
 					expression.Stop = expression.Stop + 1
