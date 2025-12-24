@@ -708,60 +708,76 @@ EXIT_LOOP:
 	' ## Interpretation ##
 	' ####################
 	
-	' Resize to the elements we actually parsed.
-	If elements(eIdx).Kind = ElementKind.[_Unknown] Then
-		eIdx = eIdx - 1
-	End If
-	
-	If eIdx < eUp Then
-		eUp = eIdx
-		ReDim Preserve elements(base To eUp)
-	End If
-	
-	
-	' Record any pending field information.
-	Select Case e.Kind
-	Case ElementKind.elmField
-		endStatus = Fld_Close(e.Field, _
-			format := format, _
-			idxDfu := idxDfu, _
-			idxEsc := idxEsc _
-		)
-	End Select
-	
-	
-	
-	Select Case dfu
-	
-	' Report status: hanging escape...
-	Case ParsingDefusal.dfuEscape
+	' Short-circuit for any error.
+	If endStatus <> ParsingStatus.stsSuccess Then
+		Parse = endStatus
+		
+	' Handle unresolved syntax: a hanging escape...
+	ElseIf Enum_Has(dfu, ParsingDefusal.dfuEscape) Then
+		' Pinpoint the hanging escape...
+		expression.Start = charIndex
+		expression.Stop = expression.Start
+		Expr_Close expression, format := format
+		
+		' ...and return the specific status.
 		Parse = ParsingStatus.stsErrorHangingEscape
 		
-	' ...or an unclosed quote...
-	Case ParsingDefusal.dfuQuote
-		Parse = ParsingStatus.stsErrorUnenclosedQuote
-		
-	Case Else
-		' ...or an unclosed field...
-		If depth <> 0 Then
-			Parse = ParsingStatus.stsErrorUnenclosedField
+	' ...or an unenclosed quote...
+	ElseIf Enum_Has(dfu, ParsingDefusal.dfuQuote) Then
+		' Permit this for regular text...
+		If e.Kind = ElementKind.elmPlain Then
+			' Save this (plaintext) element to the array...
+			Elm_Clone e, elements(eIdx)
 			
-		' ...or a index of the wrong type...
-		ElseIf endStatus = ParsingStatus.stsErrorInvalidIndex Then
-			Parse = ParsingStatus.stsErrorInvalidIndex
-			
-		' ...or a successful parsing.
-		Else
+			' ...and report success.
 			Parse = ParsingStatus.stsSuccess
+			
+		' ...but otherwise report the specific error.
+		Else
+			Parse = ParsingStatus.stsUnenclosedQuote
 		End If
-	End Select
+		
+	' ...or an unenclosed field.
+	ElseIf Enum_Has(dfu, ParsingDefusal.dfuNest) Then
+		Parse = ParsingStatus.stsErrorUnenclosedField
+		
+	' Otherwise report success in the absence of any issues.
+	Else
+		Parse = ParsingStatus.stsSuccess
+	End If
 	
-	Exit Function
+	
+	' Resize the resulting array.
+	GoTo RESIZE_ELM
 	
 	
 ' Report a generic syntax error.
 STX_ERROR:
+	' Pinpoint where the error occurred...
+	expression.Start = charIndex
+	expression.Stop = expression.Start
+	Expr_Close expression, format := format
+	
+	' ...and return the generic status.
 	Parse = ParsingStatus.stsError
+	
+	
+' Resize the array to the elements we actually parsed.
+RESIZE_ELM:
+	' Locate the last valid element...
+	If elements(eIdx).Kind = ElementKind.[_Unknown] Then
+		eIdx = eIdx - 1
+	End If
+	
+	' ...and truncate the array to that element...
+	If eIdx > 0 Then
+		eUp = eIdx
+		ReDim Preserve elements(base To eUp)
+		
+	' ...but clear the array without a valid element.
+	ElseIf eIdx < eUp Then
+		Erase elements
+	End If
 End Function
 
 
