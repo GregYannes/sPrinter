@@ -200,6 +200,9 @@ Public Function Parse( _
 	Dim endStatus As ParsingStatus: endStatus = ParsingStatus.stsSuccess
 	
 	' ...and the current element...
+	' ' ###############################
+	' Dim eIdx As Long: eIdx = base - 1
+	' ' ###############################
 	Dim eIdx As Long: eIdx = base
 	Dim e As ParserElement
 	Expr_Reset expression
@@ -242,13 +245,38 @@ Public Function Parse( _
 		' ##############
 		
 		Case ElementKind.[_Unknown]
-			' ...
+			' ' #################################################
+			' ' Save the last element...
+			' If eIdx >= base Then Elm_Clone e, elements(eIdx)
+			' 
+			' ' ...and advance to the next.
+			' eIdx = eIdx + 1
+			' 
+			' ' Reset the global trackers:
+			' Expr_Reset expression	' Clear the expression.
+			' Elm_Reset e		' Clear the element contents.
+			' 
+			' ' ' Enter parsing.
+			' ' depth = depth + 1
+			' 
+			' ' Locate the element.
+			' expression.Start = charIndex
+			' expression.Stop = expression.Start
+			' ' #################################################
 			
 			
 			Select Case char
 			
 			' Parse into a field...
 			Case openField
+				' ' ###################################################################
+				' ' Reset the global (field) trackers:
+				' Erase args				' Clear the array of arguments.
+				' argIdx = FieldArgument.[_None]	' Reset to no arguments.
+				' nDfu = 0				' Reset to no quotations.
+				' idxEsc = False			' Reset to unescaped.
+				' ' ###################################################################
+				
 				' Nest deeper into the field.
 				depth = depth + 1
 				
@@ -353,6 +381,11 @@ Public Function Parse( _
 					
 				' ...or parse into a field...
 				Case openField
+					' ' #########################################
+					' ' Exit parsing so we can reenter the field.
+					' depth = depth - 1
+					' ' #########################################
+					
 					' Save (and reset) this (plaintext) element to the array.
 					Elm_Clone e, elements(eIdx)
 					Elm_Reset e
@@ -386,6 +419,90 @@ Public Function Parse( _
 		' ###########
 		
 		Case ElementKind.elmField
+			
+			' ' ################################################################################################################################################
+			' ' Handle the field contents.
+			' If depth = 1 Then
+			' 	' ' #################################################################
+			' 	' ' Save the last argument.
+			' 	' If argIdx > FieldArgument.[_None] Then Expr_Clone arg, args(argIdx)
+			' 	' 
+			' 	' ' Reset the local (argument) trackers.
+			' 	' Expr_Reset arg	' Clear the argument contents.
+			' 	' ' #################################################################
+			' 	
+			' 	Select Case char
+			' 	
+			' 	' Parse out of the field...
+			' 	Case closeField
+			' 		' Extend the (element) location.
+			' 		expression.Stop = expression.Stop + 1
+			' 		
+			' 		' Exit parsing so we can reenter the next element.
+			' 		depth = depth - 1
+			' 		
+			' 		' Save this (field) element to the array...
+			' 		endStatus = Fld_Close(e.Field, format := format, expression := expression, args := args, argIdx := argIdx, idxDfu := idxDfu, idxEsc := idxEsc)
+			' 		If endStatus = ParsingStatus.psSuccess Then
+			' 			Elm_Clone e, elements(eIdx)
+			' 			
+			' 		' ...unless there is a parsing error.
+			' 		Else
+			' 			GoTo EXIT_LOOP
+			' 		End If
+			' 		
+			' 		' Advance to the next element.
+			' 		eIdx = eIdx + 1
+			' 		
+			' 		' Reset the global trackers.
+			' 		Expr_Reset expression
+			' 		Elm_Reset e
+			' 		Erase args
+			' 		argIdx = FieldArgument.[_None]
+			' 		nDfu = 0
+			' 		idxEsc = False
+			' 		
+			' 		' Advance to the next character.
+			' 		GoTo NEXT_CHAR
+			' 		
+			' 	' ...or parse into the next argument...
+			' 	Case separator
+			' 		' Extend the (element) location.
+			' 		expression.Stop = expression.Stop + 1
+			' 		
+			' 		' .
+			' 		
+			' 		
+			' 		' Prepare the argument.
+			' 		arg.Stop = charIndex
+			' 		arg.Start = arg.Stop + 1
+			' 		
+			' 		' Advance to the next argument.
+			' 		argIdx = argIdx + 1
+			' 		
+			' 		' Advance to the next character.
+			' 		GoTo NEXT_CHAR
+			' 		
+			' 	' ...or parse into the current argument.
+			' 	Case Else
+			' 		' Ensure arguments are counted and prepared.
+			' 		If argIdx = FieldArgument.[_None] Then
+			' 			argIdx = argIdx + 1
+			' 			arg.Start = charIndex
+			' 			arg.Stop = arg.Start
+			' 		End If
+			' 		
+			' 		' Enter the argument.
+			' 		depth = depth + 1
+			' 		
+			' 		' Revisit this character in the argument.
+			' 		arg.Stop = arg.Stop - 1
+			' 		GoTo SAME_CHAR
+			' 	End Select
+			' End If
+			' ' ################################################################################################################################################
+			
+			
 			' Escape a literal character...
 			If Enum_Has(dfu, ParsingDefusal.dfuEscape) Then
 				' Deactivate escaping.
