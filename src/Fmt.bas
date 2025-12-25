@@ -749,6 +749,7 @@ EXIT_LOOP:
 			Elm_Clone e, elements(eIdx)
 			
 			' ...and report success.
+			Expr_Reset expression
 			Parse = ParsingStatus.stsSuccess
 			
 		' ...but otherwise report the specific error.
@@ -770,6 +771,7 @@ EXIT_LOOP:
 		End If
 		
 		' ...and report success.
+		Expr_Reset expression
 		Parse = ParsingStatus.stsSuccess
 	End If
 	
