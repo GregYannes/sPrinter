@@ -786,19 +786,19 @@ STX_ERROR:
 	
 ' Resize the array to the elements we actually parsed.
 RESIZE_ELM:
-	' Locate the last valid element...
+	' Locate the last valid element.
 	If elements(eIdx).Kind = ElementKind.[_Unknown] Then
 		eIdx = eIdx - 1
 	End If
 	
-	' ...and truncate the array to that element...
-	If eIdx > 0 Then
+	' Clear the array if there are no valid elements...
+	If eIdx < base Then
+		Erase elements
+		
+	' ...and otherwise truncate it at the last one.
+	ElseIf eIdx < eUp Then
 		eUp = eIdx
 		ReDim Preserve elements(base To eUp)
-		
-	' ...but clear the array without a valid element.
-	ElseIf eIdx < eUp Then
-		Erase elements
 	End If
 End Function
 
