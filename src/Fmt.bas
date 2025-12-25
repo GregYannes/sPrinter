@@ -759,6 +759,12 @@ EXIT_LOOP:
 		
 	' Otherwise report success in the absence of any issues.
 	Else
+		' Save any pending (valid) element to the array...
+		If e.Kind <> ElementKind.[_Unknown] Then
+			Elm_Clone e, elements(eIdx)
+		End If
+		
+		' ...and report success.
 		Parse = ParsingStatus.stsSuccess
 	End If
 	
