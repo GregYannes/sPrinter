@@ -740,8 +740,10 @@ EXIT_LOOP:
 		
 	' ...or an unenclosed quote...
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuQuote) Then
+		Select Case e.Kind
+		
 		' Permit this for regular text...
-		If e.Kind = ElementKind.elmPlain Then
+		Case ElementKind.elmPlain
 			' Save this (plaintext) element to the array...
 			Elm_Clone e, elements(eIdx)
 			
@@ -749,9 +751,9 @@ EXIT_LOOP:
 			Parse = ParsingStatus.stsSuccess
 			
 		' ...but otherwise report the specific error.
-		Else
+		Case Else
 			Parse = ParsingStatus.stsErrorUnenclosedQuote
-		End If
+		End Select
 		
 	' ...or an unenclosed field.
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuNest) Then
