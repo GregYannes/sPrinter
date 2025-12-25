@@ -731,12 +731,15 @@ EXIT_LOOP:
 		
 	' Handle unresolved syntax: a hanging escape...
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuEscape) Then
-		' Pinpoint the hanging escape...
+		' Return to the final character...
+		charIndex = charIndex - 1
+		
+		' ...and pinpoint the hanging escape.
 		expression.Start = charIndex
 		expression.Stop = expression.Start
 		Expr_Close expression, format := format
 		
-		' ...and return the specific status.
+		' Return the specific status.
 		Parse = ParsingStatus.stsErrorHangingEscape
 		
 	' ...or an unenclosed quote...
