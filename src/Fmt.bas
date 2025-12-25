@@ -726,6 +726,7 @@ EXIT_LOOP:
 	
 	' Short-circuit for any error.
 	If endStatus <> ParsingStatus.stsSuccess Then
+		Expr_Close expression, format := format
 		Parse = endStatus
 		
 	' Handle unresolved syntax: a hanging escape...
@@ -752,11 +753,13 @@ EXIT_LOOP:
 			
 		' ...but otherwise report the specific error.
 		Case Else
+			Expr_Close expression, format := format
 			Parse = ParsingStatus.stsErrorUnenclosedQuote
 		End Select
 		
 	' ...or an unenclosed field.
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuNest) Then
+		Expr_Close expression, format := format
 		Parse = ParsingStatus.stsErrorUnenclosedField
 		
 	' Otherwise report success in the absence of any issues.
