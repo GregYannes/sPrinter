@@ -1109,6 +1109,37 @@ Private Sub Expr_Clone(ByRef expr1 As ParserExpression, ByRef expr2 As ParserExp
 End Sub
 
 
+' ' Trim an expression (and preserve its consistency between syntax and location).
+' Private Sub Expr_Trim(ByRef expr As ParserExpression, _
+' 	Optional ByRef nLeft As Long, _
+' 	Optional ByRef nRight As Long _
+' )
+' 	' Record the initial length...
+' 	Dim n1 As Long, n2 As Long
+' 	n1 = VBA.Len$(expr.Syntax)
+' 	
+' 	' ...then trim any leading whitespace...
+' 	expr.Syntax = VBA.LTrim$(expr.Syntax)
+' 	
+' 	' ...and advance the start.
+' 	n2 = VBA.Len$(expr.Syntax)
+' 	nLeft = n1 - n2
+' 	expr.Start = expr.Start + nLeft
+' 	
+' 	
+' 	' Record the remaining length...
+' 	n1 = n2
+' 	
+' 	' ...then trim any trailing whitespace...
+' 	expr.Syntax = VBA.RTrim$(expr.Syntax)
+' 	
+' 	' ...and withdraw the end.
+' 	n2 = VBA.Len$(expr.Syntax)
+' 	nRight = n1 - n2
+' 	expr.Stop = expr.Stop - nRight
+' End Sub
+
+
 
 ' #################################
 ' ## Support | Elements | Fields ##
