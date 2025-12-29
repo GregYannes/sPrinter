@@ -838,6 +838,36 @@ Public Function Enum_Has(ByRef enum1 As Long, ByRef enum2 As Long) As Boolean
 End Function
 
 
+' Remove characters from the end(s) of a string.
+Public Function Txt_Crop(ByVal txt As String, _
+	Optional ByVal nLeft As Long = 0, _
+	Optional ByVal nRight As Long = 0 _
+)
+	Dim n As Long
+	
+	If nRight > 0 Then
+		' Record the initial length...
+		n = VBA.Len$(txt)
+		
+		' ...and truncate the suffix.
+		nRight = Application.WorksheetFunction.Min(nRight, n)
+		txt = VBA.Left$(txt, n - nRight)
+	End If
+	
+	If nLeft > 0 Then
+		' Record the remaining length...
+		n = VBA.Len$(txt)
+		
+		' ...and truncate the prefix...
+		nLeft = Application.WorksheetFunction.Min(nLeft, n)
+		txt = VBA.Right$(txt, n - nLeft)
+	End If
+	
+	' Return the result.
+	Txt_Crop = txt
+End Function
+
+
 
 ' #############
 ' ## Support ##
