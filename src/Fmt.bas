@@ -1118,18 +1118,6 @@ End Sub
 ' 	Dim n1 As Long, n2 As Long
 ' 	n1 = VBA.Len$(expr.Syntax)
 ' 	
-' 	' ...then trim any leading whitespace...
-' 	expr.Syntax = VBA.LTrim$(expr.Syntax)
-' 	
-' 	' ...and advance the head.
-' 	n2 = VBA.Len$(expr.Syntax)
-' 	nLeft = n1 - n2
-' 	expr.Start = expr.Start + nLeft
-' 	
-' 	
-' 	' Record the remaining length...
-' 	n1 = n2
-' 	
 ' 	' ...then trim any trailing whitespace...
 ' 	expr.Syntax = VBA.RTrim$(expr.Syntax)
 ' 	
@@ -1137,6 +1125,18 @@ End Sub
 ' 	n2 = VBA.Len$(expr.Syntax)
 ' 	nRight = n1 - n2
 ' 	expr.Stop = expr.Stop - nRight
+' 	
+' 	
+' 	' Record the remaining length...
+' 	n1 = n2
+' 	
+' 	' ...then trim any leading whitespace...
+' 	expr.Syntax = VBA.LTrim$(expr.Syntax)
+' 	
+' 	' ...and advance the head.
+' 	n2 = VBA.Len$(expr.Syntax)
+' 	nLeft = n1 - n2
+' 	expr.Start = expr.Start + nLeft
 ' End Sub
 
 
