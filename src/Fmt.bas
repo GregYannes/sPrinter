@@ -1004,6 +1004,13 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	' ...before recording the original syntax.
 	Expr_Close idx, format := format
 	
+	' Clean the original syntax....
+	Dim nLeft As Long, nRight As Long
+	Expr_Trim idx, nLeft := nLeft, nRight := nRight
+	
+	' ...and mirror the defused syntax.
+	dfuSyntax = Txt_Crop(dfuSyntax, nLeft := nLeft, nRight := nRight)
+	
 	' Short-circuit for a missing index.
 	If idx.Syntax = VBA.vbNullString Then
 		Let fld.Index = noIdx
