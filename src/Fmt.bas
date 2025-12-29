@@ -813,6 +813,20 @@ RESIZE_ELM:
 End Function
 
 
+' ' Unparse an array of syntax elements into a format string.
+' Public Function Unparse(
+' 	ByRef elements() As ParsingElement, _
+' 	Optional ByVal escape As String = STX_ESC, _
+' 	Optional ByVal openField As String = STX_FLD_OPEN, _
+' 	Optional ByVal closeField As String = STX_FLD_CLOSE, _
+' 	Optional ByVal openQuote As String = STX_QUO_OPEN, _
+' 	Optional ByVal closeQuote As String = STX_QUO_CLOSE, _
+' 	Optional ByVal separator As String = STX_SEP _
+' ) As String
+' 	' ...
+' End Function
+
+
 
 ' ###############
 ' ## Utilities ##
