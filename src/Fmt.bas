@@ -1140,34 +1140,6 @@ End Sub
 ' End Sub
 
 
-' ' Truncate an expression.
-' Private Sub Expr_Truncate(ByRef expr As ParserExpression, _
-' 	ByVal nLeft As Long = 0, _
-' 	ByVal nRight As Long = 0 _
-' )
-' 	' Record the initial length...
-' 	Dim n As Long: n = VBA.Len$(expr.Syntax)
-' 	
-' 	' ...then truncate any fixed prefix...
-' 	nLeft = Application.WorksheetFunction.Min(nLeft, n)
-' 	expr.Syntax = VBA.Right$(expr.Syntax, n - nLeft)
-' 	
-' 	' ...and advance the head.
-' 	expr.Start = expr.Start + nLeft
-' 	
-' 	
-' 	' Record the remaining length...
-' 	n = VBA.Len$(expr.Syntax)
-' 	
-' 	' ...then truncate any fixed suffix...
-' 	nRight = Application.WorksheetFunction.Min(nRight, n)
-' 	expr.Syntax = VBA.Left$(expr.Syntax, n - nRight)
-' 	
-' 	' ...and withdraw the tail.
-' 	expr.Stop = expr.Stop - nRight
-' End Sub
-
-
 
 ' #################################
 ' ## Support | Elements | Fields ##
