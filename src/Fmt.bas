@@ -847,7 +847,7 @@ Public Function Txt_Crop(ByVal txt As String, _
 	
 	If nRight > 0 Then
 		' Record the initial length...
-		n = VBA.Len$(txt)
+		n = VBA.Len(txt)
 		
 		' ...and truncate the suffix.
 		nRight = Application.WorksheetFunction.Min(nRight, n)
@@ -856,7 +856,7 @@ Public Function Txt_Crop(ByVal txt As String, _
 	
 	If nLeft > 0 Then
 		' Record the remaining length...
-		n = VBA.Len$(txt)
+		n = VBA.Len(txt)
 		
 		' ...and truncate the prefix...
 		nLeft = Application.WorksheetFunction.Min(nLeft, n)
@@ -1016,7 +1016,7 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	
 	' Interpret as an (encapsulated) key...
 	If idxCap Or idxEsc Then
-		Let fld.Index = VBA.CStr(dfuSyntax)
+		Let fld.Index = VBA.CStr$(dfuSyntax)
 		
 	' ...or an integral index.
 	Else
@@ -1053,7 +1053,7 @@ End Function
 ' 	Dim specStx As String: specStx = spec.Syntax
 ' 	
 ' 	' Clean that syntax...
-' 	specStx = VBA.Trim(specStx)
+' 	specStx = VBA.Trim$(specStx)
 ' 	
 ' 	' ...and short-circuit for a missing argument altogether.
 ' 	If specStx = VBA.vbNullString Then
@@ -1160,13 +1160,13 @@ Private Sub Expr_Trim(ByRef expr As ParserExpression, _
 )
 	' Record the initial length...
 	Dim n1 As Long, n2 As Long
-	n1 = VBA.Len$(expr.Syntax)
+	n1 = VBA.Len(expr.Syntax)
 	
 	' ...then trim any trailing whitespace...
 	expr.Syntax = VBA.RTrim$(expr.Syntax)
 	
 	' ...and withdraw the tail.
-	n2 = VBA.Len$(expr.Syntax)
+	n2 = VBA.Len(expr.Syntax)
 	nRight = n1 - n2
 	expr.Stop = expr.Stop - nRight
 	
@@ -1178,7 +1178,7 @@ Private Sub Expr_Trim(ByRef expr As ParserExpression, _
 	expr.Syntax = VBA.LTrim$(expr.Syntax)
 	
 	' ...and advance the head.
-	n2 = VBA.Len$(expr.Syntax)
+	n2 = VBA.Len(expr.Syntax)
 	nLeft = n1 - n2
 	expr.Start = expr.Start + nLeft
 End Sub
@@ -1233,7 +1233,7 @@ End Property
 ' 	ByVal spec As String, _
 ' 	Optional ByRef exists As Boolean _
 ' ) As Long
-' 	spec = VBA.UCase(spec)
+' 	spec = VBA.UCase$(spec)
 ' 	
 ' 	' 		============	==========	======================
 ' 	' 		Abbreviation	Name      	Enumeration
