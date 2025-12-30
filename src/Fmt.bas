@@ -1191,6 +1191,49 @@ Private Sub Expr_Trim(ByRef expr As ParserExpression, _
 End Sub
 
 
+' ' Detect and handle an encapsulated expression.
+' Private Function Expr_Cap(ByRef expr As ParserExpression, _
+' 	ByRef cap As ParserExpression, _
+' 	Optional ByRef dfu As String _
+' ) As Boolean
+' 	' Short-circuit for an empty expression.
+' 	If expr.Syntax = VBA.vbNullString Then
+' 		Expr_Cap = False
+' 		Exit Function
+' 	End If
+' 	
+' 	' Check whether the expression is fully encapsulated: in its original form...
+' 	Expr_Cap = (expr.Start = cap.Start And expr.Stop = cap.Stop)
+' 	
+' 	' ...or after it is cleaned.
+' 	If Not Expr_Cap Then
+' 		' Copy the expression to avoid side-effects.
+' 		Dim temp As ParserExpression
+' 		Expr_Clone expr, temp
+' 		
+' 		' Clean the copy.
+' 		Dim nLeft As Long, nRight As Long
+' 		Expr_Trim temp, nLeft := nLeft, nRight := nRight
+' 		
+' 		' Short-circuit for an empty result.
+' 		If temp.Syntax = VBA.vbNullString Then
+' 			Expr_Cap = False
+' 			Exit Function
+' 		End If
+' 		
+' 		' Check again for encapsulation...
+' 		Expr_Cap = (temp.Start = cap.Start And temp.Stop = cap.Stop)
+' 		If Expr_Cap Then
+' 			' ...and accordingly update the original expression...
+' 			Expr_Clone temp, expr
+' 			
+' 			' ...along with the defused syntax for consistency.
+' 			dfu = Txt_Crop(dfu, nLeft := nLeft, nRight := nRight)
+' 		End If
+' 	End If
+' End Function
+
+
 
 ' #################################
 ' ## Support | Elements | Fields ##
