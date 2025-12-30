@@ -1306,6 +1306,19 @@ Private Property Let Fld_Arg(ByRef fld As ParserField, _
 End Property
 
 
+' ' Define missing values for field arguments.
+' Private Function Arg_Missing(ByRef arg As FieldArgument) As Variant
+' 	Select Case arg
+' 	Case FieldArgument.argIndex
+' 		Let Arg_Missing = Empty
+' 	Case FieldArgument.argPosition, FieldArgument.argMode, FieldArgument.argDay1, FieldArgument.argWeek1
+' 		Let Arg_Missing = -1
+' 	Case FieldArgument.argFormat
+' 		Let Arg_Missing = VBA.vbNullString
+' 	End Select
+' End Function
+
+
 ' ' Interpret specifiers for field arguments.
 ' Private Function Arg_Specifier(ByRef arg As FieldArgument, _
 ' 	ByVal spec As String, _
