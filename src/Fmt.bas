@@ -158,6 +158,10 @@ End Type
 ' ## API ##
 ' #########
 
+' ###################
+' ## API | Parsing ##
+' ###################
+
 ' Parse a format string into an array of syntax elements.
 Public Function Parse( _
 	ByRef format As String, _
@@ -826,6 +830,19 @@ End Function
 ' ) As String
 ' 	' ...
 ' End Function
+
+
+' Count the elements returned by Parse().
+Public Function Elm_Count(ByRef elms() As ParserExpression, _
+	Optional ByVal dimension As Long = 1 _
+) As Long
+	On Error GoTo BOUND_ERROR
+	Elm_Count = UBound(elms, dimension) - LBound(elms, dimension) + 1
+	Exit Function
+	
+BOUND_ERROR:
+	Elm_Count = 0
+End Function
 
 
 
