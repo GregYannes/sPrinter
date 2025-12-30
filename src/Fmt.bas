@@ -1150,11 +1150,9 @@ End Sub
 
 
 ' Count the elements returned by Parse().
-Private Function Elm_Count(ByRef elms() As ParserExpression, _
-	Optional ByVal dimension As Long = 1 _
-) As Long
+Private Function Elm_Count(ByRef elms() As ParserExpression) As Long
 	On Error GoTo BOUND_ERROR
-	Elm_Count = UBound(elms, dimension) - LBound(elms, dimension) + 1
+	Elm_Count = UBound(elms, 1) - LBound(elms, 1) + 1
 	Exit Function
 	
 BOUND_ERROR:
