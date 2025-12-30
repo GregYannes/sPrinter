@@ -1319,6 +1319,14 @@ End Property
 ' End Function
 
 
+' ' Test if a field argument is "missing".
+' Private Function Arg_IsMissing(ByRef arg As FieldArgument, _
+' 	ByRef val As Variant _
+' ) As Boolean
+' 	Arg_IsMissing = (val = Arg_Missing(arg))
+' End Function
+
+
 ' ' Interpret specifiers for field arguments.
 ' Private Function Arg_Specifier(ByRef arg As FieldArgument, _
 ' 	ByVal spec As String, _
