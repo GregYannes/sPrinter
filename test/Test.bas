@@ -38,6 +38,8 @@ Public Sub Test()
 			Debug.Print "FIELD: out(" & i & ")" & VBA.vbTab & "= " & fld
 			
 			out = out & fld
+		Case Else
+			Debug.Print "UNKNOWN: out(" & i & ")"
 		End Select
 	Next i
 	
