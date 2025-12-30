@@ -28,7 +28,6 @@ Public Sub Test()
 				Else
 					fld = fld & e.Field.Index
 				End If
-				
 			End If
 			
 			If e.Field.Format <> VBA.vbNullString Then
