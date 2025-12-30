@@ -1050,7 +1050,7 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	' ...or an integral index.
 	Else
 		On Error GoTo IDX_ERROR
-		Let fld.Index = VBA.CLng&(idx.Syntax)
+		Let fld.Index = VBA.CLng(idx.Syntax)
 		On Error GoTo 0
 	End If
 	
