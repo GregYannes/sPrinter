@@ -987,7 +987,7 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 	
 ' Report an error when parsing the arguments.
 FLD_ERROR:
-	Expr_Clone arg, expression 
+	Expr_Clone arg, expression
 End Function
 
 
