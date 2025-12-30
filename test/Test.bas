@@ -23,12 +23,12 @@ Public Sub Test()
 			fld = "{"
 			
 			If Not VBA.IsEmpty(e.Field.Index) Then
-				
 				' If VBA.VarType(e.Field.Index) = VBA.VbVarType.vbString Then
 				' 	fld = fld & "'" & e.Field.Index & "'"
 				' Else
 				' 	fld = fld & e.Field.Index
 				' End If
+				
 			End If
 			
 			If e.Field.Format <> VBA.vbNullString Then
