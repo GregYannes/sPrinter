@@ -1327,6 +1327,17 @@ End Property
 ' End Function
 
 
+' ' Identify arguments that accept specifiers.
+' Private Function Arg_IsSpecifier(ByRef arg As FieldArgument) As Boolean
+' 	Select Case arg
+' 	Case FieldArgument.argPosition, FieldArgument.argMode, FieldArgument.argDay1, FieldArgument.argWeek1
+' 		Arg_IsSpecifier = False
+' 	Case Else
+' 		Arg_IsSpecifier = True
+' 	End Select
+' End Function
+
+
 ' ' Interpret specifiers for field arguments.
 ' Private Function Arg_Specifier(ByRef arg As FieldArgument, _
 ' 	ByVal spec As String, _
