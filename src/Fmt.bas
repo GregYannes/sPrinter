@@ -832,19 +832,6 @@ End Function
 ' End Function
 
 
-' Count the elements returned by Parse().
-Public Function Elm_Count(ByRef elms() As ParserExpression, _
-	Optional ByVal dimension As Long = 1 _
-) As Long
-	On Error GoTo BOUND_ERROR
-	Elm_Count = UBound(elms, dimension) - LBound(elms, dimension) + 1
-	Exit Function
-	
-BOUND_ERROR:
-	Elm_Count = 0
-End Function
-
-
 
 ' ###############
 ' ## Utilities ##
@@ -1160,6 +1147,19 @@ Private Sub Elm_Clone(ByRef elm1 As ParserElement, ByRef elm2 As ParserElement)
 	Let elm2.Plain	= elm1.Plain
 	Fld_Clone elm1.Field, elm2.Field
 End Sub
+
+
+' Count the elements returned by Parse().
+Public Function Elm_Count(ByRef elms() As ParserExpression, _
+	Optional ByVal dimension As Long = 1 _
+) As Long
+	On Error GoTo BOUND_ERROR
+	Elm_Count = UBound(elms, dimension) - LBound(elms, dimension) + 1
+	Exit Function
+	
+BOUND_ERROR:
+	Elm_Count = 0
+End Function
 
 
 
