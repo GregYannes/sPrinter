@@ -7,8 +7,8 @@ Public Sub Test()
 	Dim elements() As ParserElement
 	
 	Dim status As ParsingStatus
-	
-	status = Parse(format, elements)
+	Dim expr As ParserExpression
+	status = Parse(format, elements, expr)
 	
 	Dim e As ParserElement
 	Dim out As String: Dim fld As String
@@ -22,16 +22,16 @@ Public Sub Test()
 		Case ElementKind.elmField
 			fld = "{"
 			
-			If e.HasIndex Then
-				fld = fld & e.RawIndex
-				' If e.IndexIsKey Then
+			If Not VBA.IsEmpty(e.Field.Index) Then
+				
+				' If VBA.VarType(e.Field.Index) = VBA.VbVarType.vbString Then
 				' 	fld = fld & "'" & e.Field.Index & "'"
 				' Else
 				' 	fld = fld & e.Field.Index
 				' End If
 			End If
 			
-			If e.HasFormat Then
+			If e.Field.Format <> VBA.vbNullString Then
 				fld = fld & ":" & e.Field.Format
 			End If
 			
