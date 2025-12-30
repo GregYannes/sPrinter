@@ -896,7 +896,7 @@ Private Sub Expr_Close(ByRef expr As ParserExpression, _
 	' ...or clear invalid information.
 	Else
 		expr.Syntax = VBA.vbNullString
-		expr.Stop = 0
+		expr.Stop = expr.Start - 1
 	End If
 End Sub
 
