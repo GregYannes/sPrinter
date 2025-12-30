@@ -43,10 +43,15 @@ Public Sub Test()
 		End Select
 	Next i
 	
+	Dim nChr As Long: nChr = VBA.Len(format)
+	Dim lElm As Long: lElm = LBound(elements)
+	Dim uElm As Long: uElm = UBound(elements)
+	Dim nElm As Long: nElm = uElm - lElm + 1
+	
 	Debug.Print
-	Debug.Print VBA.Len(format) & " chars"
-	Debug.Print "status = " & status
-	Debug.Print "lower = " & LBound(elements) & ", upper = " & UBound(elements)
-	Debug.Print "OUTPUT: """ & out & """"
+	Debug.Print "STATUS: " & status
+	Debug.Print nChr & " characters"
+	Debug.Print nElm & " elements"
 	Debug.Print "FORMAT: """ & format & """"
+	Debug.Print "OUTPUT: """ & out & """"
 End Sub
