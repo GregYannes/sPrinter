@@ -4,35 +4,35 @@ Attribute VB_Name = "Test"
 
 Public Sub Test()
 	Dim format As String: format = "ab}cd{}ef\{gh{1}ij{-2}kl{\3}mn{""key_1""}op{{key_2}}qr{{key_3\}}}st{:mm""{-dd-""yyyy}uv{""key_4"":}wx{\5:mm-dd-yyyy""mm-dd-yyyy""\}}yz""{6:mm-dd-yyyy}"""
-	Dim elements() As sParseElement
+	Dim elements() As ParserElement
 	
-	Dim status As sParseStatus
-	status = sParse(format, elements)
+	Dim status As ParsingStatus
+	status = Parse(format, elements)
 	
-	Dim e As sParseElement
+	Dim e As ParserElement
 	Dim out As String: Dim fld As String
 	For i = LBound(elements) To UBound(elements)
 		e = elements(i)
 		' Debug.Print e.Kind
 		
 		Select Case e.Kind
-		Case sParseKind.pkPlain
-			Debug.Print "PLAIN: out(" & i & ")" & VBA.vbTab & "= " & e.Text
-			out = out & e.Text
-		Case sParseKind.pkField
+		Case ElementKind.elmPlain
+			Debug.Print "PLAIN: out(" & i & ")" & VBA.vbTab & "= " & e.Plain
+			out = out & e.Plain
+		Case ElementKind.elmField
 			fld = "{"
 			
 			If e.HasIndex Then
 				fld = fld & e.RawIndex
 				' If e.IndexIsKey Then
-				' 	fld = fld & "'" & e.Index & "'"
+				' 	fld = fld & "'" & e.Field.Index & "'"
 				' Else
-				' 	fld = fld & e.Index
+				' 	fld = fld & e.Field.Index
 				' End If
 			End If
 			
 			If e.HasFormat Then
-				fld = fld & ":" & e.format
+				fld = fld & ":" & e.Field.Format
 			End If
 			
 			fld = fld & "}"
