@@ -888,15 +888,19 @@ End Function
 Private Sub Expr_Close(ByRef expr As ParserExpression, _
 	ByRef format As String _
 )
-	' Record the syntax...
-	If expr.Start > 0 And expr.Start <= expr.Stop Then
-		Dim exprLen As Long: exprLen = expr.Stop - expr.Start + 1
-		expr.Syntax = VBA.Mid$(format, expr.Start, exprLen)
+	' Clear invalid information...
+	If expr.Start <= 0 Then
+		Expr_Reset expr
 		
-	' ...or clear invalid information.
-	Else
+	' ...or record a blank...
+	ElseIf expr.Start > expr.Stop Then
 		expr.Syntax = VBA.vbNullString
 		expr.Stop = expr.Start - 1
+		
+	' ...or record valid syntax.
+	Else
+		Dim exprLen As Long: exprLen = expr.Stop - expr.Start + 1
+		expr.Syntax = VBA.Mid$(format, expr.Start, exprLen)
 	End If
 End Sub
 
