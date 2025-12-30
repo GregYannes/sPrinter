@@ -1150,7 +1150,7 @@ End Sub
 
 
 ' Count the elements returned by Parse().
-Public Function Elm_Count(ByRef elms() As ParserExpression, _
+Private Function Elm_Count(ByRef elms() As ParserExpression, _
 	Optional ByVal dimension As Long = 1 _
 ) As Long
 	On Error GoTo BOUND_ERROR
