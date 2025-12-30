@@ -176,6 +176,9 @@ Public Function Parse( _
 	' ## Setup ##
 	' ###########
 	
+	' Default to success.
+	Parse = ParsingStatus.stsSuccess
+	
 	' Record the format length.
 	Dim fmtLen As Long: fmtLen = VBA.Len(format)
 	
@@ -197,7 +200,6 @@ Public Function Parse( _
 	' Track the current context for parsing...
 	Dim dfu As ParsingDefusal: dfu = ParsingDefusal.[_Off]
 	Dim depth As Long: depth = 0
-	Dim endStatus As ParsingStatus: endStatus = ParsingStatus.stsSuccess
 	
 	' ...and the current element...
 	Dim eIdx As Long: eIdx = base
@@ -622,12 +624,12 @@ Public Function Parse( _
 					End If
 					
 					' ...along with the (field) element.
-					endStatus = Fld_Close(e.Field, format := format, expression := expression, args := args, argIdx := argIdx, idxDfu := idxDfu, idxEsc := idxEsc)
+					Parse = Fld_Close(e.Field, format := format, expression := expression, args := args, argIdx := argIdx, idxDfu := idxDfu, idxEsc := idxEsc)
 					Elm_Clone e, elements(eIdx)
 					Elm_Reset e
 					
 					' Short-circuit for errors.
-					If endStatus <> ParsingStatus.stsSuccess Then GoTo EXIT_LOOP
+					If Parse <> ParsingStatus.stsSuccess Then GoTo EXIT_LOOP
 					
 					' Advance to the next element.
 					eIdx = eIdx + 1
@@ -725,9 +727,8 @@ EXIT_LOOP:
 	' ####################
 	
 	' Short-circuit for any error.
-	If endStatus <> ParsingStatus.stsSuccess Then
+	If Parse <> ParsingStatus.stsSuccess Then
 		Expr_Close expression, format := format
-		Parse = endStatus
 		
 	' Handle unresolved syntax: a hanging escape...
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuEscape) Then
