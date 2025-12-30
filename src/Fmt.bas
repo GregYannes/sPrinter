@@ -1194,10 +1194,15 @@ End Sub
 ' ' Detect and handle an encapsulated expression.
 ' Private Function Expr_Cap(ByRef expr As ParserExpression, _
 ' 	ByRef cap As ParserExpression, _
-' 	Optional ByRef dfu As String _
+' 	Optional ByRef dfu As String, _
+' 	Optional ByRef blank As Boolean _
 ' ) As Boolean
+' 	' Default to nonblank.
+' 	blank = False
+' 	
 ' 	' Short-circuit for an empty expression.
 ' 	If expr.Syntax = VBA.vbNullString Then
+' 		blank = True
 ' 		Expr_Cap = False
 ' 		Exit Function
 ' 	End If
@@ -1217,6 +1222,7 @@ End Sub
 ' 		
 ' 		' Short-circuit for an empty result.
 ' 		If temp.Syntax = VBA.vbNullString Then
+' 			blank = True
 ' 			Expr_Cap = False
 ' 			Exit Function
 ' 		End If
