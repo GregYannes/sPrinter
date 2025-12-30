@@ -7,13 +7,13 @@ Public Sub Test()
 	Dim elements() As ParserElement
 	
 	Dim status As ParsingStatus
+	
 	status = Parse(format, elements)
 	
 	Dim e As ParserElement
 	Dim out As String: Dim fld As String
 	For i = LBound(elements) To UBound(elements)
 		e = elements(i)
-		' Debug.Print e.Kind
 		
 		Select Case e.Kind
 		Case ElementKind.elmPlain
