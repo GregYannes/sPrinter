@@ -72,7 +72,7 @@ Public Enum ParsingStatus
 	stsSuccess               =    0	' Report success.
 	stsError                 = 1000	' Report a general syntax error.
 	stsErrorHangingEscape    = 1001	' Report a hanging escape...
-	stsErrorUnenclosedField  = 1002	' ...or an incomplete field...
+	stsErrorImbalancedNesting = 1002	' ...or an incomplete field...
 	stsErrorUnenclosedQuote  = 1003	' ...or an incomplete quote...
 	stsErrorInvalidIndex     = 1004	' ...or an index that is not an integer.
 End Enum
@@ -762,7 +762,7 @@ EXIT_LOOP:
 	' ...or an unenclosed field.
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuNest) Or depth > 0 Then
 		Expr_Close expression, format := format
-		Parse = ParsingStatus.stsErrorUnenclosedField
+		Parse = ParsingStatus.stsErrorImbalancedNesting
 		
 	' Otherwise report success in the absence of any issues.
 	Else
