@@ -929,7 +929,6 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 	For i = FieldArgument.[_First] To iTo
 		' Extract the argument by position.
 		arg = args(i)
-		' Expr_Clone args(i), arg
 		
 		
 		Select Case i
