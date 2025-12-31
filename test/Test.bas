@@ -4,22 +4,22 @@ Attribute VB_Name = "Test"
 
 Public Sub Test()
 	Dim format As String: format = "ab}cd{ }ef\{gh{1}ij{ -2 }kl{ \3 }mn{ ""key_1"" }op{{key_2}}qr{ {key_3\}} }st{ :mm""{-dd-""yyyy}uv{""key_4"":}wx{ \5 : mm-dd-yyyy""mm-dd-yyyy""\} }yz{ : }ab""{6:mm-dd-yyyy}"""
-	Dim elements() As Fmt.ParserElement
+	Dim elements() As sPrinter.ParserElement
 	
 	Dim status As ParsingStatus
-	Dim expr As Fmt.ParserExpression
-	status = Fmt.Parse(format, elements, expr)
+	Dim expr As sPrinter.ParserExpression
+	status = sPrinter.Parse(format, elements, expr)
 	
-	Dim e As Fmt.ParserElement
+	Dim e As sPrinter.ParserElement
 	Dim out As String: Dim fld As String
 	For i = LBound(elements) To UBound(elements)
 		e = elements(i)
 		
 		Select Case e.Kind
-		Case Fmt.ElementKind.elmPlain
+		Case sPrinter.ElementKind.elmPlain
 			Debug.Print "PLAIN: out(" & i & ")" & VBA.vbTab & "= " & e.Plain
 			out = out & e.Plain
-		Case Fmt.ElementKind.elmField
+		Case sPrinter.ElementKind.elmField
 			fld = "{"
 			
 			If Not VBA.IsEmpty(e.Field.Index) Then
@@ -47,7 +47,7 @@ Public Sub Test()
 	Dim lElm As Long: lElm = LBound(elements)
 	Dim uElm As Long: uElm = UBound(elements)
 	Dim nElm As Long: nElm = uElm - lElm + 1
-	' Dim nElm As Long: nElm = Fmt.Elm_Count(elements)
+	' Dim nElm As Long: nElm = sPrinter.Elm_Count(elements)
 	
 	Debug.Print
 	Debug.Print "STATUS: " & status

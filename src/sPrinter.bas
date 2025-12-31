@@ -1,4 +1,4 @@
-Attribute VB_Name = "Fmt"
+Attribute VB_Name = "sPrinter"
 
 
 
@@ -19,11 +19,11 @@ Option Explicit
 ' ## Metadata ##
 ' ##############
 
-Public Const MOD_NAME As String = "Fmt"
+Public Const MOD_NAME As String = "sPrinter"
 
 Public Const MOD_VERSION As String = ""
 
-Public Const MOD_REPO As String = "https://github.com/GregYannes/Fmt"
+Public Const MOD_REPO As String = "https://github.com/GregYannes/sPrinter"
 
 
 
