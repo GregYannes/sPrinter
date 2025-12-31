@@ -69,12 +69,12 @@ End Enum
 
 ' Outcomes of parsing.
 Public Enum ParsingStatus
-	stsSuccess               =    0	' Report success.
-	stsError                 = 1000	' Report a general syntax error.
-	stsErrorHangingEscape    = 1001	' Report a hanging escape...
+	stsSuccess                =    0	' Report success.
+	stsError                  = 1000	' Report a general syntax error.
+	stsErrorHangingEscape     = 1001	' Report a hanging escape...
 	stsErrorImbalancedNesting = 1002	' ...or an incomplete field...
-	stsErrorUnenclosedQuote  = 1003	' ...or an incomplete quote...
-	stsErrorInvalidIndex     = 1004	' ...or an index that is not an integer.
+	stsErrorUnenclosedQuote   = 1003	' ...or an incomplete quote...
+	stsErrorInvalidIndex      = 1004	' ...or an index that is not an integer.
 End Enum
 
 
