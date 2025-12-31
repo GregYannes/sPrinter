@@ -1012,8 +1012,17 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	Dim idxCap As Boolean: idxCap = (idxDfu.Start = idx.Start And idxDfu.Stop = idx.Stop)
 	
 	' Interpret as an (encapsulated) key...
-	If idxCap Or idxEsc Then
+	If idxCap Then
 		Let fld.Index = VBA.CStr$(dfuSyntax)
+		
+	' ...or as an (escaped) key that looks numeric...
+	ElseIf idxEsc Then
+		On Error GoTo IDX_ERROR
+		VBA.CLng dfuSyntax
+		On Error GoTo 0
+		
+		' Clean the key while preserving the numeric style ($-1,234.56).
+		Let fld.Index = VBA.Trim$(dfuSyntax)
 		
 	' ...or an integral index.
 	Else
