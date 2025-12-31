@@ -75,7 +75,6 @@ Public Enum ParsingStatus
 	stsErrorUnenclosedField  = 1002	' ...or an incomplete field...
 	stsErrorUnenclosedQuote  = 1003	' ...or an incomplete quote...
 	stsErrorInvalidIndex     = 1004	' ...or an index that is not an integer...
-' 	stsErrorInvalidSpecifier = 1005	' ...or an unrecognized specifier.
 End Enum
 
 
@@ -101,10 +100,6 @@ End Enum
 Private Enum FieldArgument
 	[_None]					' No arguments.
 	argIndex				' The index at which to extract the value.
-' 	argPosition				' How to interpret a negative index.
-' 	argMode					' The engine used for formatting.
-' 	argDay1					' The first day of the week, passed to Format() as "FirstDayOfWeek".
-' 	argWeek1				' The first week of the year, passed to Format() as "FirstWeekOfYear".
 	argFormat				' The formatting applied to the value.
 	[_All]					' All arguments.
 	
@@ -137,10 +132,6 @@ End Type
 ' Element for parsing a field embedded in formatting.
 Public Type ParserField
 	Index As Variant		' The index to extract the value...
-' 	Position As PositionKind	' ...and how to interpret that index.
-' 	Mode As FormatMode		' The engine used for formatting...
-' 	Day1 As VBA.VbDayOfWeek		' ...and the conventions used by Format() for weekdays...
-' 	Week1 As VBA.VbFirstWeekOfYear	' ...and for calendar weeks.
 	Format As String		' The formatting code applied to the value.
 End Type
 
@@ -952,15 +943,6 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 				idxDfu := idxDfu, _
 				idxEsc := idxEsc _
 			)
-			
-		' ' Process a specifier argument.
-		' Case FieldArgument.argPosition, FieldArgument.argMode, FieldArgument.argDay1, FieldArgument.argWeek1
-		' 	Fld_Close = Fld_CloseSpecifier(fld, _
-		' 		arg := i, _
-		' 		spec := arg, _
-		' 		format := format, _
-		' 		expression := expression _
-		' 	)
 		End Select
 		
 		' Short-circuit for error.
@@ -1052,53 +1034,6 @@ IDX_ERROR:
 	Expr_Clone idx, expression
 	Fld_CloseIndex = ParsingStatus.stsErrorInvalidIndex
 End Function
-
-
-' ' ...and any of its specifier arguments...
-' Private Function Fld_CloseSpecifier(ByRef fld As ParserField, _
-' 	ByRef arg As FieldArgument, _
-' 	ByRef spec As ParserExpression, _
-' 	ByRef format As String, _
-' 	ByRef expression As ParserExpression _
-' ) As ParsingStatus
-' 	' Define fallback for missing argument.
-' 	Dim noArg As Variant: noArg = -1
-' 	
-' 	' Record and extract the original syntax.
-' 	Expr_Close spec, format := format
-' 	Dim specStx As String: specStx = spec.Syntax
-' 	
-' 	' Clean that syntax...
-' 	specStx = VBA.Trim$(specStx)
-' 	
-' 	' ...and short-circuit for a missing argument altogether.
-' 	If specStx = VBA.vbNullString Then
-' 		Let Fld_Arg(fld, arg) = noArg
-' 		Fld_CloseSpecifier = ParsingStatus.stsSuccess
-' 		Exit Function
-' 	End If
-' 	
-' 	' Look up the specifier that matches this syntax...
-' 	Dim val As Long, exists As Boolean
-' 	val = Arg_Specifier(arg, spec := specStx, exists := exists)
-' 	
-' 	' ...and short-circuit for no match.
-' 	If Not exists Then GoTo SPEC_ERROR
-' 	
-' 	' Assign any valid specifier to the argument...
-' 	Let Fld_Arg(fld, arg) = val
-' 	
-' 	' ...and report success.
-' 	Expr_Reset expression
-' 	Fld_CloseSpecifier = ParsingStatus.stsSuccess
-' 	Exit Function
-' 	
-' 	
-' ' Report the error for an invalid specifier.
-' SPEC_ERROR:
-' 	Expr_Clone spec, expression
-' 	Fld_CloseSpecifier = ParsingStatus.stsErrorInvalidSpecifier
-' End Function
 
 
 ' ...and its format argument.
@@ -1275,133 +1210,5 @@ End Sub
 ' Clone one field (sub)element into another.
 Private Sub Fld_Clone(ByRef fld1 As ParserField, ByRef fld2 As ParserField)
 	Let fld2.Index    = fld1.Index
-' 	Let fld2.Position = fld1.Position
-' 	Let fld2.Mode     = fld1.Mode
-' 	Let fld2.Day1     = fld1.Day1
-' 	Let fld2.Week1    = fld1.Week1
 	Let fld2.Format   = fld1.Format
 End Sub
-
-
-
-' #############################################
-' ## Support | Elements | Fields | Arguments ##
-' #############################################
-
-' ' Set an argument for a field.
-' Private Property Let Fld_Arg(ByRef fld As ParserField, _
-' 	ByRef arg As FieldArgument, _
-' 	ByRef val As Variant _
-' )
-' 	Select Case arg
-' 	Case FieldArgument.argIndex:	Let fld.Index    = val
-' 	Case FieldArgument.argPosition:	Let fld.Position = val
-' 	Case FieldArgument.argMode:	Let fld.Mode     = val
-' 	Case FieldArgument.argDay1:	Let fld.Day1     = val
-' 	Case FieldArgument.argWeek1:	Let fld.Week1    = val
-' 	Case FieldArgument.argFormat:	Let fld.Format   = val
-' 	End Select
-' End Property
-
-
-' ' Define missing values for field arguments.
-' Private Function Arg_Missing(ByRef arg As FieldArgument) As Variant
-' 	Select Case arg
-' 	Case FieldArgument.argIndex
-' 		Let Arg_Missing = Empty
-' 	Case FieldArgument.argPosition, FieldArgument.argMode, FieldArgument.argDay1, FieldArgument.argWeek1
-' 		Let Arg_Missing = -1
-' 	Case FieldArgument.argFormat
-' 		Let Arg_Missing = VBA.vbNullString
-' 	End Select
-' End Function
-
-
-' ' Test if a field argument is "missing".
-' Private Function Arg_IsMissing(ByRef arg As FieldArgument, _
-' 	ByRef val As Variant _
-' ) As Boolean
-' 	Arg_IsMissing = (val = Arg_Missing(arg))
-' End Function
-
-
-' ' Identify arguments that accept specifiers.
-' Private Function Arg_IsSpecifier(ByRef arg As FieldArgument) As Boolean
-' 	Select Case arg
-' 	Case FieldArgument.argPosition, FieldArgument.argMode, FieldArgument.argDay1, FieldArgument.argWeek1
-' 		Arg_IsSpecifier = False
-' 	Case Else
-' 		Arg_IsSpecifier = True
-' 	End Select
-' End Function
-
-
-' ' Interpret specifiers for field arguments.
-' Private Function Arg_Specifier(ByRef arg As FieldArgument, _
-' 	ByVal spec As String, _
-' 	Optional ByRef exists As Boolean _
-' ) As Long
-' 	spec = VBA.UCase$(spec)
-' 	
-' 	' 		============	==========	======================
-' 	' 		Abbreviation	Name      	Enumeration
-' 	' 		============	==========	======================
-' 	Select Case arg
-' 	
-' 	' ' How to interpret a negative index.
-' 	' Case FieldArgument.argPosition
-' 	' 	Select Case spec
-' 	' 	' 	============	==========	======================
-' 	' ' 	Case	"?", 		"UNKNOWN",	"[_UNKNOWN]":		Arg_Specifier = PositionKind.[_Unknown]
-' 	' 	Case	"ABS",		"ABSOLUTE",	"POSABSOLUTE":		Arg_Specifier = PositionKind.posAbsolute
-' 	' 	Case	"REL",		"RELATIVE",	"POSRELATIVE":		Arg_Specifier = PositionKind.posRelative
-' 	' 	' 	============	==========	======================
-' 	' 	Case Else: GoTo NO_MATCH
-' 	' 	End Select
-' 		
-' 	' ' The engine used for formatting.
-' 	' Case FieldArgument.argMode
-' 	' 	Select Case spec
-' 	' 	' 	============	==========	======================
-' 	' ' 	Case	"?",		"UNKNOWN",	"[_Unknown]":		Arg_Specifier = FormatMode.[_Unknown]
-' 	' 	Case	"XL",		"EXCEL",	"FMTEXCELTEXT":		Arg_Specifier = FormatMode.fmtExcelText
-' 	' 	Case	"VB",		"VBA",		"FMTVBFORMAT":		Arg_Specifier = FormatMode.fmtVbFormat
-' 	' 	' 	============	==========	======================
-' 	' 	Case Else: GoTo NO_MATCH
-' 	' 	End Select
-' 		
-' 	' ' The "FirstDayOfWeek" for Format().
-' 	' Case FieldArgument.argDay1
-' 	' 	Select Case spec
-' 	' 	' 	============	==========	======================
-' 	' 	Case	"SYS",		"SYSTEM",	"VBUSESYSTEMDAYOFWEEK":	Arg_Specifier = VBA.VbDayOfWeek.vbUseSystemDayOfWeek
-' 	' 	Case	"SUN",		"SUNDAY",	"VBSUNDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbSunday
-' 	' 	Case	"MON",		"MONDAY",	"VBMONDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbMonday
-' 	' 	Case	"TUE",		"TUESDAY",	"VBTUESDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbTuesday
-' 	' 	Case	"WED",		"WEDNESDAY",	"VBWEDNESDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbWednesday
-' 	' 	Case	"THU",		"THURSDAY",	"VBTHURSDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbThursday
-' 	' 	Case	"FRI",		"FRIDAY",	"VBFRIDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbFriday
-' 	' 	Case	"SAT",		"SATURDAY",	"VBSATURDAY":		Arg_Specifier = VBA.VbDayOfWeek.vbSaturday
-' 	' 	' 	============	==========	======================
-' 	' 	Case Else: GoTo NO_MATCH
-' 	' 	End Select
-' 		
-' 	' ' The "FirstWeekOfYear" for Format().
-' 	' Case FieldArgument.argWeek1
-' 	' 	Select Case spec
-' 	' 	' 	============	==========	======================
-' 	' 	Case	"SYS",		"SYSTEM",	"VBUSESYSTEM":		Arg_Specifier = VBA.VbFirstWeekOfYear.vbUseSystem
-' 	' 	Case	"J1",		"JAN1",		"VBFIRSTJAN1":		Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstJan1
-' 	' 	Case	"4D",		"FOURDAYS",	"VBFIRSTFOURDAYS":	Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstFourDays
-' 	' 	Case	"FW",		"FULLWEEK",	"VBFIRSTFULLWEEK":	Arg_Specifier = VBA.VbFirstWeekOfYear.vbFirstFullWeek
-' 	' 	' 	============	==========	======================
-' 	' 	Case Else: GoTo NO_MATCH
-' 	' 	End Select
-' 	End Select
-' 	
-' 	exists = True
-' 	Exit Function
-' 	
-' NO_MATCH:
-' 	exists = False
-' End Function
