@@ -47,6 +47,7 @@ Public Sub Test()
 	Dim lElm As Long: lElm = LBound(elements)
 	Dim uElm As Long: uElm = UBound(elements)
 	Dim nElm As Long: nElm = uElm - lElm + 1
+	' Dim nElm As Long: nElm = Elm_Count(elements)
 	
 	Debug.Print
 	Debug.Print "STATUS: " & status
