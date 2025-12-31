@@ -1295,10 +1295,10 @@ Private Property Let Fld_Arg(ByRef fld As ParserField, _
 )
 	Select Case arg
 	Case FieldArgument.argIndex:	Let fld.Index    = val
-	Case FieldArgument.argPosition:	Let fld.Position = val
-	Case FieldArgument.argMode:	Let fld.Mode     = val
-	Case FieldArgument.argDay1:	Let fld.Day1     = val
-	Case FieldArgument.argWeek1:	Let fld.Week1    = val
+' 	Case FieldArgument.argPosition:	Let fld.Position = val
+' 	Case FieldArgument.argMode:	Let fld.Mode     = val
+' 	Case FieldArgument.argDay1:	Let fld.Day1     = val
+' 	Case FieldArgument.argWeek1:	Let fld.Week1    = val
 	Case FieldArgument.argFormat:	Let fld.Format   = val
 	End Select
 End Property
