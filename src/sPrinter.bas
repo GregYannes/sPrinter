@@ -74,7 +74,7 @@ Public Enum ParsingStatus
 	stsErrorHangingEscape    = 1001	' Report a hanging escape...
 	stsErrorUnenclosedField  = 1002	' ...or an incomplete field...
 	stsErrorUnenclosedQuote  = 1003	' ...or an incomplete quote...
-	stsErrorInvalidIndex     = 1004	' ...or an index that is not an integer...
+	stsErrorInvalidIndex     = 1004	' ...or an index that is not an integer.
 End Enum
 
 
@@ -131,7 +131,7 @@ End Type
 
 ' Element for parsing a field embedded in formatting.
 Public Type ParserField
-	Index As Variant		' The index to extract the value...
+	Index As Variant		' The index to extract the value.
 	Format As String		' The formatting code applied to the value.
 End Type
 
