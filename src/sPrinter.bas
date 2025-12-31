@@ -1288,20 +1288,20 @@ End Sub
 ' ## Support | Elements | Fields | Arguments ##
 ' #############################################
 
-' Set an argument for a field.
-Private Property Let Fld_Arg(ByRef fld As ParserField, _
-	ByRef arg As FieldArgument, _
-	ByRef val As Variant _
-)
-	Select Case arg
-	Case FieldArgument.argIndex:	Let fld.Index    = val
+' ' Set an argument for a field.
+' Private Property Let Fld_Arg(ByRef fld As ParserField, _
+' 	ByRef arg As FieldArgument, _
+' 	ByRef val As Variant _
+' )
+' 	Select Case arg
+' 	Case FieldArgument.argIndex:	Let fld.Index    = val
 ' 	Case FieldArgument.argPosition:	Let fld.Position = val
 ' 	Case FieldArgument.argMode:	Let fld.Mode     = val
 ' 	Case FieldArgument.argDay1:	Let fld.Day1     = val
 ' 	Case FieldArgument.argWeek1:	Let fld.Week1    = val
-	Case FieldArgument.argFormat:	Let fld.Format   = val
-	End Select
-End Property
+' 	Case FieldArgument.argFormat:	Let fld.Format   = val
+' 	End Select
+' End Property
 
 
 ' ' Define missing values for field arguments.
