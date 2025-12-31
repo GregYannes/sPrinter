@@ -263,10 +263,10 @@ Public Function Parse( _
 				
 				' Locate the element.
 				expression.Start = charIndex
-				expression.Stop = expression.Start - 1
+				expression.Stop = expression.Start
 				
 				' Revisit this character in plaintext.
-				' expression.Stop = expression.Stop - 1
+				expression.Stop = expression.Stop - 1
 				GoTo SAME_CHAR
 			End Select
 			
