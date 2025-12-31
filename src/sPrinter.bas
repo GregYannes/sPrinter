@@ -760,7 +760,7 @@ EXIT_LOOP:
 		End Select
 		
 	' ...or an unenclosed field.
-	ElseIf Enum_Has(dfu, ParsingDefusal.dfuNest) Then
+	ElseIf Enum_Has(dfu, ParsingDefusal.dfuNest) Or depth > 0 Then
 		Expr_Close expression, format := format
 		Parse = ParsingStatus.stsErrorUnenclosedField
 		
