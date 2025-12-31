@@ -764,15 +764,6 @@ EXIT_LOOP:
 		Expr_Close expression, format := format
 		Parse = ParsingStatus.stsErrorImbalancedNesting
 		
-	' ' ...or an element with unenclosed structure.
-	' ElseIf depth > 0 Then
-	' 	Select Case e.Kind
-	' 	
-	' 	Case ElementKind.elmField
-	' 		Expr_Close expression, format := format
-	' 		Parse = ParsingStatus.stsErrorImbalancedNesting
-	' 	End Select
-		
 	' Otherwise report success in the absence of any issues.
 	Else
 		' Save any pending (valid) element to the array...
