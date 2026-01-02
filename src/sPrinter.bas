@@ -1031,8 +1031,15 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 		
 	' ...or an integral index.
 	Else
+		' Defuse a simple (flat) expression with only escapes...
 		On Error GoTo IDX_ERROR
-		Let fld.Index = VBA.CLng(idx.Syntax)
+		If idxDfu.Start = 0 Then
+			Let fld.Index = VBA.CLng(dfuSyntax)
+			
+		' ...but interpret anything else (deep expressions) as is.
+		Else
+			Let fld.Index = VBA.CLng(idx.Syntax)
+		End If
 		On Error GoTo 0
 	End If
 	
