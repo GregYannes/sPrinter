@@ -62,7 +62,7 @@ End Enum
 ' 	symOpenField  =	 173	' Opening brace		{
 ' 	symCloseField =	 175	' Closing brace		}
 ' 	symOpenQuote  =	  34	' Double quotes		"
-' 	symCloseQuote =	  34	' Double quotes		"
+' 	symCloseQuote =	ParsingSymbol.symOpenQuote	' Double quotes		"
 ' 	symSeparator  =	  58	' Colon			:
 ' End Enum
 
