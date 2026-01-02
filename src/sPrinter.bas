@@ -206,7 +206,7 @@ Public Function Parse( _
 	Dim argIdx As FieldArgument: argIdx = FieldArgument.[_None]
 	Dim arg As ParserExpression
 	Dim idxDfu As ParserExpression
-	Dim idxEsc As Boolean: idxEsc = False
+	Dim idxEsc As Long: idxEsc = 0
 	
 	' ...and the current characters.
 	Dim charIndex As Long
@@ -543,7 +543,7 @@ Public Function Parse( _
 					dfu = dfu + ParsingDefusal.dfuEscape
 					
 					' Note any escaping in the index argument.
-					If depth = 1 And argIdx = FieldArgument.argIndex Then idxEsc = True
+					If depth = 1 And argIdx = FieldArgument.argIndex And idxEsc = 0 Then idxEsc = charIndex
 					
 					' Extend the location of this field.
 					expression.Stop = expression.Stop + 1
@@ -636,7 +636,7 @@ Public Function Parse( _
 					Erase args
 					argIdx = FieldArgument.[_None]
 					Expr_Reset idxDfu
-					idxEsc = False
+					idxEsc = 0
 					
 					' Advance to the next character.
 					GoTo NEXT_CHAR
@@ -910,7 +910,7 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 	ByRef args() As ParserExpression, _
 	ByRef argIdx As Long, _
 	ByRef idxDfu As ParserExpression, _
-	ByRef idxEsc As Boolean _
+	ByRef idxEsc As Long _
 ) As ParsingStatus
 	' Short-circuit for no arguments.
 	If argIdx = FieldArgument.[_None] Then
@@ -985,7 +985,7 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	ByRef format As String, _
 	ByRef expression As ParserExpression, _
 	ByRef idxDfu As ParserExpression, _
-	ByRef idxEsc As Boolean _
+	ByRef idxEsc As Long _
 ) As ParsingStatus
 	' Define fallback for missing argument.
 	Dim noIdx As Variant  ' noIdx = Missing()
@@ -1010,6 +1010,9 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 		Exit Function
 	End If
 	
+	' Check if the index begins with an escape sequence.
+	Dim isEsc As Boolean: isEsc = (idxEsc = idx.Start)
+	
 	' Check if the index is encapsulated in a single quotation ("...") or nesting ({...}).
 	Dim idxCap As Boolean: idxCap = (idxDfu.Start = idx.Start And idxDfu.Stop = idx.Stop)
 	
@@ -1018,7 +1021,7 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 		Let fld.Index = VBA.CStr$(dfuSyntax)
 		
 	' ...or as an (escaped) key that looks numeric...
-	ElseIf idxEsc Then
+	ElseIf isEsc Then
 		On Error GoTo IDX_ERROR
 		VBA.CLng dfuSyntax
 		On Error GoTo 0
