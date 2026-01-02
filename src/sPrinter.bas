@@ -206,7 +206,7 @@ Public Function Parse( _
 	Dim argIdx As FieldArgument: argIdx = FieldArgument.[_None]
 	Dim arg As ParserExpression
 	Dim idxDfu As ParserExpression
-	Dim idxEsc As Long: idxEsc = 0
+	Dim idxEsc As Boolean: idxEsc = False
 	
 	' ...and the current characters.
 	Dim charIndex As Long
@@ -543,7 +543,7 @@ Public Function Parse( _
 					dfu = dfu + ParsingDefusal.dfuEscape
 					
 					' Note any escaping in the index argument.
-					If depth = 1 And argIdx = FieldArgument.argIndex And idxEsc = 0 Then idxEsc = charIndex
+					If depth = 1 And argIdx = FieldArgument.argIndex Then idxEsc = True
 					
 					' Extend the location of this field.
 					expression.Stop = expression.Stop + 1
@@ -636,7 +636,7 @@ Public Function Parse( _
 					Erase args
 					argIdx = FieldArgument.[_None]
 					Expr_Reset idxDfu
-					idxEsc = 0
+					idxEsc = False
 					
 					' Advance to the next character.
 					GoTo NEXT_CHAR
@@ -910,7 +910,7 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 	ByRef args() As ParserExpression, _
 	ByRef argIdx As Long, _
 	ByRef idxDfu As ParserExpression, _
-	ByRef idxEsc As Long _
+	ByRef idxEsc As Boolean _
 ) As ParsingStatus
 	' Short-circuit for no arguments.
 	If argIdx = FieldArgument.[_None] Then
@@ -985,7 +985,7 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	ByRef format As String, _
 	ByRef expression As ParserExpression, _
 	ByRef idxDfu As ParserExpression, _
-	ByRef idxEsc As Long _
+	ByRef idxEsc As Boolean _
 ) As ParsingStatus
 	' Define fallback for missing argument.
 	Dim noIdx As Variant  ' noIdx = Missing()
@@ -1010,18 +1010,15 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 		Exit Function
 	End If
 	
-	' Check if the index begins with an escape sequence...
-	Dim isEsc As Boolean: isEsc = (idxEsc = idx.Start)
-	
-	' ...or if the index is encapsulated in a single quotation ("...") or nesting ({...}).
-	Dim isCap As Boolean: isCap = (idxDfu.Start = idx.Start And idxDfu.Stop = idx.Stop)
+	' Check if the index is encapsulated in a single quotation ("...") or nesting ({...}).
+	Dim idxCap As Boolean: idxCap = (idxDfu.Start = idx.Start And idxDfu.Stop = idx.Stop)
 	
 	' Interpret as an (encapsulated) key...
-	If isCap Then
+	If idxCap Then
 		Let fld.Index = VBA.CStr$(dfuSyntax)
 		
 	' ...or as an (escaped) key that looks numeric...
-	ElseIf isEsc Then
+	ElseIf idxEsc Then
 		On Error GoTo IDX_ERROR
 		VBA.CLng dfuSyntax
 		On Error GoTo 0
@@ -1031,15 +1028,8 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 		
 	' ...or an integral index.
 	Else
-		' Defuse a simple (flat) expression with only escapes...
 		On Error GoTo IDX_ERROR
-		If idxDfu.Start = 0 Then
-			Let fld.Index = VBA.CLng(dfuSyntax)
-			
-		' ...but interpret anything else (deep expressions) as is.
-		Else
-			Let fld.Index = VBA.CLng(idx.Syntax)
-		End If
+		Let fld.Index = VBA.CLng(idx.Syntax)
 		On Error GoTo 0
 	End If
 	
