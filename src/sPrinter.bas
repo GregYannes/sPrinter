@@ -1014,10 +1014,10 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	Dim isEsc As Boolean: isEsc = (idxEsc = idx.Start)
 	
 	' Check if the index is encapsulated in a single quotation ("...") or nesting ({...}).
-	Dim idxCap As Boolean: idxCap = (idxDfu.Start = idx.Start And idxDfu.Stop = idx.Stop)
+	Dim isCap As Boolean: isCap = (idxDfu.Start = idx.Start And idxDfu.Stop = idx.Stop)
 	
 	' Interpret as an (encapsulated) key...
-	If idxCap Then
+	If isCap Then
 		Let fld.Index = VBA.CStr$(dfuSyntax)
 		
 	' ...or as an (escaped) key that looks numeric...
