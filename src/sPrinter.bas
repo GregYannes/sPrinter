@@ -1010,10 +1010,10 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 		Exit Function
 	End If
 	
-	' Check if the index begins with an escape sequence.
+	' Check if the index begins with an escape sequence...
 	Dim isEsc As Boolean: isEsc = (idxEsc = idx.Start)
 	
-	' Check if the index is encapsulated in a single quotation ("...") or nesting ({...}).
+	' ...or if the index is encapsulated in a single quotation ("...") or nesting ({...}).
 	Dim isCap As Boolean: isCap = (idxDfu.Start = idx.Start And idxDfu.Stop = idx.Stop)
 	
 	' Interpret as an (encapsulated) key...
