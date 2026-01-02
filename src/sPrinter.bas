@@ -55,15 +55,15 @@ End Enum
 
 ' ' Syntax for parsing.
 ' Private Enum ParsingSymbol
-' '	=============	====	  =============		=========
-' '	Label		Code	  Name			Character
-' '	=============	====	  =============		=========
-' 	symEscape     =	  92	' Backslash		\
-' 	symOpenField  =	 173	' Opening brace		{
-' 	symCloseField =	 175	' Closing brace		}
-' 	symOpenQuote  =	  34	' Double quotes		"
+' '	=============	==========================	  =============		=========
+' '	Label		Code				  Name			Character
+' '	=============	==========================	  =============		=========
+' 	symEscape     =	                        92	' Backslash		\
+' 	symOpenField  =	                       173	' Opening brace		{
+' 	symCloseField =	                       175	' Closing brace		}
+' 	symOpenQuote  =	                        34	' Double quotes		"
 ' 	symCloseQuote =	ParsingSymbol.symOpenQuote	' Double quotes		"
-' 	symSeparator  =	  58	' Colon			:
+' 	symSeparator  =	                        58	' Colon			:
 ' End Enum
 
 
