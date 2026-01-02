@@ -61,7 +61,7 @@ End Enum
 ' 	symEscape     =	  92	' Backslash		\
 ' 	symOpenField  =	 173	' Opening brace		{
 ' 	symCloseField =	 175	' Closing brace		}
-' 	symopenQuote  =	  34	' Double quotes		"
+' 	symOpenQuote  =	  34	' Double quotes		"
 ' 	symCloseQuote =	  34	' Double quotes		"
 ' 	symSeparator  =	  58	' Colon			:
 ' End Enum
