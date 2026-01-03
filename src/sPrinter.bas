@@ -267,6 +267,33 @@ End Function
 
 
 
+' ' ####################
+' ' ## API | Printing ##
+' ' ####################
+' 
+' ' .
+' Public Function Printf() As String
+' 	' ...
+' End Function
+' 
+' 
+' ' .
+' Public Function vPrintf() As String
+' 	' ...
+' End Function
+' 
+' 
+' ' .
+' Public Function sPrintf() As String
+' 	' ...
+' End Function
+' 
+' 
+' ' .
+' Public Function vsPrintf() As String
+' 	' ...
+' End Function
+
 
 
 ' ###################
