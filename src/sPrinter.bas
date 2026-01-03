@@ -159,13 +159,13 @@ Public Sub Parse0( _
 	ByRef elements() As ParserElement, _
 	ByRef expression As ParserExpression, _
 	Optional ByRef status As ParsingStatus, _
-	Optional ByVal base As Long = 1, _
-	Optional ByVal escape As String = SYM_ESC, _
-	Optional ByVal openField As String = SYM_FLD_OPEN, _
-	Optional ByVal closeField As String = SYM_FLD_CLOSE, _
-	Optional ByVal openQuote As String = SYM_QUO_OPEN, _
-	Optional ByVal closeQuote As String = SYM_QUO_CLOSE, _
-	Optional ByVal separator As String = SYM_SEP _
+	Optional ByVal base As Long, _
+	Optional ByVal escape As String, _
+	Optional ByVal openField As String, _
+	Optional ByVal closeField As String, _
+	Optional ByVal openQuote As String, _
+	Optional ByVal closeQuote As String, _
+	Optional ByVal separator As String _
 )
 	' ###########
 	' ## Setup ##
