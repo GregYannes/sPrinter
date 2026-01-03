@@ -376,7 +376,7 @@ Private Sub Err_Parsing( _
 	ByVal closeQuote As String, _
 	ByVal separator As String _
 )
-	' Define the format for cardinal numbers: 1st, 2nd, 3rd, 4th, etc.
+	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
 	Const ORD_FMT As String = "#,##0"
 	
 	' Define the horizontal ellipsis: "…"
