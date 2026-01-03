@@ -944,6 +944,52 @@ End Sub
 
 
 
+' ##########################
+' ## Support | Extraction ##
+' ##########################
+
+' Extract a value from a data structure.
+Private Function GetValue( _
+	ByRef data As Variant, _
+	ByVal idx As Variant, _
+	ByVal n As Long, _
+	ByVal low As Long, _
+	ByVal up As Long, _
+	Optional ByVal pos As PositionKind = PositionKind.posAbsolute, _
+	Optional ByRef val As Variant _
+) As Boolean
+	' Handle relative positions.
+	If VBA.VarType(idx) = VBA.VbVarType.vbLong And pos = PositionKind.posRelative Then
+		' Report failure for those out of bounds...
+		If idx = 0 Or idx > n Then
+			GetValue = False
+			Exit Function
+			
+		' ...but otherwise count from the beginning...
+		ElseIf idx > 0 Then
+			idx = low + idx - 1
+			
+		' ...or from the end.
+		ElseIf idx < 0 Then
+			idx = up + idx + 1
+		End If
+	End If
+	
+	' Extract the value...
+	Assign val, data(idx)
+	
+	' ...and report success.
+	GetValue = True
+	Exit Function
+	
+	
+' Report a nonexistent value.
+VAL_ERROR:
+	GetValue = False
+End Function
+
+
+
 ' #######################
 ' ## Support | Parsing ##
 ' #######################
