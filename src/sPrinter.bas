@@ -154,10 +154,11 @@ End Type
 ' ###################
 
 ' Parse a format string into an array of syntax elements.
-Public Function Parse( _
+Public Sub Parse( _
 	ByRef format As String, _
 	ByRef elements() As ParserElement, _
 	ByRef expression As ParserExpression, _
+	Optional ByRef status As ParsingStatus, _
 	Optional ByVal base As Long = 1, _
 	Optional ByVal escape As String = STX_ESC, _
 	Optional ByVal openField As String = STX_FLD_OPEN, _
@@ -165,14 +166,14 @@ Public Function Parse( _
 	Optional ByVal openQuote As String = STX_QUO_OPEN, _
 	Optional ByVal closeQuote As String = STX_QUO_CLOSE, _
 	Optional ByVal separator As String = STX_SEP _
-) As ParsingStatus
+)
 	
 	' ###########
 	' ## Setup ##
 	' ###########
 	
 	' Default to success.
-	Parse = ParsingStatus.stsSuccess
+	status = ParsingStatus.stsSuccess
 	
 	' Record the format length.
 	Dim fmtLen As Long: fmtLen = VBA.Len(format)
@@ -181,8 +182,8 @@ Public Function Parse( _
 	If fmtLen = 0 Then
 		Erase elements
 		Expr_Reset expression
-		Parse = ParsingStatus.stsSuccess
-		Exit Function
+		status = ParsingStatus.stsSuccess
+		Exit Sub
 	End If
 	
 	
@@ -621,12 +622,12 @@ Public Function Parse( _
 					End If
 					
 					' ...along with the (field) element.
-					Parse = Fld_Close(e.Field, format := format, expression := expression, args := args, argIdx := argIdx, idxDfu := idxDfu, idxEsc := idxEsc)
+					status = Fld_Close(e.Field, format := format, expression := expression, args := args, argIdx := argIdx, idxDfu := idxDfu, idxEsc := idxEsc)
 					Elm_Clone e, elements(eIdx)
 					Elm_Reset e
 					
 					' Short-circuit for errors.
-					If Parse <> ParsingStatus.stsSuccess Then GoTo EXIT_LOOP
+					If status <> ParsingStatus.stsSuccess Then GoTo EXIT_LOOP
 					
 					' Advance to the next element.
 					eIdx = eIdx + 1
@@ -724,7 +725,7 @@ EXIT_LOOP:
 	' ####################
 	
 	' Short-circuit for any error.
-	If Parse <> ParsingStatus.stsSuccess Then
+	If status <> ParsingStatus.stsSuccess Then
 		Expr_Close expression, format := format
 		
 	' Handle unresolved syntax: a hanging escape...
@@ -738,7 +739,7 @@ EXIT_LOOP:
 		Expr_Close expression, format := format
 		
 		' Return the specific status.
-		Parse = ParsingStatus.stsErrorHangingEscape
+		status = ParsingStatus.stsErrorHangingEscape
 		
 	' ...or an unenclosed quote...
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuQuote) Then
@@ -751,18 +752,18 @@ EXIT_LOOP:
 			
 			' ...and report success.
 			Expr_Reset expression
-			Parse = ParsingStatus.stsSuccess
+			status = ParsingStatus.stsSuccess
 			
 		' ...but otherwise report the specific error.
 		Case Else
 			Expr_Close expression, format := format
-			Parse = ParsingStatus.stsErrorUnenclosedQuote
+			status = ParsingStatus.stsErrorUnenclosedQuote
 		End Select
 		
 	' ...or an imbalanced nesting.
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuNest) Or depth > 0 Then
 		Expr_Close expression, format := format
-		Parse = ParsingStatus.stsErrorImbalancedNesting
+		status = ParsingStatus.stsErrorImbalancedNesting
 		
 	' Otherwise report success in the absence of any issues.
 	Else
@@ -773,7 +774,7 @@ EXIT_LOOP:
 		
 		' ...and report success.
 		Expr_Reset expression
-		Parse = ParsingStatus.stsSuccess
+		status = ParsingStatus.stsSuccess
 	End If
 	
 	
@@ -789,7 +790,7 @@ STX_ERROR:
 	Expr_Close expression, format := format
 	
 	' ...and return the generic status.
-	Parse = ParsingStatus.stsError
+	status = ParsingStatus.stsError
 	
 	
 ' Resize the array to the elements we actually parsed.
@@ -808,7 +809,7 @@ RESIZE_ELM:
 		eUp = eIdx
 		ReDim Preserve elements(base To eUp)
 	End If
-End Function
+End Sub
 
 
 ' ' Unparse an array of syntax elements into a format string.
