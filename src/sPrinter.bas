@@ -459,6 +459,10 @@ End Sub
 ' 	ByRef index As Variant, _
 ' 	ByRef position As PositionKind _
 ' )
+' 	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
+' 	Const ORD_FMT As String = "#,##0"
+' 	
+' 	
 ' 	' Display the index in detail.
 ' 	Dim idxCode As String, idxKind As String, posKind As String
 ' 	FormatIndex _
@@ -473,7 +477,9 @@ End Sub
 ' 	Dim description As String
 ' 	description = "This"
 ' 	If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
-' 	description = description & " " & idxKind & " does not exist in the data: " & idxCode
+' 	description = description & " " & idxKind & " does not exist in the data"
+' 	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
+' 	description = description & ": " & idxCode
 ' 	
 ' 	' Raise the error.
 ' 	Err.Raise _
@@ -489,6 +495,10 @@ End Sub
 ' 	ByRef format As String, _
 ' 	Optional ByVal position As PositionKind _
 ' )
+' 	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
+' 	Const ORD_FMT As String = "#,##0"
+' 	
+' 	
 ' 	' Display the index in detail.
 ' 	Dim idxCode As String, idxKind As String, posKind As String
 ' 	FormatIndex _
@@ -503,7 +513,9 @@ End Sub
 ' 	Dim description As String
 ' 	description = "The value from this"
 ' 	If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
-' 	description = description & " " & idxKind & " (" & idxCode & ") cannot be displayed in this format: " & format
+' 	description = description & " " & idxKind & " (" & idxCode & ") cannot be displayed in this format"
+' 	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
+' 	description = description & ": " & format
 ' 	
 ' 	' Raise the error.
 ' 	Err.Raise _
