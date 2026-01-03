@@ -492,15 +492,20 @@ End Sub
 ' ' Throw an error for an invalid format.
 ' Private Sub Err_Format( _
 ' 	ByVal nField As Long, _
-' 	ByRef format As String _
+' 	ByRef format As String, _
+' 	Optional ByVal isDefault As Boolean = False _
 ' )
 ' 	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
 ' 	Const ORD_FMT As String = "#,##0"
 ' 	
 ' 	
 ' 	' Generate a relevant description of the error.
-' 	Dim description As String
-' 	description = "The value cannot be displayed in this format code"
+' 	Dim description As String, valKind As String
+' 	If isDefault Then valKind = "default"
+' 	
+' 	description = "The"
+' 	If valKind <> VBA.vbNullString Then description = description & " (" valKind & ")"
+' 	description = description & " value cannot be displayed in this format code"
 ' 	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
 ' 	description = description & ": " & format
 ' 	
