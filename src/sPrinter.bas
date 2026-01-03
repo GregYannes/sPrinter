@@ -595,6 +595,56 @@ End Function
 
 
 
+' ########################
+' ## Utilities | Arrays ##
+' ########################
+
+' Get the length (along a dimension) of an array.
+Private Function Arr_Length(ByRef arr As Variant, _
+	Optional ByVal dimension As Long = 1 _
+) As Long
+	' Subscript out of range.
+	Const EMPTY_ERR As Long = 9
+	
+	On Error GoTo BOUND_ERROR
+	Arr_Length = UBound(arr, dimension) - LBound(arr, dimension) + 1
+	Exit Function
+	
+	
+' Handle an empty array.
+BOUND_ERROR:
+	Select Case VBA.Err.Number
+	Case EMPTY_ERR:	Arr_Length = 0
+	Case Else:	Err_Raise
+	End Select
+End Function
+
+
+' Get the "rank" of an array: the count of its dimensions.
+Public Function Arr_Rank(ByRef arr As Variant) As Long
+	' Subscript out of range.
+	Const EMPTY_ERR As Long = 9
+	
+	Dim tst As Long
+	Arr_Rank = 0
+	
+	On Error GoTo BOUND_ERROR
+	Do While True
+		Arr_Rank = Arr_Rank + 1
+		tst = UBound(arr, Arr_Rank)
+	Loop
+	
+	
+' Handle the rank.
+BOUND_ERROR:
+	Select Case VBA.Err.Number
+	Case EMPTY_ERR:	Arr_Rank = Arr_Rank - 1
+	Case Else:	Err_Raise
+	End Select
+End Function
+
+
+
 ' ######################
 ' ## Utilities | Text ##
 ' ######################
