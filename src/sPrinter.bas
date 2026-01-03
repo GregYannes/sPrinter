@@ -456,25 +456,23 @@ End Sub
 ' ' Throw an error for a nonexistent index.
 ' Private Sub Err_Index( _
 ' 	ByVal nField As Long, _
-' 	ByRef index As Variant _
-' )
+' 	ByRef index As Variant, _
 ' 	ByRef position As PositionKind _
-' 	
-' 	
+' )
 ' 	' Display the index in detail.
-' 	Dim idxCode As String, idxKind As String  ' , posKind As String
+' 	Dim idxCode As String, idxKind As String, posKind As String
 ' 	FormatIndex _
 ' 		idx := index, _
 ' 		idxCode := idxCode, _
 ' 		ord := False, _
 ' 		idxKind := idxKind, _
-' 		pos := position  ' , _
+' 		pos := position, _
 ' 		posKind := posKind
 ' 	
 ' 	' Generate a relevant description of the error.
 ' 	Dim description As String
 ' 	description = "This"
-' 	' If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
+' 	If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
 ' 	description = description & " " & idxKind & " does not exist in the data: " & idxCode
 ' 	
 ' 	' Raise the error.
@@ -492,19 +490,19 @@ End Sub
 ' 	Optional ByVal position As PositionKind _
 ' )
 ' 	' Display the index in detail.
-' 	Dim idxCode As String, idxKind As String  ' , posKind As String
+' 	Dim idxCode As String, idxKind As String, posKind As String
 ' 	FormatIndex _
 ' 		idx := index, _
 ' 		idxCode := idxCode, _
 ' 		ord := False, _
 ' 		idxKind := idxKind, _
-' 		pos := position  ' , _
+' 		pos := position, _
 ' 		posKind := posKind
 ' 	
 ' 	' Generate a relevant description of the error.
 ' 	Dim description As String
 ' 	description = "The value from this"
-' 	' If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
+' 	If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
 ' 	description = description & " " & idxKind & " (" & idxCode & ") cannot be displayed in this format: " & format
 ' 	
 ' 	' Raise the error.
