@@ -555,6 +555,19 @@ Private Sub Err_DuplicateSyms( _
 End Sub
 
 
+' Throw an error for data of the wrong structure.
+Private Sub Err_Data()
+	' Define the error: type mismatch.
+	Const ERR_NUM As Long = 13
+	Const ERR_DESC As String = "The data must be either a unidimensional array, or an object with both a default member and a "".Count"" property."
+	
+	' Raise the error.
+	Err.Raise _
+		Number := ERR_NUM, _
+		Description := ERR_DESC
+End Sub
+
+
 
 ' ###############
 ' ## Utilities ##
