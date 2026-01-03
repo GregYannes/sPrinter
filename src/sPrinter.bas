@@ -455,86 +455,86 @@ Private Sub Err_Parsing( _
 End Sub
 
 
-' ' Throw an error for an unrecognized .Kind of element.
-' Private Sub Err_Element( _
-' 	ByVal nElement As Long, _
-' 	ByVal kind As ElementKind _
-' )
-' 	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
-' 	Const ORD_FMT As String = "#,##0"
-' 	
-' 	
-' 	Dim description As String, kindCode As String
-' 	description = "This " & Num_Ordinal(nElement, format := ORD_FMT) & " element from the parser cannot be intepreted"
-' 	description = description & ", because its "".Kind"" (" & VBA.Format(kind, ORD_FMT) & ") is unrecognized."
-' 	
-' 	' Raise the error.
-' 	Err.Raise _
-' 		Number := sPrinterStatus.stsErrorUnknownElement, _
-' 		Description := description
-' End Sub
+' Throw an error for an unrecognized .Kind of element.
+Private Sub Err_Element( _
+	ByVal nElement As Long, _
+	ByVal kind As ElementKind _
+)
+	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
+	Const ORD_FMT As String = "#,##0"
+	
+	
+	Dim description As String, kindCode As String
+	description = "This " & Num_Ordinal(nElement, format := ORD_FMT) & " element from the parser cannot be intepreted"
+	description = description & ", because its "".Kind"" (" & VBA.Format(kind, ORD_FMT) & ") is unrecognized."
+	
+	' Raise the error.
+	Err.Raise _
+		Number := sPrinterStatus.stsErrorUnknownElement, _
+		Description := description
+End Sub
 
 
-' ' Throw an error for a nonexistent index.
-' Private Sub Err_Index( _
-' 	ByVal nField As Long, _
-' 	ByRef index As Variant, _
-' 	ByRef position As PositionKind _
-' )
-' 	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
-' 	Const ORD_FMT As String = "#,##0"
-' 	
-' 	
-' 	' Display the index in detail.
-' 	Dim idxCode As String, idxKind As String, posKind As String
-' 	FormatIndex _
-' 		idx := index, _
-' 		idxCode := idxCode, _
-' 		ord := False, _
-' 		idxKind := idxKind, _
-' 		pos := position, _
-' 		posKind := posKind
-' 	
-' 	' Generate a relevant description of the error.
-' 	Dim description As String
-' 	description = "This"
-' 	If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
-' 	description = description & " " & idxKind & " does not exist in the data"
-' 	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
-' 	description = description & ": " & idxCode
-' 	
-' 	' Raise the error.
-' 	Err.Raise _
-' 		Number := sPrinterStatus.stsErrorNonexistentIndex, _
-' 		Description := description
-' End Sub
+' Throw an error for a nonexistent index.
+Private Sub Err_Index( _
+	ByVal nField As Long, _
+	ByRef index As Variant, _
+	ByRef position As PositionKind _
+)
+	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
+	Const ORD_FMT As String = "#,##0"
+	
+	
+	' Display the index in detail.
+	Dim idxCode As String, idxKind As String, posKind As String
+	FormatIndex _
+		idx := index, _
+		idxCode := idxCode, _
+		ord := False, _
+		idxKind := idxKind, _
+		pos := position, _
+		posKind := posKind
+	
+	' Generate a relevant description of the error.
+	Dim description As String
+	description = "This"
+	If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
+	description = description & " " & idxKind & " does not exist in the data"
+	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
+	description = description & ": " & idxCode
+	
+	' Raise the error.
+	Err.Raise _
+		Number := sPrinterStatus.stsErrorNonexistentIndex, _
+		Description := description
+End Sub
 
 
-' ' Throw an error for an invalid format.
-' Private Sub Err_Format( _
-' 	ByVal nField As Long, _
-' 	ByRef format As String, _
-' 	Optional ByVal isDefault As Boolean = False _
-' )
-' 	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
-' 	Const ORD_FMT As String = "#,##0"
-' 	
-' 	
-' 	' Generate a relevant description of the error.
-' 	Dim description As String, valKind As String
-' 	If isDefault Then valKind = "default"
-' 	
-' 	description = "The"
-' 	If valKind <> VBA.vbNullString Then description = description & " (" valKind & ")"
-' 	description = description & " value cannot be displayed in this format code"
-' 	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
-' 	description = description & ": " & format
-' 	
-' 	' Raise the error.
-' 	Err.Raise _
-' 		Number := sPrinterStatus.stsErrorInvalidFormat, _
-' 		Description := description
-' End Sub
+' Throw an error for an invalid format.
+Private Sub Err_Format( _
+	ByVal nField As Long, _
+	ByRef format As String, _
+	Optional ByVal isDefault As Boolean = False _
+)
+	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
+	Const ORD_FMT As String = "#,##0"
+	
+	
+	' Generate a relevant description of the error.
+	Dim description As String, valKind As String
+	If isDefault Then valKind = "default"
+	
+	description = "The"
+	If valKind <> VBA.vbNullString Then description = description & " (" valKind & ")"
+	description = description & " value cannot be displayed in this format code"
+	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
+	description = description & ": " & format
+	
+	' Raise the error.
+	Err.Raise _
+		Number := sPrinterStatus.stsErrorInvalidFormat, _
+		Description := description
+End Sub
 
 
 ' Throw an error for a blank parsing symbol.
