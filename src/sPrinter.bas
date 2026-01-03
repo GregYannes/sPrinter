@@ -454,7 +454,10 @@ End Sub
 
 
 ' ' Throw an error for a nonexistent index.
-' Private Sub Err_Index(ByRef index As Variant)
+' Private Sub Err_Index( _
+' 	ByVal nField As Long, _
+' 	ByRef index As Variant _
+' )
 ' 	ByRef position As PositionKind _
 ' 	
 ' 	
@@ -483,6 +486,7 @@ End Sub
 
 ' ' Throw an error for an invalid format.
 ' Private Sub Err_Format( _
+' 	ByVal nField As Long, _
 ' 	ByRef index As Variant, _
 ' 	ByRef format As String, _
 ' 	Optional ByVal position As PositionKind _
