@@ -167,7 +167,6 @@ Public Sub Parse( _
 	Optional ByVal closeQuote As String = STX_QUO_CLOSE, _
 	Optional ByVal separator As String = STX_SEP _
 )
-	
 	' ###########
 	' ## Setup ##
 	' ###########
