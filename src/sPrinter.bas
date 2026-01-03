@@ -842,6 +842,60 @@ DUP_ERROR:
 End Sub
 
 
+' Validate input for the data structure whose values are embedded.
+Private Sub CheckData( _
+	ByRef data As Variant, _
+	Optional ByRef n As Long, _
+	Optional ByRef low As Long, _
+	Optional ByRef up As Long _
+)
+	' The base used by objects like Collection and Dictionary.
+	Const OBJ_BASE As Long = 1
+	
+	' Examine an object...
+	If VBA.IsObject(data) Then
+		On Error GoTo DATA_ERROR
+		n = data.Count
+		On Error ToTo 0
+		
+		If n > 0 Then
+			low = OBJ_BASE
+			up = low + n - 1
+		Else
+			low = 0
+			up = 0
+		End If
+		
+	' ...or an array...
+	ElseIf VBA.IsArray(data) Then
+		Dim rnk As Long: rnk = Arr_Rank(data)
+		If rnk <> 1 Then GoTo DATA_ERROR
+		
+		n = Arr_Length(data, dimension := 1)
+		
+		If n > 0 Then
+			low = LBound(data, 1)
+			up = UBound(data, 1)
+		Else
+			low = 0
+			up = 0
+		End If
+		
+	' ...but throw an error for anything else.
+	Else
+		GoTo DATA_ERROR
+	End If
+	
+	' Conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for an invalid structure.
+DATA_ERROR:
+	Err_Data
+End Sub
+
+
 
 ' #######################
 ' ## Support | Parsing ##
