@@ -135,7 +135,7 @@ End Enum
 Public Type ParserExpression
 	Syntax As String	' The syntax that was parsed to define this expression.
 	Start As Long		' Where that syntax begins in the original code...
-	Stop AS Long		' ...and where it ends.
+	Stop As Long		' ...and where it ends.
 End Type
 
 
@@ -149,7 +149,7 @@ End Type
 ' Elements into which formats are parsed.
 Public Type ParserElement
 	Kind As ElementKind		' The subtype which extends this element:
-	Plain as String			'   - Plain text which displays literally...
+	Plain As String			'   - Plain text which displays literally...
 	Field As ParserField		'   - ...or a field which embeds a value.
 End Type
 
