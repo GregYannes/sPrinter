@@ -207,7 +207,7 @@ Public Function Format2( _
 End Function
 
 
-' Embed values (with formatting) within a message...
+' Embed (formatted) values within a message...
 Public Function Message( _
 	ByRef format As String, _
 	Optional ByRef data As Variant, _
