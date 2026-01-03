@@ -242,7 +242,8 @@ Public Function Message( _
 	)
 	
 	' ...and short-circuit for no elements.
-	If Elm_Count(elements) = 0 Then
+	Dim count As Long: count = Elm_Count(elements)
+	If count = 0 Then
 		Message = VBA.vbNullString
 		Exit Function
 	End If
