@@ -75,6 +75,8 @@ Public Enum ParsingStatus
 	stsErrorUnenclosedQuote   = 1002	' ...or an incomplete quote...
 	stsErrorImbalancedNesting = 1003	' ...or an imbalanced nesting...
 	stsErrorInvalidIndex      = 1004	' ...or an index that is not an integer.
+' 	stsErrorNonexistentIndex  = 1005	' Report an index that does not exist in the data...
+' 	stsErrorInvalidFormat     = 1006	' ...or a format that is invalid for Format() or Text().
 End Enum
 
 
@@ -285,6 +287,63 @@ Private Sub Err_Parsing( _
 		Number := status, _
 		Description := description
 End Sub
+
+
+' ' Throw an error for a nonexistent index.
+' Private Sub Err_Index(ByRef index As Variant)
+' 	ByRef position As PositionKind _
+' 	
+' 	
+' 	' Display the index in detail.
+' 	Dim idxCode As String, idxKind As String  ' , posKind As String
+' 	FormatIndex _
+' 		idx := index, _
+' 		idxCode := idxCode, _
+' 		ord := False, _
+' 		idxKind := idxKind, _
+' 		pos := position  ' , _
+' 		posKind := posKind
+' 	
+' 	' Generate a relevant description of the error.
+' 	Dim description As String
+' 	description = "This"
+' 	' If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
+' 	description = description & " " & idxKind & " does not exist in the data: " & idxCode
+' 	
+' 	' Raise the error.
+' 	Err.Raise _
+' 		Number := ParsingStatus.stsErrorNonexistentIndex, _
+' 		Description := description
+' End Sub
+
+
+' ' Throw an error for an invalid format.
+' Private Sub Err_Format( _
+' 	ByRef index As Variant, _
+' 	ByRef format As String, _
+' 	Optional ByVal position As PositionKind _
+' )
+' 	' Display the index in detail.
+' 	Dim idxCode As String, idxKind As String  ' , posKind As String
+' 	FormatIndex _
+' 		idx := index, _
+' 		idxCode := idxCode, _
+' 		ord := False, _
+' 		idxKind := idxKind, _
+' 		pos := position  ' , _
+' 		posKind := posKind
+' 	
+' 	' Generate a relevant description of the error.
+' 	Dim description As String
+' 	description = "The value from this"
+' 	' If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
+' 	description = description & " " & idxKind & " (" & idxCode & ") cannot be displayed in this format: " & format
+' 	
+' 	' Raise the error.
+' 	Err.Raise _
+' 		Number := ParsingStatus.stsErrorInvalidFormat, _
+' 		Description := description
+' End Sub
 
 
 ' Throw an error for a blank parsing symbol.
