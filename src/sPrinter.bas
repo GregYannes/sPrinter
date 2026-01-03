@@ -260,7 +260,109 @@ Public Function Message( _
 		Exit Function
 	End If
 	
-	' ...
+	
+	' Assemble the elements into a message.
+	Dim eLow As Long: eLow = LBound(elements, 1)
+	Dim eUp As Long: eUp = UBound(elements, 1)
+	
+	Dim has As Boolean, isDfl As Boolean
+	Dim iAuto As Long: iAuto = 1
+	Dim iFld As Long: iFld = 0
+	Dim e As ParserElement, idx As Variant, pos As PositionKind, val As Variant, fmt As String, out As String
+	
+	Dim i As Long
+	For i = eLow To eUp
+		e = elements(i)
+		
+		Select Case e.Kind
+		
+		' Simply use plaintext as is...
+		Case ElementKind.elmPlain
+			out = e.Plain
+			
+		' ...but format field values for embedding.
+		Case ElementKind.elmField
+			' Count the field.
+			iFld = iFld + 1
+			
+			' Default to the next available index...
+			If VBA.IsEmpty(e.Field.Index) Then
+				Let idx = iAuto
+				pos = PositionKind.posRelative
+				iAuto = iAuto + 1
+				
+			' ...if the field failed to specify the index.
+			Else
+				Let idx = e.Field.Index
+				pos = position
+			End If
+			
+			' Try extracting the value at that index.
+			has = GetValue( _
+				data := data, _
+				idx := idx, _
+				n := n, _
+				low := low, _
+				up := up, _
+				pos := position, _
+				val := val _
+			)
+			
+			' Handle existing...
+			If has Then
+				isDfl = False
+				
+			' ...or nonexisting values.
+			Else
+				' Throw an error...
+				If VBA.IsMissing(default) Then
+					Err_Index _
+						nField := iFld, _
+						index := idx, _
+						position := position
+					
+				' ...unless the user specified a default.
+				Else
+					isDfl = True
+					Assign val, default
+				End If
+			End If
+			
+			' Try formatting that value as output.
+			fmt = e.Field.Format
+			
+			On Error GoTo FMT_ERROR
+			out = Format2( _
+				value := val, _
+				format := fmt, _
+				mode := mode, _
+				firstDayOfWeek := firstDayOfWeek, _
+				firstWeekOfYear := firstWeekOfYear _
+			)
+			On Error GoTo 0
+			
+		' Throw an error for anything else.
+		Case Else
+			Err_Element _
+				nElement := i, _
+				kind = e.Kind _
+		End Select
+		
+		' Append the result to the message.
+		Message = Message & out
+	Next i
+	
+	
+	' Return the resulting output.
+	Exit Function
+	
+	
+' Handle an error when formatting a value. 
+FMT_ERROR:
+	Err_Format _
+		nField := iField, _
+		format := fmt, _
+		isDefault := isDfl
 End Function
 
 
