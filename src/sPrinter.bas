@@ -278,11 +278,11 @@ Public Function Parse( _
 	ByRef format As String, _
 	Optional ByVal base As Long = 1, _
 	Optional ByVal escape As Variant = SYM_ESC, _
-	Optional ByVal openField As String = SYM_FLD_OPEN, _
-	Optional ByVal closeField As String = SYM_FLD_CLOSE, _
-	Optional ByVal openQuote As String = SYM_QUO_OPEN, _
-	Optional ByVal closeQuote As String = SYM_QUO_CLOSE, _
-	Optional ByVal separator As String = SYM_SEP _
+	Optional ByVal openField As Variant = SYM_FLD_OPEN, _
+	Optional ByVal closeField As Variant = SYM_FLD_CLOSE, _
+	Optional ByVal openQuote As Variant = SYM_QUO_OPEN, _
+	Optional ByVal closeQuote As Variant = SYM_QUO_CLOSE, _
+	Optional ByVal separator As Variant = SYM_SEP _
 ) As ParserElement()
 	' Validate the symbols for syntax.
 	CheckSyms _
