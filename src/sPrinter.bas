@@ -53,6 +53,14 @@ Public Enum FormatMode
 End Enum
 
 
+' Context from which Message() is called.
+Private Enum CallingContext
+	[_Unknown] = 0	' Uninitialized.
+	cxtVBA		' The VBA environment.
+	cxtExcel	' An Excel worksheet.
+End Enum
+
+
 ' ' Syntax for parsing.
 ' Private Enum ParsingSymbol
 ' '	=============	==========================	  =============		=========	====================================
@@ -469,6 +477,23 @@ End Function
 ' #############
 ' ## Support ##
 ' #############
+
+' Determine the context from which the current function was called.
+Private Function Context() As CallingContext
+	If TypeOf Application.Caller Is Range Then
+		Context = CallingContext.cxtExcel
+	ElseIf VBA.IsError(Application.Caller) Then
+		If VBA.CLng(Application.Caller) = Excel.XlCVError.xlErrRef Then
+			Context = CallingContext.cxtVBA
+		Else
+			Context = CallingContext.[_Unknown]
+		End If
+	Else
+		Context = CallingContext.[_Unknown]
+	End If
+End Function
+
+
 
 ' ##########################
 ' ## Support | Formatting ##
