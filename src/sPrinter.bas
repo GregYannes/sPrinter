@@ -472,34 +472,34 @@ End Function
 ' ## Support | Validation ##
 ' ##########################
 
-' Convert any input (text or code) into a valid symbol.
-Private Function AsSym(ByRef x As Variant) As String
+' Validate input (text or code) for a parsing symbol.
+Private Sub CheckSym(ByRef x As Variant)
 	' Extract the first character from a string...
 	If VBA.VarType(x) = VBA.VbVarType.vbString Then
-		AsSym = VBA.Left$(x, 1)
+		x = VBA.Left$(x, 1)
 		
 	' ...or convert a code into its character.
 	Else
 		#If Mac Then
-			AsSym = VBA.Chr(x)
+			x = VBA.Chr(x)
 		#Else
-			AsSym = VBA.ChrW(x)
+			x = VBA.ChrW(x)
 		#End If
 	End If
 	
 	' Ensure the symbol is not whitespace...
-	AsSym = Application.WorksheetFunction.Clean$(AsSym)
-	AsSym = VBA.Trim$(AsSym)
-	If AsSym = VBA.vbNullString Then GoTo BLANK_ERROR
+	x = Application.WorksheetFunction.Clean$(x)
+	x = VBA.Trim$(x)
+	If x = VBA.vbNullString Then GoTo BLANK_ERROR
 	
 	' ...and return the result.
-	Exit Function
+	Exit Sub
 	
 	
 ' Throw an error for whitespace.
 BLANK_ERROR:
 	Err_BlankSym
-End Function
+End Sub
 
 
 ' Validate inputs (texts or codes) for all parsing symbols.
