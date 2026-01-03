@@ -37,7 +37,7 @@ Private Const SYM_FLD_OPEN As String = "{"		' Embed a field for formatting...
 Private Const SYM_FLD_CLOSE As String = "}"		' ...and enclose that field.
 Private Const SYM_QUO_OPEN As String = """"		' Quote the next several characters...
 Private Const SYM_QUO_CLOSE As String = SYM_QUO_OPEN	' ...and enclose that quote.
-Private Const SYM_SEP As String = ":"			' Separate specifiers in a field.
+Private Const SYM_SEP As String = ":"			' Separate the arguments in a field.
 
 
 
