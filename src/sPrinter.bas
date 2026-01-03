@@ -207,7 +207,7 @@ Public Function Format2( _
 End Function
 
 
-' Display a set of values embedded with formatting within a message.
+' Embed values (with formatting) within a message...
 Public Function Message( _
 	ByRef format As String, _
 	Optional ByRef data As Variant, _
@@ -230,6 +230,41 @@ Public Function Message( _
 	
 	' ...
 End Function
+
+
+' ...and print that message to the console.
+Public Function Print2( _
+	ByRef format As String, _
+	Optional ByRef data As Variant, _
+	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
+	Optional ByVal firstDayOfWeek As VBA.VbDayOfWeek = VBA.VbDayOfWeek.vbSunday, _
+	Optional ByVal firstWeekOfYear As VBA.VbFirstWeekOfYear = VBA.VbFirstWeekOfYear.vbFirstJan1, _
+	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
+	Optional ByVal escape As Variant = SYM_ESC, _
+	Optional ByVal openField As String = SYM_FLD_OPEN, _
+	Optional ByVal closeField As String = SYM_FLD_CLOSE, _
+	Optional ByVal openQuote As String = SYM_QUO_OPEN, _
+	Optional ByVal closeQuote As String = SYM_QUO_CLOSE, _
+	Optional ByVal separator As String = SYM_SEP _
+) As String
+	Print2 = Message( _
+		format := format, _
+		data := data, _
+		mode := mode, _
+		firstDayOfWeek := firstDayOfWeek, _
+		firstWeekOfYear := firstWeekOfYear, _
+		position := position, _
+		escape := escape, _
+		openField := openField, _
+		closeField := closeField, _
+		openQuote := openQuote, _
+		closeQuote := closeQuote, _
+		separator := separator _
+	)
+	
+	Debug.Print Print2
+End Function
+
 
 
 
