@@ -198,8 +198,8 @@ Public Function Parse( _
 			openField := openField, _
 			closeField := closeField, _
 			openQuote := openQuote, _
-			closeField := closeField, _
-			separator := separator _
+			closeQuote := closeQuote, _
+			separator := separator
 	End If
 End Function
 
@@ -220,7 +220,7 @@ Private Sub Err_Parsing( _
 	ByVal openField As String, _
 	ByVal closeField As String, _
 	ByVal openQuote As String, _
-	ByVal closeField As String, _
+	ByVal closeQuote As String, _
 	ByVal separator As String _
 )
 	' Define the format for cardinal numbers: 1st, 2nd, 3rd, 4th, etc.
@@ -548,7 +548,7 @@ DUP_ERROR:
 	Err_DuplicateSyms _
 		sym := sym, _
 		openQuote := openQuote, _
-		closeQuote := closeQuote _
+		closeQuote := closeQuote
 End Sub
 
 
