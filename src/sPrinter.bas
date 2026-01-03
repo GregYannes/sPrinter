@@ -573,6 +573,16 @@ End Sub
 ' ## Utilities ##
 ' ###############
 
+' Assign any value (scalar or objective) to a variable.
+Public Sub Assign(ByRef var As Variant, ByRef val As Variant)
+	If VBA.IsObject(val) Then
+		Set var = val
+	Else
+		Let var = val
+	End If
+End Sub
+
+
 ' Test if a combination (dfuNest + dfuEscape) includes a particular enumeration (dfuEscape).
 Public Function Enum_Has(ByRef enum1 As Long, ByRef enum2 As Long) As Boolean
 	Enum_Has = enum1 And enum2
