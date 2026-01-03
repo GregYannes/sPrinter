@@ -153,8 +153,8 @@ End Type
 ' ## API | Parsing ##
 ' ###################
 
-' Parse a format string into an array of syntax elements.
-Public Sub ParseTo( _
+' Parse a format string (without guardrails) and record granular details.
+Public Sub Parse0( _
 	ByRef format As String, _
 	ByRef elements() As ParserElement, _
 	ByRef expression As ParserExpression, _

@@ -8,7 +8,7 @@ Public Sub Test()
 	
 	Dim expr As sPrinter.ParserExpression
 	Dim status As ParsingStatus
-	sPrinter.ParseTo format := format, elements := elements, expression := expr, status := status
+	sPrinter.Parse0 format := format, elements := elements, expression := expr, status := status
 	
 	Dim e As sPrinter.ParserElement
 	Dim out As String: Dim fld As String
