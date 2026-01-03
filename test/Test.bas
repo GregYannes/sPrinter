@@ -6,8 +6,8 @@ Public Sub Test()
 	Dim format As String: format = "ab}cd{ }ef\{gh{1}ij{ -2 }kl{ \3 }mn{ ""key_1"" }op{{key_2}}qr{ {key_3\}} }st{ :mm""{-dd-""yyyy}uv{""key_4"":}wx{ \5 : mm-dd-yyyy""mm-dd-yyyy""\} }yz{ : }ab""{6:mm-dd-yyyy}"""
 	Dim elements() As sPrinter.ParserElement
 	
-	Dim status As ParsingStatus
 	Dim expr As sPrinter.ParserExpression
+	Dim status As ParsingStatus
 	sPrinter.Parse format := format, elements := elements, expression := expr, status := status
 	
 	Dim e As sPrinter.ParserElement
