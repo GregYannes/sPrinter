@@ -349,6 +349,22 @@ End Function
 ' ## Diagnostics ##
 ' #################
 
+' Throw the latest error object.
+Private Sub Err_Raise()
+	VBA.Err.Raise _
+		Number := VBA.Err.Number, _
+		Source := VBA.Err.Source, _
+		Description := VBA.Err.Description, _
+		HelpFile := VBA.Err.HelpFile, _
+		HelpContext := VBA.Err.HelpContext
+End Sub
+
+
+
+' ###############################
+' ## Diagnostics | Situational ##
+' ###############################
+
 ' Throw a parsing error with granular information.
 Private Sub Err_Parsing( _
 	ByVal status As ParsingStatus, _
