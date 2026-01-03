@@ -153,6 +153,57 @@ End Type
 ' ## API | Parsing ##
 ' ###################
 
+' Parse a format string as an array of syntax elements.
+Public Function Parse( _
+	ByRef format As String, _
+	Optional ByVal base As Long = 1, _
+	Optional ByVal escape As Variant = SYM_ESC, _
+	Optional ByVal openField As String = SYM_FLD_OPEN, _
+	Optional ByVal closeField As String = SYM_FLD_CLOSE, _
+	Optional ByVal openQuote As String = SYM_QUO_OPEN, _
+	Optional ByVal closeQuote As String = SYM_QUO_CLOSE, _
+	Optional ByVal separator As String = SYM_SEP _
+) As ParserElement()
+	' Validate the symbols for syntax.
+	CheckSyms _
+		escape := escape, _
+		openField := openField, _
+		closeField := closeField, _
+		openQuote := openQuote, _
+		closeQuote := closeQuote, _
+		separator := separator
+	
+	' Parse the format and record the outcome.
+	Dim expression As ParserExpression
+	Dim status As ParsingStatus
+	Parse0 _
+		format := format, _
+		base := base, _
+		escape := escape, _
+		openField := openField, _
+		closeField := closeField, _
+		openQuote := openQuote, _
+		closeQuote := closeQuote, _
+		separator := separator, _
+		elements := Parse, _
+		expression := expression, _
+		status := status
+	
+	' Raise any error that occurred while parsing.
+	If status <> ParsingStatus.stsSuccess Then
+		Err_Parsing _
+			status := status, _
+			expression := expression, _
+			escape := escape, _
+			openField := openField, _
+			closeField := closeField, _
+			openQuote := openQuote, _
+			closeField := closeField, _
+			separator := separator _
+	End If
+End Function
+
+
 ' Parse a format string (without guardrails) and record granular details.
 Public Sub Parse0( _
 	ByRef format As String, _
