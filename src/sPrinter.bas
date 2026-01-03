@@ -228,6 +228,24 @@ Public Function Message( _
 		Exit Function
 	End If
 	
+	' Parse the message format...
+	Dim elements() As ParserElement: elements = Parse(
+		format := format, _
+		base := base, _
+		escape := escape, _
+		openField := openField, _
+		closeField := closeField, _
+		openQuote := openQuote, _
+		closeQuote := closeQuote, _
+		separator := separator _
+	)
+	
+	' ...and short-circuit for no elements.
+	If Elm_Count(elements) = 0 Then
+		Message = VBA.vbNullString
+		Exit Function
+	End If
+	
 	' ...
 End Function
 
