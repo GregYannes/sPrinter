@@ -242,7 +242,7 @@ Public Function Message( _
 	
 	' Parse the message format...
 	Dim base As Long: base = 1
-	Dim elements() As ParserElement: elements = Parse(
+	Dim elements() As ParserElement: elements = Parse( _
 		format := format, _
 		base := base, _
 		escape := escape, _
@@ -345,7 +345,7 @@ Public Function Message( _
 		Case Else
 			Err_Element _
 				nElement := i, _
-				kind = e.Kind _
+				kind := e.Kind
 		End Select
 		
 		' Append the result to the message.
@@ -360,7 +360,7 @@ Public Function Message( _
 ' Handle an error when formatting a value. 
 FMT_ERROR:
 	Err_Format _
-		nField := iField, _
+		nField := iFld, _
 		format := fmt, _
 		isDefault := isDfl
 End Function
@@ -637,7 +637,7 @@ Private Sub Err_Format( _
 	If isDefault Then valKind = "default"
 	
 	description = "The"
-	If valKind <> VBA.vbNullString Then description = description & " (" valKind & ")"
+	If valKind <> VBA.vbNullString Then description = description & " (" & valKind & ")"
 	description = description & " value cannot be displayed in this format code"
 	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
 	description = description & ": " & format
@@ -880,8 +880,8 @@ Private Sub FormatIndex( _
 	Const IDX_FMT As String = "#,##0"
 	
 	' Define how a key is displayed.
-	Dim KEY_OPEN As String = """"
-	Dim KEY_CLOSE As String = """"
+	Const KEY_OPEN As String = """"
+	Const KEY_CLOSE As String = """"
 	
 	
 	Select Case VBA.VarType(idx)
@@ -1005,7 +1005,7 @@ Private Sub CheckData( _
 	If VBA.IsObject(data) Then
 		On Error GoTo DATA_ERROR
 		n = data.Count
-		On Error ToTo 0
+		On Error GoTo 0
 		
 		If n > 0 Then
 			low = OBJ_BASE
@@ -1982,7 +1982,7 @@ End Sub
 
 
 ' Count the elements returned by Parse().
-Private Function Elm_Count(ByRef elms() As ParserExpression) As Long
+Private Function Elm_Count(ByRef elms() As ParserElement) As Long
 	' Subscript out of range.
 	Const EMPTY_ERR As Long = 9
 	
