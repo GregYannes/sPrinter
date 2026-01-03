@@ -158,13 +158,13 @@ Public Sub Parse0( _
 	ByRef format As String, _
 	ByRef elements() As ParserElement, _
 	ByRef expression As ParserExpression, _
-	Optional ByVal base As Long, _
-	Optional ByVal escape As String, _
-	Optional ByVal openField As String, _
-	Optional ByVal closeField As String, _
-	Optional ByVal openQuote As String, _
-	Optional ByVal closeQuote As String, _
-	Optional ByVal separator As String, _
+	ByVal base As Long, _
+	ByVal escape As String, _
+	ByVal openField As String, _
+	ByVal closeField As String, _
+	ByVal openQuote As String, _
+	ByVal closeQuote As String, _
+	ByVal separator As String, _
 	Optional ByRef status As ParsingStatus _
 )
 	' ###########
