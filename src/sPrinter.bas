@@ -1788,12 +1788,18 @@ End Sub
 
 ' Count the elements returned by Parse().
 Private Function Elm_Count(ByRef elms() As ParserExpression) As Long
+	' Subscript out of range.
+	Const EMPTY_ERR As Long = 9
+	
 	On Error GoTo BOUND_ERROR
 	Elm_Count = UBound(elms, 1) - LBound(elms, 1) + 1
 	Exit Function
 	
 BOUND_ERROR:
-	Elm_Count = 0
+	Select Case VBA.Err.Number
+		Case EMPTY_ERR:	Elm_Count = 0
+		Case Else:	Err_Raise
+	End Select
 End Function
 
 
