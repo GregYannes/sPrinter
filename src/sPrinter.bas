@@ -811,18 +811,6 @@ RESIZE_ELM:
 End Sub
 
 
-' ' Unparse an array of syntax elements into a format string.
-' Public Function Unparse(
-' 	ByRef elements() As ParsingElement, _
-' 	Optional ByVal escape As String = STX_ESC, _
-' 	Optional ByVal openField As String = STX_FLD_OPEN, _
-' 	Optional ByVal closeField As String = STX_FLD_CLOSE, _
-' 	Optional ByVal openQuote As String = STX_QUO_OPEN, _
-' 	Optional ByVal closeQuote As String = STX_QUO_CLOSE, _
-' 	Optional ByVal separator As String = STX_SEP _
-' ) As String
-' 	' ...
-' End Function
 
 
 
@@ -927,13 +915,6 @@ End Function
 ' ## Support ##
 ' #############
 
-' ' Get a missing (Variant) argument.
-' Private Function Missing(Optional ByRef x As Variant) As Variant
-' 	Let Missing = x
-' End Function
-
-
-
 ' ##########################
 ' ## Support | Validation ##
 ' ##########################
@@ -979,15 +960,6 @@ Private Sub CheckSyms( _
 	ByRef closeQuote As Variant, _
 	ByRef separator As Variant _
 )
-	' ' The names of the arguments.
-	' Const ARG_ESC = "escape"
-	' Const ARG_FLD_OPEN = "openField"
-	' Const ARG_FLD_CLOSE = "closeField"
-	' Const ARG_QUO_OPEN = "openQuote"
-	' Const ARG_QUO_CLOSE = "closeQuote"
-	' Const ARG_SEP = "separator"
-	
-	
 	' Validate individual symbols.
 	CheckSym escape
 	CheckSym openField
@@ -997,27 +969,23 @@ Private Sub CheckSyms( _
 	CheckSym separator
 	
 	
-	' ' Validate pairs of matching symbols.
-	' If openField = closeField Then GoTo PAIR_ERROR
-	
-	
 	' Validate uniqueness across symbols...
 	Dim syms As Collection: Set syms = New Collection
 	Dim sym As String
 	
 	On Error GoTo DUP_ERROR
-	sym = escape:     syms.Add True, key := sym	' ARG_ESC
-	sym = openField:  syms.Add True, key := sym	' ARG_FLD_OPEN
-	sym = closeField: syms.Add True, key := sym	' ARG_FLD_CLOSE
-	sym = openQuote:  syms.Add True, key := sym	' ARG_QUO_OPEN
+	sym = escape:     syms.Add True, key := sym
+	sym = openField:  syms.Add True, key := sym
+	sym = closeField: syms.Add True, key := sym
+	sym = openQuote:  syms.Add True, key := sym
 	
 	' ...except between quotes.
 	If openQuote <> closeQuote Then
 		sym = closeQuote
-		syms.Add True, key := closeQuote	' ARG_QUO_CLOSE
+		syms.Add True, key := closeQuote
 	End If
 	
-	sym = separator:  syms.Add True, key := sym	' ARG_SEP
+	sym = separator:  syms.Add True, key := sym
 	On Error GoTo 0
 	
 	' Conclude validation successfully.
@@ -1319,55 +1287,6 @@ Private Sub Expr_Trim(ByRef expr As ParserExpression, _
 	nLeft = n1 - n2
 	expr.Start = expr.Start + nLeft
 End Sub
-
-
-' ' Detect and handle an encapsulated expression.
-' Private Function Expr_Cap(ByRef expr As ParserExpression, _
-' 	ByRef cap As ParserExpression, _
-' 	Optional ByRef dfu As String, _
-' 	Optional ByRef blank As Boolean _
-' ) As Boolean
-' 	' Default to nonblank.
-' 	blank = False
-' 	
-' 	' Short-circuit for an empty expression.
-' 	If expr.Syntax = VBA.vbNullString Then
-' 		blank = True
-' 		Expr_Cap = False
-' 		Exit Function
-' 	End If
-' 	
-' 	' Check whether the expression is fully encapsulated: in its original form...
-' 	Expr_Cap = (expr.Start = cap.Start And expr.Stop = cap.Stop)
-' 	
-' 	' ...or after it is cleaned.
-' 	If Not Expr_Cap Then
-' 		' Copy the expression to avoid side-effects.
-' 		Dim temp As ParserExpression
-' 		Expr_Clone expr, temp
-' 		
-' 		' Clean the copy.
-' 		Dim nLeft As Long, nRight As Long
-' 		Expr_Trim temp, nLeft := nLeft, nRight := nRight
-' 		
-' 		' Short-circuit for an empty result.
-' 		If temp.Syntax = VBA.vbNullString Then
-' 			blank = True
-' 			Expr_Cap = False
-' 			Exit Function
-' 		End If
-' 		
-' 		' Check again for encapsulation...
-' 		Expr_Cap = (temp.Start = cap.Start And temp.Stop = cap.Stop)
-' 		If Expr_Cap Then
-' 			' ...and accordingly update the original expression...
-' 			Expr_Clone temp, expr
-' 			
-' 			' ...along with the defused syntax for consistency.
-' 			dfu = Txt_Crop(dfu, nLeft := nLeft, nRight := nRight)
-' 		End If
-' 	End If
-' End Function
 
 
 
