@@ -156,8 +156,6 @@ End Type
 ' Parse a format string (without guardrails) and record granular details.
 Public Sub Parse0( _
 	ByRef format As String, _
-	ByRef elements() As ParserElement, _
-	ByRef expression As ParserExpression, _
 	ByVal base As Long, _
 	ByVal escape As String, _
 	ByVal openField As String, _
@@ -165,6 +163,8 @@ Public Sub Parse0( _
 	ByVal openQuote As String, _
 	ByVal closeQuote As String, _
 	ByVal separator As String, _
+	ByRef elements() As ParserElement, _
+	ByRef expression As ParserExpression, _
 	Optional ByRef status As ParsingStatus _
 )
 	' ###########
