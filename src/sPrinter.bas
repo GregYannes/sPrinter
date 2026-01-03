@@ -409,57 +409,6 @@ Public Function Txt_Crop(ByVal txt As String, _
 End Function
 
 
-' ' Trim all whitespace characters from the end(s) of a string.
-' Public Function Txt_Trim(ByVal txt As String, _
-' 	Optional ByRef nLeft As Long, _
-' 	Optional ByRef nRight As Long _
-' ) As String
-' 	' Count the original characters.
-' 	Dim nTxt As Long: nTxt = VBA.Len(txt)
-' 	
-' 	' Remove all nonprinting characters...
-' 	Dim cln As String: cln = txt
-' 	cln = Application.WorksheetFunction.Clean$(cln)
-' 	
-' 	' ...and surrounding whitespace.
-' 	cln = VBA.Trim$(cln)
-' 	
-' 	' Short-circuit for a blank result.
-' 	If cln = VBA.vbNullString Then
-' 		Txt_Trim = VBA.vbNullString
-' 		nLeft = 0
-' 		nRight = nTxt
-' 		Exit Function
-' 	End If
-' 	
-' 	' Identify the bookend (printing) characters...
-' 	Dim lChr As String: lChr = VBA.Left$(cln, 1)
-' 	Dim rChr As String: rChr = VBA.Right$(cln, 1)
-' 	
-' 	' ...and locate them in the original string.
-' 	Dim lPos As Long: lPos = VBA.InStr( _
-' 		String1 := txt, _
-' 		String2 := lChr, _
-' 		Start := 1, _
-' 		Compare := VBA.VbCompareMethod.vbBinaryCompare _
-' 	)
-' 	Dim rPos As Long: rPos = VBA.InStrRev( _
-' 		StringCheck := txt, _
-' 		StringMatch := rChr, _
-' 		Start := -1, _
-' 		Compare := VBA.VbCompareMethod.vbBinaryCompare _
-' 	)
-' 	
-' 	' Count the offset...
-' 	nLeft = lPos - 1
-' 	nRight = nTxt - rPos
-' 	
-' 	' ...and return the substring between those bookends.
-' 	Dim nChr As Long: nChr = rPos - lPos + 1
-' 	Txt_Trim = VBA.Mid$(txt, lPos, nChr)
-' End Function
-
-
 
 ' #############
 ' ## Support ##
