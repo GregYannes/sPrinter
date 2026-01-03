@@ -75,8 +75,8 @@ End Enum
 ' End Enum
 
 
-' Outcomes of parsing.
-Public Enum ParsingStatus
+' Outcomes of operations like parsing and formatting.
+Public Enum sPrinterStatus
 	stsSuccess                =    0	' Report success.
 	stsError                  = 1000	' Report a general syntax error.
 	stsErrorHangingEscape     = 1001	' Report a hanging escape...
@@ -317,7 +317,7 @@ Public Function Parse( _
 	
 	' Parse the format and record the outcome.
 	Dim expression As ParserExpression
-	Dim status As ParsingStatus
+	Dim status As sPrinterStatus
 	Parse0 _
 		format := format, _
 		base := base, _
@@ -332,7 +332,7 @@ Public Function Parse( _
 		status := status
 	
 	' Raise any error that occurred while parsing.
-	If status <> ParsingStatus.stsSuccess Then
+	If status <> sPrinterStatus.stsSuccess Then
 		Err_Parsing _
 			status := status, _
 			expression := expression, _
@@ -369,7 +369,7 @@ End Sub
 
 ' Throw a parsing error with granular information.
 Private Sub Err_Parsing( _
-	ByVal status As ParsingStatus, _
+	ByVal status As sPrinterStatus, _
 	ByRef expression As ParserExpression, _
 	ByVal escape As String, _
 	ByVal openField As String, _
@@ -411,7 +411,7 @@ Private Sub Err_Parsing( _
 	
 	' Generate a relevant description of the error.
 	Select Case status
-	Case ParsingStatus.stsError
+	Case sPrinterStatus.stsError
 		description = "An error occurred when parsing the message format"
 		If position <> VBA.vbNullString Then
 			If qualifier <> VBA.vbNullString Then position = qualifier & " " & position
@@ -419,12 +419,12 @@ Private Sub Err_Parsing( _
 		End If
 		description = description & "."
 		
-	Case ParsingStatus.stsErrorHangingEscape
+	Case sPrinterStatus.stsErrorHangingEscape
 		description = "The message format contains a hanging escape (" & escape & ")"
 		If position <> VBA.vbNullString Then description = description & " " & position
 		description = description & "."
 		
-	Case ParsingStatus.stsErrorUnenclosedQuote
+	Case sPrinterStatus.stsErrorUnenclosedQuote
 		description = "The message format contains an unenclosed quote (" & openQuote & etc & closeQuote & ")"
 		If position <> VBA.vbNullString Then
 			If qualifier <> VBA.vbNullString Then position = qualifier & " " & position
@@ -432,7 +432,7 @@ Private Sub Err_Parsing( _
 		End If
 		description = description & "."
 		
-	Case ParsingStatus.stsErrorImbalancedNesting
+	Case sPrinterStatus.stsErrorImbalancedNesting
 		description = "The message format contains an imbalanced field nesting (" & openField & etc & closeField & ")"
 		If position <> VBA.vbNullString Then
 			If qualifier <> VBA.vbNullString Then position = qualifier & " " & position
@@ -440,7 +440,7 @@ Private Sub Err_Parsing( _
 		End If
 		description = description & "."
 		
-	Case ParsingStatus.stsErrorInvalidIndex
+	Case sPrinterStatus.stsErrorInvalidIndex
 		description = "The message format contains an invalid field index"
 		If position <> VBA.vbNullString Then description = description & ", " & position
 		description = description & ": " & expression.Syntax
@@ -470,7 +470,7 @@ End Sub
 ' 	
 ' 	' Raise the error.
 ' 	Err.Raise _
-' 		Number := ParsingStatus.stsErrorUnknownElement, _
+' 		Number := sPrinterStatus.stsErrorUnknownElement, _
 ' 		Description := description
 ' End Sub
 
@@ -505,7 +505,7 @@ End Sub
 ' 	
 ' 	' Raise the error.
 ' 	Err.Raise _
-' 		Number := ParsingStatus.stsErrorNonexistentIndex, _
+' 		Number := sPrinterStatus.stsErrorNonexistentIndex, _
 ' 		Description := description
 ' End Sub
 
@@ -532,7 +532,7 @@ End Sub
 ' 	
 ' 	' Raise the error.
 ' 	Err.Raise _
-' 		Number := ParsingStatus.stsErrorInvalidFormat, _
+' 		Number := sPrinterStatus.stsErrorInvalidFormat, _
 ' 		Description := description
 ' End Sub
 
@@ -950,14 +950,14 @@ Private Sub Parse0( _
 	ByVal separator As String, _
 	ByRef elements() As ParserElement, _
 	ByRef expression As ParserExpression, _
-	Optional ByRef status As ParsingStatus _
+	Optional ByRef status As sPrinterStatus _
 )
 	' ###########
 	' ## Setup ##
 	' ###########
 	
 	' Default to success.
-	status = ParsingStatus.stsSuccess
+	status = sPrinterStatus.stsSuccess
 	
 	' Record the format length.
 	Dim fmtLen As Long: fmtLen = VBA.Len(format)
@@ -966,7 +966,7 @@ Private Sub Parse0( _
 	If fmtLen = 0 Then
 		Erase elements
 		Expr_Reset expression
-		status = ParsingStatus.stsSuccess
+		status = sPrinterStatus.stsSuccess
 		Exit Sub
 	End If
 	
@@ -1411,7 +1411,7 @@ Private Sub Parse0( _
 					Elm_Reset e
 					
 					' Short-circuit for errors.
-					If status <> ParsingStatus.stsSuccess Then GoTo EXIT_LOOP
+					If status <> sPrinterStatus.stsSuccess Then GoTo EXIT_LOOP
 					
 					' Advance to the next element.
 					eIdx = eIdx + 1
@@ -1509,7 +1509,7 @@ EXIT_LOOP:
 	' ####################
 	
 	' Short-circuit for any error.
-	If status <> ParsingStatus.stsSuccess Then
+	If status <> sPrinterStatus.stsSuccess Then
 		Expr_Close expression, format := format
 		
 	' Handle unresolved syntax: a hanging escape...
@@ -1523,7 +1523,7 @@ EXIT_LOOP:
 		Expr_Close expression, format := format
 		
 		' Return the specific status.
-		status = ParsingStatus.stsErrorHangingEscape
+		status = sPrinterStatus.stsErrorHangingEscape
 		
 	' ...or an unenclosed quote...
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuQuote) Then
@@ -1536,18 +1536,18 @@ EXIT_LOOP:
 			
 			' ...and report success.
 			Expr_Reset expression
-			status = ParsingStatus.stsSuccess
+			status = sPrinterStatus.stsSuccess
 			
 		' ...but otherwise report the specific error.
 		Case Else
 			Expr_Close expression, format := format
-			status = ParsingStatus.stsErrorUnenclosedQuote
+			status = sPrinterStatus.stsErrorUnenclosedQuote
 		End Select
 		
 	' ...or an imbalanced nesting.
 	ElseIf Enum_Has(dfu, ParsingDefusal.dfuNest) Or depth > 0 Then
 		Expr_Close expression, format := format
-		status = ParsingStatus.stsErrorImbalancedNesting
+		status = sPrinterStatus.stsErrorImbalancedNesting
 		
 	' Otherwise report success in the absence of any issues.
 	Else
@@ -1558,7 +1558,7 @@ EXIT_LOOP:
 		
 		' ...and report success.
 		Expr_Reset expression
-		status = ParsingStatus.stsSuccess
+		status = sPrinterStatus.stsSuccess
 	End If
 	
 	
@@ -1574,7 +1574,7 @@ STX_ERROR:
 	Expr_Close expression, format := format
 	
 	' ...and return the generic status.
-	status = ParsingStatus.stsError
+	status = sPrinterStatus.stsError
 	
 	
 ' Resize the array to the elements we actually parsed.
@@ -1630,18 +1630,18 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 	ByRef argIdx As Long, _
 	ByRef idxDfu As ParserExpression, _
 	ByRef idxEsc As Long _
-) As ParsingStatus
+) As sPrinterStatus
 	' Short-circuit for no arguments.
 	If argIdx = FieldArgument.[_None] Then
 		Fld_Reset fld
-		Fld_Close = ParsingStatus.stsSuccess
+		Fld_Close = sPrinterStatus.stsSuccess
 		Exit Function
 	End If
 	
 	
 	' Process each argument...
 	Dim arg As ParserExpression
-	Fld_Close = ParsingStatus.stsSuccess
+	Fld_Close = sPrinterStatus.stsSuccess
 	
 	' ...except the (trailing) format.
 	Dim iTo As Long: iTo = Application.WorksheetFunction.Max(FieldArgument.[_First], argIdx - 1)
@@ -1666,7 +1666,7 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 		End Select
 		
 		' Short-circuit for error.
-		If Fld_Close <> ParsingStatus.stsSuccess Then GoTo FLD_ERROR
+		If Fld_Close <> sPrinterStatus.stsSuccess Then GoTo FLD_ERROR
 	Next i
 	
 	
@@ -1685,7 +1685,7 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 	End If
 	
 	' Short-circuit for error...
-	If Fld_Close <> ParsingStatus.stsSuccess Then GoTo FLD_ERROR
+	If Fld_Close <> sPrinterStatus.stsSuccess Then GoTo FLD_ERROR
 	
 	' ...and otherwise report success.
 	Expr_Reset expression
@@ -1705,7 +1705,7 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	ByRef expression As ParserExpression, _
 	ByRef idxDfu As ParserExpression, _
 	ByRef idxEsc As Long _
-) As ParsingStatus
+) As sPrinterStatus
 	' Define fallback for missing argument.
 	Dim noIdx As Variant  ' noIdx = Missing()
 	
@@ -1725,7 +1725,7 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	' Short-circuit for a missing index.
 	If idx.Syntax = VBA.vbNullString Then
 		Let fld.Index = noIdx
-		Fld_CloseIndex = ParsingStatus.stsSuccess
+		Fld_CloseIndex = sPrinterStatus.stsSuccess
 		Exit Function
 	End If
 	
@@ -1764,14 +1764,14 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	
 	' Report success.
 	Expr_Reset expression
-	Fld_CloseIndex = ParsingStatus.stsSuccess
+	Fld_CloseIndex = sPrinterStatus.stsSuccess
 	Exit Function
 	
 	
 ' Report the error for an invalid index.
 IDX_ERROR:
 	Expr_Clone idx, expression
-	Fld_CloseIndex = ParsingStatus.stsErrorInvalidIndex
+	Fld_CloseIndex = sPrinterStatus.stsErrorInvalidIndex
 End Function
 
 
@@ -1780,7 +1780,7 @@ Private Function Fld_CloseFormat(ByRef fld As ParserField, _
 	ByRef fmt As ParserExpression, _
 	ByRef format As String, _
 	ByRef expression As ParserExpression _
-) As ParsingStatus
+) As sPrinterStatus
 	' Define fallback for missing argument.
 	Dim noFmt As String
 	
@@ -1790,7 +1790,7 @@ Private Function Fld_CloseFormat(ByRef fld As ParserField, _
 	' ...and short-circuit for a missing format.
 	If fmt.Syntax = VBA.vbNullString Then
 		Let fmt.Syntax = noFmt
-		Fld_CloseFormat = ParsingStatus.stsSuccess
+		Fld_CloseFormat = sPrinterStatus.stsSuccess
 		Exit Function
 	End If
 	
@@ -1799,7 +1799,7 @@ Private Function Fld_CloseFormat(ByRef fld As ParserField, _
 	
 	' ...and report success.
 	Expr_Reset expression
-	Fld_CloseFormat = ParsingStatus.stsSuccess
+	Fld_CloseFormat = sPrinterStatus.stsSuccess
 End Function
 
 
