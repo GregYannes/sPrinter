@@ -374,7 +374,7 @@ Private Sub Err_Parsing( _
 	
 	
 	' Describe where the erroneous syntax occurs.
-	Dim description As String, position As String
+	Dim description As String, position As String, qualifier As String
 	Dim startPos As String, stopPos As String
 	
 	If expression.Start > 0 Then
@@ -382,10 +382,13 @@ Private Sub Err_Parsing( _
 		stopPos = Num_Ordinal(expression.Stop, format := ORD_FMT)
 		
 		If expression.Start < expression.Stop Then
+			qualifier = "somewhere"
 			position = "between the " & startPos & " and " & stopPos & " characters"
 		ElseIf expression.Start = expression.Stop Then
+			' qualifier = "exactly"
 			position = "at the " & startPos & " character"
 		Else
+			' qualifier = "immediately"
 			position = "following the " & stopPos & " character"
 		End If
 	End If
@@ -394,7 +397,10 @@ Private Sub Err_Parsing( _
 	Select Case status
 	Case ParsingStatus.stsError
 		description = "An error occurred when parsing the message format"
-		If position <> VBA.vbNullString Then description = description & ", " & position
+		If position <> VBA.vbNullString Then
+			If qualifier <> VBA.vbNullString Then position = qualifier & " " & position
+			description = description & ", " & position
+		End If
 		description = description & "."
 		
 	Case ParsingStatus.stsErrorHangingEscape
@@ -404,12 +410,18 @@ Private Sub Err_Parsing( _
 		
 	Case ParsingStatus.stsErrorUnenclosedQuote
 		description = "The message format contains an unenclosed quote (" & openQuote & etc & closeQuote & ")"
-		If position <> VBA.vbNullString Then description = description & " " & position
+		If position <> VBA.vbNullString Then
+			If qualifier <> VBA.vbNullString Then position = qualifier & " " & position
+			description = description & " " & position
+		End If
 		description = description & "."
 		
 	Case ParsingStatus.stsErrorImbalancedNesting
 		description = "The message format contains an imbalanced field nesting (" & openField & etc & closeField & ")"
-		If position <> VBA.vbNullString Then description = description & " " & position
+		If position <> VBA.vbNullString Then
+			If qualifier <> VBA.vbNullString Then position = qualifier & " " & position
+			description = description & " " & position
+		End If
 		description = description & "."
 		
 	Case ParsingStatus.stsErrorInvalidIndex
