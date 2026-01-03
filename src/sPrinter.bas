@@ -511,7 +511,7 @@ End Sub
 ' 	
 ' 	' Generate a relevant description of the error.
 ' 	Dim description As String
-' 	description = "The value from this"
+' 	description = "The value at this"
 ' 	If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
 ' 	description = description & " " & idxKind & " (" & idxCode & ") cannot be displayed in this format"
 ' 	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
