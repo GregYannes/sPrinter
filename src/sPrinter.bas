@@ -205,7 +205,7 @@ End Function
 
 
 ' Parse a format string (without guardrails) and record granular details.
-Public Sub Parse0( _
+Private Sub Parse0( _
 	ByRef format As String, _
 	ByRef base As Long, _
 	ByVal escape As String, _
