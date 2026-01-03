@@ -47,7 +47,7 @@ Private Const SYM_SEP As String = ":"			' Separate the arguments in a field.
 
 ' Engine used for formatting.
 Public Enum FormatMode
-' 	[_Unknown] = 0	' Uninitialized.
+	[_Unknown] = 0	' Uninitialized.
 	fmtVbFormat	' The Format() function in VBA.
 	fmtXlText	' The Text() function in Excel.
 End Enum
@@ -158,6 +158,55 @@ End Type
 ' #########
 ' ## API ##
 ' #########
+
+' ######################
+' ## API | Formatting ##
+' ######################
+
+' Display a value with a certain formatting code and engine.
+Public Function Format2( _
+	ByRef value As Variant, _
+	Optional ByRef format As String, _
+	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
+	Optional ByVal firstDayOfWeek As VBA.VbDayOfWeek = VBA.VbDayOfWeek.vbSunday, _
+	Optional ByVal firstWeekOfYear As VBA.VbFirstWeekOfYear = VBA.VbFirstWeekOfYear.vbFirstJan1 _
+) As String
+	' Default to inferring the mode from calling context.
+	If mode = FormatMode.[_Unknown] Then
+		Dim cxt As CallingContext: cxt = Context()
+		Select Case cxt
+		
+		' Calling from VBA will default to its native Format()...
+		Case CallingContext.cxtVBA:   mode = FormatMode.fmtVbFormat
+		
+		' ...while calling from Excel will default to its native TEXT()...
+		Case CallingContext.cxtExcel: mode = FormatMode.fmtXlText
+		
+		' ...but the more rigorous Format() is our failsafe.
+		Case Else:                    mode = FormatMode.fmtVbFormat
+		End Select
+	End If
+	
+	
+	' Format via the desired mode.
+	Select Case mode
+	Case FormatMode.fmtVbFormat
+		Format2 = VBA.Format( _
+			Expression := value, _
+			Format := format, _
+			FirstDayOfWeek := firstDayOfWeek, _
+			FirstWeekOfYear := firstWeekOfYear _
+		)
+		
+	Case FormatMode.fmtXlText
+		Format2 = Application.WorksheetFunction.Text( _
+			Arg1 := value, _
+			Arg2 := format _
+		)
+	End Select
+End Function
+
+
 
 ' ###################
 ' ## API | Parsing ##
