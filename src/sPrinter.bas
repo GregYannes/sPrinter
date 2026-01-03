@@ -118,12 +118,12 @@ Private Enum FieldArgument
 End Enum
 
 
-' ' Ways to interpret (negative) positional indices.
-' Public Enum PositionKind
-' 	[_Unknown] = 0	' Uninitialized.
-' 	posAbsolute	' Negative index (-1) is extracted directly...
-' 	posRelative	' ...or measured (1st) from the end.
-' End Enum
+' Ways to interpret (negative) positional indices.
+Public Enum PositionKind
+	[_Unknown] = 0	' Uninitialized.
+	posAbsolute	' Negative index (-1) is extracted directly...
+	posRelative	' ...or measured (1st) from the end.
+End Enum
 
 
 
@@ -205,6 +205,32 @@ Public Function Format2( _
 		)
 	End Select
 End Function
+
+
+' Display a set of values embedded with formatting within a message.
+Public Function Message( _
+	ByRef format As String, _
+	Optional ByRef data As Variant, _
+	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
+	Optional ByVal firstDayOfWeek As VBA.VbDayOfWeek = VBA.VbDayOfWeek.vbSunday, _
+	Optional ByVal firstWeekOfYear As VBA.VbFirstWeekOfYear = VBA.VbFirstWeekOfYear.vbFirstJan1, _
+	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
+	Optional ByVal escape As Variant = SYM_ESC, _
+	Optional ByVal openField As String = SYM_FLD_OPEN, _
+	Optional ByVal closeField As String = SYM_FLD_CLOSE, _
+	Optional ByVal openQuote As String = SYM_QUO_OPEN, _
+	Optional ByVal closeQuote As String = SYM_QUO_CLOSE, _
+	Optional ByVal separator As String = SYM_SEP _
+) As String
+	' Short-circuit for blank format.
+	If format = VBA.vbNullString Then
+		Message = VBA.vbNullString
+		Exit Function
+	End If
+	
+	' ...
+End Function
+
 
 
 
