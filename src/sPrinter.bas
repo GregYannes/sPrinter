@@ -974,18 +974,18 @@ Private Sub CheckSyms( _
 	Dim sym As String
 	
 	On Error GoTo DUP_ERROR
-	sym = escape:     syms.Add True, key := sym
-	sym = openField:  syms.Add True, key := sym
-	sym = closeField: syms.Add True, key := sym
-	sym = openQuote:  syms.Add True, key := sym
+	sym = escape:     syms.Add False, key := sym
+	sym = openField:  syms.Add False, key := sym
+	sym = closeField: syms.Add False, key := sym
+	sym = openQuote:  syms.Add False, key := sym
 	
 	' ...except between quotes.
 	If openQuote <> closeQuote Then
 		sym = closeQuote
-		syms.Add True, key := closeQuote
+		syms.Add False, key := closeQuote
 	End If
 	
-	sym = separator:  syms.Add True, key := sym
+	sym = separator:  syms.Add False, key := sym
 	On Error GoTo 0
 	
 	' Conclude validation successfully.
