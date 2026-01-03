@@ -223,9 +223,6 @@ Private Sub Err_Parsing( _
 	' Define the format for cardinal numbers: 1st, 2nd, 3rd, 4th, etc.
 	Const ORD_FMT As String = "#,##0"
 	
-	' Define an unknown index.
-	Const BAD_IDX As String = "?"
-	
 	' Define the horizontal ellipsis: "…"
 	#If Mac Then
 		Const ETC_SYM As Long = 201
@@ -262,21 +259,21 @@ Private Sub Err_Parsing( _
 		
 	Case ParsingStatus.stsErrorHangingEscape
 		description = "The message format contains a hanging escape (" & escape & ")"
-		If position <> VBA.vbNullString Then description = description & ", " & position
+		If position <> VBA.vbNullString Then description = description & " " & position
 		description = description & "."
 		
 	Case ParsingStatus.stsErrorUnenclosedQuote
 		description = "The message format contains an unenclosed quote (" & openQuote & etc & closeQuote & ")"
-		If position <> VBA.vbNullString Then description = description & ", " & position
+		If position <> VBA.vbNullString Then description = description & " " & position
 		description = description & "."
 		
 	Case ParsingStatus.stsErrorImbalancedNesting
-		description = "The message format contains an imbalanced nesting (" & openField & etc & closeField & ")"
-		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = "The message format contains an imbalanced field nesting (" & openField & etc & closeField & ")"
+		If position <> VBA.vbNullString Then description = description & " " & position
 		description = description & "."
 		
 	Case ParsingStatus.stsErrorInvalidIndex
-		description = "The message format contains an invalid index (" & openField & BAD_IDX & separator & " " & etc & closeField & ")"
+		description = "The message format contains an invalid field index"
 		If position <> VBA.vbNullString Then description = description & ", " & position
 		description = description & ": " & expression.Syntax
 		
