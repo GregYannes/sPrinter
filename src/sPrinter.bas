@@ -954,7 +954,7 @@ Private Function AsSym(ByRef x As Variant) As String
 	End If
 	
 	' Ensure the symbol is not whitespace...
-	AsSym = Application.WorksheetFunction.Clean(AsSym)
+	AsSym = Application.WorksheetFunction.Clean$(AsSym)
 	AsSym = VBA.Trim$(AsSym)
 	If AsSym = VBA.vbNullString Then GoTo BLANK_ERROR
 	
