@@ -230,6 +230,16 @@ Public Function Message( _
 		Exit Function
 	End If
 	
+	
+	' Validate the data.
+	Dim n As Long, low As Long, up As Long
+	CheckData _
+		data := data, _
+		n := n, _
+		low := low, _
+		up := up
+	
+	
 	' Parse the message format...
 	Dim base As Long: base = 1
 	Dim elements() As ParserElement: elements = Parse(
