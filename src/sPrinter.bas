@@ -385,10 +385,8 @@ Private Sub Err_Parsing( _
 			qualifier = "somewhere"
 			position = "between the " & startPos & " and " & stopPos & " characters"
 		ElseIf expression.Start = expression.Stop Then
-			' qualifier = "exactly"
 			position = "at the " & startPos & " character"
 		Else
-			' qualifier = "immediately"
 			position = "following the " & stopPos & " character"
 		End If
 	End If
