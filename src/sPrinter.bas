@@ -156,7 +156,7 @@ End Type
 ' Parse a format string (without guardrails) and record granular details.
 Public Sub Parse0( _
 	ByRef format As String, _
-	ByVal base As Long, _
+	ByRef base As Long, _
 	ByVal escape As String, _
 	ByVal openField As String, _
 	ByVal closeField As String, _
