@@ -154,7 +154,7 @@ End Type
 ' ###################
 
 ' Parse a format string into an array of syntax elements.
-Public Sub Parse( _
+Public Sub ParseTo( _
 	ByRef format As String, _
 	ByRef elements() As ParserElement, _
 	ByRef expression As ParserExpression, _
