@@ -85,6 +85,7 @@ Public Enum ParsingStatus
 	stsErrorInvalidIndex      = 1004	' ...or an index that is not an integer.
 ' 	stsErrorNonexistentIndex  = 1005	' Report an index that does not exist in the data...
 ' 	stsErrorInvalidFormat     = 1006	' ...or a format that is invalid for Format() or Text().
+' 	stsErrorUnknownElement    = 1007	' Report a ParsingElement of unknown kind.
 End Enum
 
 
@@ -452,6 +453,26 @@ Private Sub Err_Parsing( _
 		Number := status, _
 		Description := description
 End Sub
+
+
+' ' Throw an error for an unrecognized .Kind of element.
+' Private Sub Err_Element( _
+' 	ByVal nElement As Long, _
+' 	ByVal kind As ElementKind _
+' )
+' 	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
+' 	Const ORD_FMT As String = "#,##0"
+' 	
+' 	
+' 	Dim description As String, kindCode As String
+' 	description = "This " & Num_Ordinal(nElement, format := ORD_FMT) & " element from the parser cannot be intepreted"
+' 	description = description & ", because its "".Kind"" (" & VBA.Format(kind, ORD_FMT) & ") is unrecognized."
+' 	
+' 	' Raise the error.
+' 	Err.Raise _
+' 		Number := ParsingStatus.stsErrorUnknownElement, _
+' 		Description := description
+' End Sub
 
 
 ' ' Throw an error for a nonexistent index.
