@@ -31,13 +31,13 @@ Public Const MOD_REPO As String = "https://github.com/GregYannes/sPrinter"
 ' ## Constants ##
 ' ###############
 
-' Syntax for parsing.
-Private Const STX_ESC As String = "\"			' Escape the next character.
-Private Const STX_FLD_OPEN As String = "{"		' Embed a field for formatting...
-Private Const STX_FLD_CLOSE As String = "}"		' ...and enclose that field.
-Private Const STX_QUO_OPEN As String = """"		' Quote the next several characters...
-Private Const STX_QUO_CLOSE As String = STX_QUO_OPEN	' ...and enclose that quote.
-Private Const STX_SEP As String = ":"			' Separate specifiers in a field.
+' Symbols for parsing syntax.
+Private Const SYM_ESC As String = "\"			' Escape the next character.
+Private Const SYM_FLD_OPEN As String = "{"		' Embed a field for formatting...
+Private Const SYM_FLD_CLOSE As String = "}"		' ...and enclose that field.
+Private Const SYM_QUO_OPEN As String = """"		' Quote the next several characters...
+Private Const SYM_QUO_CLOSE As String = SYM_QUO_OPEN	' ...and enclose that quote.
+Private Const SYM_SEP As String = ":"			' Separate specifiers in a field.
 
 
 
@@ -160,12 +160,12 @@ Public Sub ParseTo( _
 	ByRef expression As ParserExpression, _
 	Optional ByRef status As ParsingStatus, _
 	Optional ByVal base As Long = 1, _
-	Optional ByVal escape As String = STX_ESC, _
-	Optional ByVal openField As String = STX_FLD_OPEN, _
-	Optional ByVal closeField As String = STX_FLD_CLOSE, _
-	Optional ByVal openQuote As String = STX_QUO_OPEN, _
-	Optional ByVal closeQuote As String = STX_QUO_CLOSE, _
-	Optional ByVal separator As String = STX_SEP _
+	Optional ByVal escape As String = SYM_ESC, _
+	Optional ByVal openField As String = SYM_FLD_OPEN, _
+	Optional ByVal closeField As String = SYM_FLD_CLOSE, _
+	Optional ByVal openQuote As String = SYM_QUO_OPEN, _
+	Optional ByVal closeQuote As String = SYM_QUO_CLOSE, _
+	Optional ByVal separator As String = SYM_SEP _
 )
 	' ###########
 	' ## Setup ##
