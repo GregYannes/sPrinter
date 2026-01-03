@@ -1078,7 +1078,9 @@ Private Function GetValue( _
 	End If
 	
 	' Extract the value...
+	On Error GoTo VAL_ERROR
 	Assign val, data(idx)
+	On Error GoTo 0
 	
 	' ...and report success.
 	GetValue = True
