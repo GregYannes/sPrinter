@@ -934,6 +934,104 @@ End Function
 
 
 
+' ##########################
+' ## Support | Validation ##
+' ##########################
+
+' Convert any input (text or code) into a valid symbol.
+Private Function AsSym(ByRef x As Variant) As String
+	' Extract the first character from a string...
+	If VBA.VarType(x) = VBA.VbVarType.vbString Then
+		AsSym = VBA.Left$(x, 1)
+		
+	' ...or convert a code into its character.
+	Else
+		#If Mac Then
+			AsSym = VBA.Chr(x)
+		#Else
+			AsSym = VBA.ChrW(x)
+		#End If
+	End If
+	
+	' Ensure the symbol is not whitespace...
+	AsSym = Application.WorksheetFunction.Clean(AsSym)
+	If AsSym = VBA.vbNullString Then GoTo BLANK_ERROR
+	
+	' ...and return the result.
+	Exit Function
+	
+	
+' Throw an error for whitespace.
+BLANK_ERROR:
+	Err.Raise _
+		Number := 5, _
+		Description := "Whitespace may not be used as a formatting symbol."
+End Function
+
+
+' Validate inputs (texts or codes) for all parsing symbols.
+Private Sub CheckSyms( _
+	ByRef escape As Variant, _
+	ByRef openField As Variant, _
+	ByRef closeField As Variant, _
+	ByRef openQuote As Variant, _
+	ByRef closeQuote As Variant, _
+	ByRef separator As Variant _
+)
+	' ' The names of the arguments.
+	' Const ARG_ESC = "escape"
+	' Const ARG_FLD_OPEN = "openField"
+	' Const ARG_FLD_CLOSE = "closeField"
+	' Const ARG_QUO_OPEN = "openQuote"
+	' Const ARG_QUO_CLOSE = "closeQuote"
+	' Const ARG_SEP = "separator"
+	
+	
+	' Validate individual symbols.
+	CheckSym escape
+	CheckSym openField
+	CheckSym closeField
+	CheckSym openQuote
+	CheckSym closeQuote
+	CheckSym separator
+	
+	
+	' ' Validate pairs of matching symbols.
+	' If openField = closeField Then GoTo PAIR_ERROR
+	
+	
+	' Validate uniqueness across symbols...
+	Dim syms As Collection: Set syms = New Collection
+	Dim sym As String
+	
+	On Error GoTo DUP_ERROR
+	sym = escape:     syms.Add True, key := sym	' ARG_ESC
+	sym = openField:  syms.Add True, key := sym	' ARG_FLD_OPEN
+	sym = closeField: syms.Add True, key := sym	' ARG_FLD_CLOSE
+	sym = openQuote:  syms.Add True, key := sym	' ARG_QUO_OPEN
+	
+	' ...except between quotes.
+	If openQuote <> closeQuote Then
+		sym = closeQuote
+		syms.Add True, key := closeQuote	' ARG_QUO_CLOSE
+	End If
+	
+	sym = separator:  syms.Add True, key := sym	' ARG_SEP
+	On Error GoTo 0
+	
+	' Conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for clashing symbols.
+DUP_ERROR:
+	Err.Raise _
+		Number := 5, _
+		Description := "The same formatting symbol may not used twice: " & sym
+End Sub
+
+
+
 ' #######################
 ' ## Support | Parsing ##
 ' #######################
