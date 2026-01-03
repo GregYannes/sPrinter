@@ -730,43 +730,43 @@ End Function
 ' ## Support | Formatting ##
 ' ##########################
 
-' ' Display the index for a field...
-' Private Sub FormatIndex( _
-' 	ByRef idx As Variant, _
-' 	Optional ByRef idxCode As String, _
-' 	Optional ByVal ord As Boolean = False, _
-' 	Optional ByRef idxKind As String, _
-' 	Optional ByVal pos As PositionKind, _
-' 	Optional ByRef posKind As String _
-' )
-' 	' Define the format for numeric indices.
-' 	Const IDX_FMT As String = "#,##0"
-' 	
-' 	' Define how a key is displayed.
-' 	Dim KEY_OPEN As String = """"
-' 	Dim KEY_CLOSE As String = """"
-' 	
-' 	
-' 	Select Case VBA.VarType(idx)
-' 	Case VBA.VbVarType.vbLong
-' 		If ord Then
-' 			idxCode = Num_Ordinal(idx, format := IDX_FMT)
-' 		Else
-' 			idxCode = VBA.Format(idx, Format := IDX_FMT)
-' 		End If
-' 		
-' 		idxKind = "Position"
-' 		
-' 		Select Case pos
-' 		Case PositionKind.posAbsolute: posKind = "Absolute"
-' 		Case PositionKind.posRelative: posKind = "Relative"
-' 		End Select
-' 		
-' 	Case VBA.VbVarType.vbString
-' 		idxCode = KEY_OPEN & idx & KEY_CLOSE
-' 		idxKind = "Key"
-' 	End Select
-' End Sub
+' Display the index for a field...
+Private Sub FormatIndex( _
+	ByRef idx As Variant, _
+	Optional ByRef idxCode As String, _
+	Optional ByVal ord As Boolean = False, _
+	Optional ByRef idxKind As String, _
+	Optional ByVal pos As PositionKind, _
+	Optional ByRef posKind As String _
+)
+	' Define the format for numeric indices.
+	Const IDX_FMT As String = "#,##0"
+	
+	' Define how a key is displayed.
+	Dim KEY_OPEN As String = """"
+	Dim KEY_CLOSE As String = """"
+	
+	
+	Select Case VBA.VarType(idx)
+	Case VBA.VbVarType.vbLong
+		If ord Then
+			idxCode = Num_Ordinal(idx, format := IDX_FMT)
+		Else
+			idxCode = VBA.Format(idx, Format := IDX_FMT)
+		End If
+		
+		idxKind = "Position"
+		
+		Select Case pos
+		Case PositionKind.posAbsolute: posKind = "Absolute"
+		Case PositionKind.posRelative: posKind = "Relative"
+		End Select
+		
+	Case VBA.VbVarType.vbString
+		idxCode = KEY_OPEN & idx & KEY_CLOSE
+		idxKind = "Key"
+	End Select
+End Sub
 
 
 
