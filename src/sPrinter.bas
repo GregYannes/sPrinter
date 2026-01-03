@@ -597,7 +597,7 @@ Private Sub Err_Index( _
 	Const ORD_FMT As String = "#,##0"
 	
 	
-	' Display the index in detail.
+	' Display the index in detail...
 	Dim idxCode As String, idxKind As String, posKind As String
 	FormatIndex _
 		idx := index, _
@@ -606,6 +606,11 @@ Private Sub Err_Index( _
 		idxKind := idxKind, _
 		pos := position, _
 		posKind := posKind
+	
+	' ...with the proper (lower) case.
+	idxCode = VBA.LCase$(idxCode)
+	idxKind = VBA.LCase$(idxKind)
+	posKind = VBA.LCase$(posKind)
 	
 	' Generate a relevant description of the error.
 	Dim description As String
