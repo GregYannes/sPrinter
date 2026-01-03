@@ -812,6 +812,135 @@ End Sub
 
 
 
+' #################
+' ## Diagnostics ##
+' #################
+
+' Throw a parsing error with granular information.
+Private Sub Err_Parsing( _
+	ByVal status As ParsingStatus, _
+	ByRef expression As ParserExpression, _
+	ByVal escape As String, _
+	ByVal openField As String, _
+	ByVal closeField As String, _
+	ByVal openQuote As String, _
+	ByVal closeField As String, _
+	ByVal separator As String _
+)
+	' Define the format for cardinal numbers: 1st, 2nd, 3rd, 4th, etc.
+	Const ORD_FMT As String = "#,##0"
+	
+	' Define an unknown index.
+	Const BAD_IDX As String = "?"
+	
+	' Define the horizontal ellipsis: "…"
+	#If Mac Then
+		Const ETC_SYM As Long = 201
+	#Else
+		Const ETC_SYM As Long = 133
+	#End If
+	
+	Dim etc As String: etc = VBA.Chr(ETC_SYM)
+	
+	
+	' Describe where the erroneous syntax occurs.
+	Dim description As String, position As String
+	Dim startPos As String, stopPos As String
+	
+	If expression.Start > 0 Then
+		startPos = Num_Ordinal(expression.Start, format := ORD_FMT)
+		stopPos = Num_Ordinal(expression.Stop, format := ORD_FMT)
+		
+		If expression.Start < expression.Stop Then
+			position = "between the " & startPos & " and " & stopPos & " characters"
+		ElseIf expression.Start = expression.Stop Then
+			position = "at the " & startPos & " character"
+		Else
+			position = "following the " & stopPos & " character"
+		End If
+	End If
+	
+	' Generate a relevant description of the error.
+	Select Case status
+	Case ParsingStatus.stsError
+		description = "An error occurred when parsing the message format"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & "."
+		
+	Case ParsingStatus.stsErrorHangingEscape
+		description = "The message format contains a hanging escape (" & escape & ")"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & "."
+		
+	Case ParsingStatus.stsErrorUnenclosedQuote
+		description = "The message format contains an unenclosed quote (" & openQuote & etc & closeQuote & ")"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & "."
+		
+	Case ParsingStatus.stsErrorImbalancedNesting
+		description = "The message format contains an imbalanced nesting (" & openField & etc & closeField & ")"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & "."
+		
+	Case ParsingStatus.stsErrorInvalidIndex
+		description = "The message format contains an invalid index (" & openField & BAD_IDX & separator & " " & etc & closeField & ")"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & ": " & expression.Syntax
+		
+	Case Else: Exit Sub
+	End Select
+	
+	' Raise the error.
+	Err.Raise _
+		Number := status, _
+		Description := description
+End Sub
+
+
+' Throw an error for a blank parsing symbol.
+Private Sub Err_BlankSym()
+	' Detail the error.
+	Const ERR_NUM As Long = 5
+	Const ERR_DESC As String = "Whitespace may not be used as a formatting symbol."
+	
+	' Raise the error.
+	Err.Raise _
+		Number := ERR_NUM, _
+		Description := ERR_DESC
+End Sub
+
+
+' Throw an error for duplicate parsing symbols.
+Private Sub Err_DuplicateSyms( _
+	ByVal sym As String, _
+	ByVal openQuote As String, _
+	ByVal closeQuote As String _
+)
+	' Define the error.
+	Const ERR_NUM As Long = 5
+	
+	' Define the horizontal ellipsis: "…"
+	#If Mac Then
+		Const ETC_SYM As Long = 201
+	#Else
+		Const ETC_SYM As Long = 133
+	#End If
+	
+	Dim etc As String: etc = VBA.Chr(ETC_SYM)
+	
+	
+	' Generate a relevant description of the error.
+	Dim description As String
+	description = "The same formatting symbol (""" &  sym & """) may not be used twice"
+	description = description & "; " & "aside from quotes (" & openQuote & etc & closeQuote & ") if you so specify"
+	description = description & "."
+	
+	' Raise the error.
+	Err.Raise _
+		Number := ERR_NUM, _
+		Description := description
+End Sub
+
 
 
 ' ###############
@@ -973,9 +1102,7 @@ Private Function AsSym(ByRef x As Variant) As String
 	
 ' Throw an error for whitespace.
 BLANK_ERROR:
-	Err.Raise _
-		Number := 5, _
-		Description := "Whitespace may not be used as a formatting symbol."
+	Err_BlankSym
 End Function
 
 
@@ -1022,9 +1149,10 @@ Private Sub CheckSyms( _
 	
 ' Report an error for clashing symbols.
 DUP_ERROR:
-	Err.Raise _
-		Number := 5, _
-		Description := "The same formatting symbol may not used twice: " & sym
+	Err_DuplicateSyms _
+		sym := sym, _
+		openQuote := openQuote, _
+		closeQuote := closeQuote _
 End Sub
 
 
