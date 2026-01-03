@@ -824,6 +824,34 @@ Public Function Enum_Has(ByRef enum1 As Long, ByRef enum2 As Long) As Boolean
 End Function
 
 
+' Display the ordinal (3rd) of an integer (3).
+Public Function Num_Ordinal(ByVal num As Long, _
+	Optional ByRef format As String _
+) As String
+	Const NUM_BASE As Integer = 10
+	
+	' Determine the proper suffix...
+	Dim sfx As String
+	Select Case (num Mod NUM_BASE)
+	Case 1:		sfx = "st"
+	Case 2:		sfx = "nd"
+	Case 3:		sfx = "rd"
+	Case Else:	sfx = "th"
+	End Select
+	
+	' ...and the proper prefix.
+	Dim pfx As String
+	If format = VBA.vbNullString Then
+		pfx = VBA.CStr(num)
+	Else
+		pfx = VBA.Format(num, Format := format)
+	End If
+	
+	' Combine them and return the result.
+	Num_Ordinal = pfx & sfx
+End Function
+
+
 
 ' ######################
 ' ## Utilities | Text ##
