@@ -229,6 +229,7 @@ Public Function Message( _
 	End If
 	
 	' Parse the message format...
+	Dim base As Long: base = 1
 	Dim elements() As ParserElement: elements = Parse(
 		format := format, _
 		base := base, _
