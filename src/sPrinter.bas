@@ -204,6 +204,359 @@ Public Function Parse( _
 End Function
 
 
+
+
+
+
+' #################
+' ## Diagnostics ##
+' #################
+
+' Throw a parsing error with granular information.
+Private Sub Err_Parsing( _
+	ByVal status As ParsingStatus, _
+	ByRef expression As ParserExpression, _
+	ByVal escape As String, _
+	ByVal openField As String, _
+	ByVal closeField As String, _
+	ByVal openQuote As String, _
+	ByVal closeField As String, _
+	ByVal separator As String _
+)
+	' Define the format for cardinal numbers: 1st, 2nd, 3rd, 4th, etc.
+	Const ORD_FMT As String = "#,##0"
+	
+	' Define an unknown index.
+	Const BAD_IDX As String = "?"
+	
+	' Define the horizontal ellipsis: "…"
+	#If Mac Then
+		Const ETC_SYM As Long = 201
+	#Else
+		Const ETC_SYM As Long = 133
+	#End If
+	
+	Dim etc As String: etc = VBA.Chr(ETC_SYM)
+	
+	
+	' Describe where the erroneous syntax occurs.
+	Dim description As String, position As String
+	Dim startPos As String, stopPos As String
+	
+	If expression.Start > 0 Then
+		startPos = Num_Ordinal(expression.Start, format := ORD_FMT)
+		stopPos = Num_Ordinal(expression.Stop, format := ORD_FMT)
+		
+		If expression.Start < expression.Stop Then
+			position = "between the " & startPos & " and " & stopPos & " characters"
+		ElseIf expression.Start = expression.Stop Then
+			position = "at the " & startPos & " character"
+		Else
+			position = "following the " & stopPos & " character"
+		End If
+	End If
+	
+	' Generate a relevant description of the error.
+	Select Case status
+	Case ParsingStatus.stsError
+		description = "An error occurred when parsing the message format"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & "."
+		
+	Case ParsingStatus.stsErrorHangingEscape
+		description = "The message format contains a hanging escape (" & escape & ")"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & "."
+		
+	Case ParsingStatus.stsErrorUnenclosedQuote
+		description = "The message format contains an unenclosed quote (" & openQuote & etc & closeQuote & ")"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & "."
+		
+	Case ParsingStatus.stsErrorImbalancedNesting
+		description = "The message format contains an imbalanced nesting (" & openField & etc & closeField & ")"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & "."
+		
+	Case ParsingStatus.stsErrorInvalidIndex
+		description = "The message format contains an invalid index (" & openField & BAD_IDX & separator & " " & etc & closeField & ")"
+		If position <> VBA.vbNullString Then description = description & ", " & position
+		description = description & ": " & expression.Syntax
+		
+	Case Else: Exit Sub
+	End Select
+	
+	' Raise the error.
+	Err.Raise _
+		Number := status, _
+		Description := description
+End Sub
+
+
+' Throw an error for a blank parsing symbol.
+Private Sub Err_BlankSym()
+	' Detail the error.
+	Const ERR_NUM As Long = 5
+	Const ERR_DESC As String = "Whitespace may not be used as a formatting symbol."
+	
+	' Raise the error.
+	Err.Raise _
+		Number := ERR_NUM, _
+		Description := ERR_DESC
+End Sub
+
+
+' Throw an error for duplicate parsing symbols.
+Private Sub Err_DuplicateSyms( _
+	ByVal sym As String, _
+	ByVal openQuote As String, _
+	ByVal closeQuote As String _
+)
+	' Define the error.
+	Const ERR_NUM As Long = 5
+	
+	' Define the horizontal ellipsis: "…"
+	#If Mac Then
+		Const ETC_SYM As Long = 201
+	#Else
+		Const ETC_SYM As Long = 133
+	#End If
+	
+	Dim etc As String: etc = VBA.Chr(ETC_SYM)
+	
+	
+	' Generate a relevant description of the error.
+	Dim description As String
+	description = "The same formatting symbol (""" &  sym & """) may not be used twice"
+	description = description & "; " & "aside from quotes (" & openQuote & etc & closeQuote & ") if you so specify"
+	description = description & "."
+	
+	' Raise the error.
+	Err.Raise _
+		Number := ERR_NUM, _
+		Description := description
+End Sub
+
+
+
+' ###############
+' ## Utilities ##
+' ###############
+
+' Test if a combination (dfuNest + dfuEscape) includes a particular enumeration (dfuEscape).
+Public Function Enum_Has(ByRef enum1 As Long, ByRef enum2 As Long) As Boolean
+	Enum_Has = enum1 And enum2
+End Function
+
+
+' Display the ordinal (3rd) of an integer (3).
+Public Function Num_Ordinal(ByVal num As Long, _
+	Optional ByRef format As String _
+) As String
+	Const NUM_BASE As Integer = 10
+	
+	' Determine the proper suffix...
+	Dim sfx As String
+	Select Case (num Mod NUM_BASE)
+	Case 1:		sfx = "st"
+	Case 2:		sfx = "nd"
+	Case 3:		sfx = "rd"
+	Case Else:	sfx = "th"
+	End Select
+	
+	' ...and the proper prefix.
+	Dim pfx As String
+	If format = VBA.vbNullString Then
+		pfx = VBA.CStr(num)
+	Else
+		pfx = VBA.Format(num, Format := format)
+	End If
+	
+	' Combine them and return the result.
+	Num_Ordinal = pfx & sfx
+End Function
+
+
+
+' ######################
+' ## Utilities | Text ##
+' ######################
+
+' Remove characters from the end(s) of a string.
+Public Function Txt_Crop(ByVal txt As String, _
+	Optional ByVal nLeft As Long = 0, _
+	Optional ByVal nRight As Long = 0 _
+)
+	Dim n As Long
+	
+	If nRight > 0 Then
+		' Record the initial length...
+		n = VBA.Len(txt)
+		
+		' ...and truncate the suffix.
+		nRight = Application.WorksheetFunction.Min(nRight, n)
+		txt = VBA.Left$(txt, n - nRight)
+	End If
+	
+	If nLeft > 0 Then
+		' Record the remaining length...
+		n = VBA.Len(txt)
+		
+		' ...and truncate the prefix...
+		nLeft = Application.WorksheetFunction.Min(nLeft, n)
+		txt = VBA.Right$(txt, n - nLeft)
+	End If
+	
+	' Return the result.
+	Txt_Crop = txt
+End Function
+
+
+' ' Trim all whitespace characters from the end(s) of a string.
+' Public Function Txt_Trim(ByVal txt As String, _
+' 	Optional ByRef nLeft As Long, _
+' 	Optional ByRef nRight As Long _
+' ) As String
+' 	' Count the original characters.
+' 	Dim nTxt As Long: nTxt = VBA.Len(txt)
+' 	
+' 	' Remove all nonprinting characters...
+' 	Dim cln As String: cln = txt
+' 	cln = Application.WorksheetFunction.Clean$(cln)
+' 	
+' 	' ...and surrounding whitespace.
+' 	cln = VBA.Trim$(cln)
+' 	
+' 	' Short-circuit for a blank result.
+' 	If cln = VBA.vbNullString Then
+' 		Txt_Trim = VBA.vbNullString
+' 		nLeft = 0
+' 		nRight = nTxt
+' 		Exit Function
+' 	End If
+' 	
+' 	' Identify the bookend (printing) characters...
+' 	Dim lChr As String: lChr = VBA.Left$(cln, 1)
+' 	Dim rChr As String: rChr = VBA.Right$(cln, 1)
+' 	
+' 	' ...and locate them in the original string.
+' 	Dim lPos As Long: lPos = VBA.InStr( _
+' 		String1 := txt, _
+' 		String2 := lChr, _
+' 		Start := 1, _
+' 		Compare := VBA.VbCompareMethod.vbBinaryCompare _
+' 	)
+' 	Dim rPos As Long: rPos = VBA.InStrRev( _
+' 		StringCheck := txt, _
+' 		StringMatch := rChr, _
+' 		Start := -1, _
+' 		Compare := VBA.VbCompareMethod.vbBinaryCompare _
+' 	)
+' 	
+' 	' Count the offset...
+' 	nLeft = lPos - 1
+' 	nRight = nTxt - rPos
+' 	
+' 	' ...and return the substring between those bookends.
+' 	Dim nChr As Long: nChr = rPos - lPos + 1
+' 	Txt_Trim = VBA.Mid$(txt, lPos, nChr)
+' End Function
+
+
+
+' #############
+' ## Support ##
+' #############
+
+' ##########################
+' ## Support | Validation ##
+' ##########################
+
+' Convert any input (text or code) into a valid symbol.
+Private Function AsSym(ByRef x As Variant) As String
+	' Extract the first character from a string...
+	If VBA.VarType(x) = VBA.VbVarType.vbString Then
+		AsSym = VBA.Left$(x, 1)
+		
+	' ...or convert a code into its character.
+	Else
+		#If Mac Then
+			AsSym = VBA.Chr(x)
+		#Else
+			AsSym = VBA.ChrW(x)
+		#End If
+	End If
+	
+	' Ensure the symbol is not whitespace...
+	AsSym = Application.WorksheetFunction.Clean$(AsSym)
+	AsSym = VBA.Trim$(AsSym)
+	If AsSym = VBA.vbNullString Then GoTo BLANK_ERROR
+	
+	' ...and return the result.
+	Exit Function
+	
+	
+' Throw an error for whitespace.
+BLANK_ERROR:
+	Err_BlankSym
+End Function
+
+
+' Validate inputs (texts or codes) for all parsing symbols.
+Private Sub CheckSyms( _
+	ByRef escape As Variant, _
+	ByRef openField As Variant, _
+	ByRef closeField As Variant, _
+	ByRef openQuote As Variant, _
+	ByRef closeQuote As Variant, _
+	ByRef separator As Variant _
+)
+	' Validate individual symbols.
+	CheckSym escape
+	CheckSym openField
+	CheckSym closeField
+	CheckSym openQuote
+	CheckSym closeQuote
+	CheckSym separator
+	
+	
+	' Validate uniqueness across symbols...
+	Dim syms As Collection: Set syms = New Collection
+	Dim sym As String
+	
+	On Error GoTo DUP_ERROR
+	sym = escape:     syms.Add False, key := sym
+	sym = openField:  syms.Add False, key := sym
+	sym = closeField: syms.Add False, key := sym
+	sym = openQuote:  syms.Add False, key := sym
+	
+	' ...except between quotes.
+	If openQuote <> closeQuote Then
+		sym = closeQuote
+		syms.Add False, key := closeQuote
+	End If
+	
+	sym = separator:  syms.Add False, key := sym
+	On Error GoTo 0
+	
+	' Conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for clashing symbols.
+DUP_ERROR:
+	Err_DuplicateSyms _
+		sym := sym, _
+		openQuote := openQuote, _
+		closeQuote := closeQuote _
+End Sub
+
+
+
+' #######################
+' ## Support | Parsing ##
+' #######################
+
 ' Parse a format string (without guardrails) and record granular details.
 Private Sub Parse0( _
 	ByRef format As String, _
@@ -863,354 +1216,9 @@ End Sub
 
 
 
-' #################
-' ## Diagnostics ##
-' #################
-
-' Throw a parsing error with granular information.
-Private Sub Err_Parsing( _
-	ByVal status As ParsingStatus, _
-	ByRef expression As ParserExpression, _
-	ByVal escape As String, _
-	ByVal openField As String, _
-	ByVal closeField As String, _
-	ByVal openQuote As String, _
-	ByVal closeField As String, _
-	ByVal separator As String _
-)
-	' Define the format for cardinal numbers: 1st, 2nd, 3rd, 4th, etc.
-	Const ORD_FMT As String = "#,##0"
-	
-	' Define an unknown index.
-	Const BAD_IDX As String = "?"
-	
-	' Define the horizontal ellipsis: "…"
-	#If Mac Then
-		Const ETC_SYM As Long = 201
-	#Else
-		Const ETC_SYM As Long = 133
-	#End If
-	
-	Dim etc As String: etc = VBA.Chr(ETC_SYM)
-	
-	
-	' Describe where the erroneous syntax occurs.
-	Dim description As String, position As String
-	Dim startPos As String, stopPos As String
-	
-	If expression.Start > 0 Then
-		startPos = Num_Ordinal(expression.Start, format := ORD_FMT)
-		stopPos = Num_Ordinal(expression.Stop, format := ORD_FMT)
-		
-		If expression.Start < expression.Stop Then
-			position = "between the " & startPos & " and " & stopPos & " characters"
-		ElseIf expression.Start = expression.Stop Then
-			position = "at the " & startPos & " character"
-		Else
-			position = "following the " & stopPos & " character"
-		End If
-	End If
-	
-	' Generate a relevant description of the error.
-	Select Case status
-	Case ParsingStatus.stsError
-		description = "An error occurred when parsing the message format"
-		If position <> VBA.vbNullString Then description = description & ", " & position
-		description = description & "."
-		
-	Case ParsingStatus.stsErrorHangingEscape
-		description = "The message format contains a hanging escape (" & escape & ")"
-		If position <> VBA.vbNullString Then description = description & ", " & position
-		description = description & "."
-		
-	Case ParsingStatus.stsErrorUnenclosedQuote
-		description = "The message format contains an unenclosed quote (" & openQuote & etc & closeQuote & ")"
-		If position <> VBA.vbNullString Then description = description & ", " & position
-		description = description & "."
-		
-	Case ParsingStatus.stsErrorImbalancedNesting
-		description = "The message format contains an imbalanced nesting (" & openField & etc & closeField & ")"
-		If position <> VBA.vbNullString Then description = description & ", " & position
-		description = description & "."
-		
-	Case ParsingStatus.stsErrorInvalidIndex
-		description = "The message format contains an invalid index (" & openField & BAD_IDX & separator & " " & etc & closeField & ")"
-		If position <> VBA.vbNullString Then description = description & ", " & position
-		description = description & ": " & expression.Syntax
-		
-	Case Else: Exit Sub
-	End Select
-	
-	' Raise the error.
-	Err.Raise _
-		Number := status, _
-		Description := description
-End Sub
-
-
-' Throw an error for a blank parsing symbol.
-Private Sub Err_BlankSym()
-	' Detail the error.
-	Const ERR_NUM As Long = 5
-	Const ERR_DESC As String = "Whitespace may not be used as a formatting symbol."
-	
-	' Raise the error.
-	Err.Raise _
-		Number := ERR_NUM, _
-		Description := ERR_DESC
-End Sub
-
-
-' Throw an error for duplicate parsing symbols.
-Private Sub Err_DuplicateSyms( _
-	ByVal sym As String, _
-	ByVal openQuote As String, _
-	ByVal closeQuote As String _
-)
-	' Define the error.
-	Const ERR_NUM As Long = 5
-	
-	' Define the horizontal ellipsis: "…"
-	#If Mac Then
-		Const ETC_SYM As Long = 201
-	#Else
-		Const ETC_SYM As Long = 133
-	#End If
-	
-	Dim etc As String: etc = VBA.Chr(ETC_SYM)
-	
-	
-	' Generate a relevant description of the error.
-	Dim description As String
-	description = "The same formatting symbol (""" &  sym & """) may not be used twice"
-	description = description & "; " & "aside from quotes (" & openQuote & etc & closeQuote & ") if you so specify"
-	description = description & "."
-	
-	' Raise the error.
-	Err.Raise _
-		Number := ERR_NUM, _
-		Description := description
-End Sub
-
-
-
-' ###############
-' ## Utilities ##
-' ###############
-
-' Test if a combination (dfuNest + dfuEscape) includes a particular enumeration (dfuEscape).
-Public Function Enum_Has(ByRef enum1 As Long, ByRef enum2 As Long) As Boolean
-	Enum_Has = enum1 And enum2
-End Function
-
-
-' Display the ordinal (3rd) of an integer (3).
-Public Function Num_Ordinal(ByVal num As Long, _
-	Optional ByRef format As String _
-) As String
-	Const NUM_BASE As Integer = 10
-	
-	' Determine the proper suffix...
-	Dim sfx As String
-	Select Case (num Mod NUM_BASE)
-	Case 1:		sfx = "st"
-	Case 2:		sfx = "nd"
-	Case 3:		sfx = "rd"
-	Case Else:	sfx = "th"
-	End Select
-	
-	' ...and the proper prefix.
-	Dim pfx As String
-	If format = VBA.vbNullString Then
-		pfx = VBA.CStr(num)
-	Else
-		pfx = VBA.Format(num, Format := format)
-	End If
-	
-	' Combine them and return the result.
-	Num_Ordinal = pfx & sfx
-End Function
-
-
-
-' ######################
-' ## Utilities | Text ##
-' ######################
-
-' Remove characters from the end(s) of a string.
-Public Function Txt_Crop(ByVal txt As String, _
-	Optional ByVal nLeft As Long = 0, _
-	Optional ByVal nRight As Long = 0 _
-)
-	Dim n As Long
-	
-	If nRight > 0 Then
-		' Record the initial length...
-		n = VBA.Len(txt)
-		
-		' ...and truncate the suffix.
-		nRight = Application.WorksheetFunction.Min(nRight, n)
-		txt = VBA.Left$(txt, n - nRight)
-	End If
-	
-	If nLeft > 0 Then
-		' Record the remaining length...
-		n = VBA.Len(txt)
-		
-		' ...and truncate the prefix...
-		nLeft = Application.WorksheetFunction.Min(nLeft, n)
-		txt = VBA.Right$(txt, n - nLeft)
-	End If
-	
-	' Return the result.
-	Txt_Crop = txt
-End Function
-
-
-' ' Trim all whitespace characters from the end(s) of a string.
-' Public Function Txt_Trim(ByVal txt As String, _
-' 	Optional ByRef nLeft As Long, _
-' 	Optional ByRef nRight As Long _
-' ) As String
-' 	' Count the original characters.
-' 	Dim nTxt As Long: nTxt = VBA.Len(txt)
-' 	
-' 	' Remove all nonprinting characters...
-' 	Dim cln As String: cln = txt
-' 	cln = Application.WorksheetFunction.Clean$(cln)
-' 	
-' 	' ...and surrounding whitespace.
-' 	cln = VBA.Trim$(cln)
-' 	
-' 	' Short-circuit for a blank result.
-' 	If cln = VBA.vbNullString Then
-' 		Txt_Trim = VBA.vbNullString
-' 		nLeft = 0
-' 		nRight = nTxt
-' 		Exit Function
-' 	End If
-' 	
-' 	' Identify the bookend (printing) characters...
-' 	Dim lChr As String: lChr = VBA.Left$(cln, 1)
-' 	Dim rChr As String: rChr = VBA.Right$(cln, 1)
-' 	
-' 	' ...and locate them in the original string.
-' 	Dim lPos As Long: lPos = VBA.InStr( _
-' 		String1 := txt, _
-' 		String2 := lChr, _
-' 		Start := 1, _
-' 		Compare := VBA.VbCompareMethod.vbBinaryCompare _
-' 	)
-' 	Dim rPos As Long: rPos = VBA.InStrRev( _
-' 		StringCheck := txt, _
-' 		StringMatch := rChr, _
-' 		Start := -1, _
-' 		Compare := VBA.VbCompareMethod.vbBinaryCompare _
-' 	)
-' 	
-' 	' Count the offset...
-' 	nLeft = lPos - 1
-' 	nRight = nTxt - rPos
-' 	
-' 	' ...and return the substring between those bookends.
-' 	Dim nChr As Long: nChr = rPos - lPos + 1
-' 	Txt_Trim = VBA.Mid$(txt, lPos, nChr)
-' End Function
-
-
-
-' #############
-' ## Support ##
-' #############
-
-' ##########################
-' ## Support | Validation ##
-' ##########################
-
-' Convert any input (text or code) into a valid symbol.
-Private Function AsSym(ByRef x As Variant) As String
-	' Extract the first character from a string...
-	If VBA.VarType(x) = VBA.VbVarType.vbString Then
-		AsSym = VBA.Left$(x, 1)
-		
-	' ...or convert a code into its character.
-	Else
-		#If Mac Then
-			AsSym = VBA.Chr(x)
-		#Else
-			AsSym = VBA.ChrW(x)
-		#End If
-	End If
-	
-	' Ensure the symbol is not whitespace...
-	AsSym = Application.WorksheetFunction.Clean$(AsSym)
-	AsSym = VBA.Trim$(AsSym)
-	If AsSym = VBA.vbNullString Then GoTo BLANK_ERROR
-	
-	' ...and return the result.
-	Exit Function
-	
-	
-' Throw an error for whitespace.
-BLANK_ERROR:
-	Err_BlankSym
-End Function
-
-
-' Validate inputs (texts or codes) for all parsing symbols.
-Private Sub CheckSyms( _
-	ByRef escape As Variant, _
-	ByRef openField As Variant, _
-	ByRef closeField As Variant, _
-	ByRef openQuote As Variant, _
-	ByRef closeQuote As Variant, _
-	ByRef separator As Variant _
-)
-	' Validate individual symbols.
-	CheckSym escape
-	CheckSym openField
-	CheckSym closeField
-	CheckSym openQuote
-	CheckSym closeQuote
-	CheckSym separator
-	
-	
-	' Validate uniqueness across symbols...
-	Dim syms As Collection: Set syms = New Collection
-	Dim sym As String
-	
-	On Error GoTo DUP_ERROR
-	sym = escape:     syms.Add False, key := sym
-	sym = openField:  syms.Add False, key := sym
-	sym = closeField: syms.Add False, key := sym
-	sym = openQuote:  syms.Add False, key := sym
-	
-	' ...except between quotes.
-	If openQuote <> closeQuote Then
-		sym = closeQuote
-		syms.Add False, key := closeQuote
-	End If
-	
-	sym = separator:  syms.Add False, key := sym
-	On Error GoTo 0
-	
-	' Conclude validation successfully.
-	Exit Sub
-	
-	
-' Report an error for clashing symbols.
-DUP_ERROR:
-	Err_DuplicateSyms _
-		sym := sym, _
-		openQuote := openQuote, _
-		closeQuote := closeQuote _
-End Sub
-
-
-
-' #######################
-' ## Support | Parsing ##
-' #######################
+' #################################
+' ## Support | Parsing | Closure ##
+' #################################
 
 ' Close an expression and record its information.
 Private Sub Expr_Close(ByRef expr As ParserExpression, _
