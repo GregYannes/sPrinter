@@ -5,10 +5,7 @@ Attribute VB_Name = "Test"
 Public Sub Test()
 	Dim format As String: format = "ab}cd{ }ef\{gh{1}ij{ -2 }kl{ \3 }mn{ ""key_1"" }op{{key_2}}qr{ {key_3\}} }st{ :mm""{-dd-""yyyy}uv{""key_4"":}wx{ \5 : mm-dd-yyyy""mm-dd-yyyy""\} }yz{ : }ab""{6:mm-dd-yyyy}"""
 	Dim elements() As sPrinter.ParserElement
-	
-	Dim expr As sPrinter.ParserExpression
-	Dim status As ParsingStatus
-	sPrinter.Parse0 format := format, elements := elements, expression := expr, status := status
+	elements = sPrinter.Parse(format := format)
 	
 	Dim e As sPrinter.ParserElement
 	Dim out As String: Dim fld As String
@@ -50,7 +47,6 @@ Public Sub Test()
 	' Dim nElm As Long: nElm = sPrinter.Elm_Count(elements)
 	
 	Debug.Print
-	Debug.Print "STATUS: " & status
 	Debug.Print nChr & " characters"
 	Debug.Print nElm & " elements"
 	Debug.Print "FORMAT: """ & format & """"
