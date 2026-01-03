@@ -512,7 +512,7 @@ End Sub
 
 ' Throw an error for a blank parsing symbol.
 Private Sub Err_BlankSym()
-	' Detail the error.
+	' Detail the error: invalid procedure call or argument.
 	Const ERR_NUM As Long = 5
 	Const ERR_DESC As String = "Whitespace may not be used as a formatting symbol."
 	
@@ -529,7 +529,7 @@ Private Sub Err_DuplicateSyms( _
 	ByVal openQuote As String, _
 	ByVal closeQuote As String _
 )
-	' Define the error.
+	' Define the error: invalid procedure call or argument.
 	Const ERR_NUM As Long = 5
 	
 	' Define the horizontal ellipsis: "…"
