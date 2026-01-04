@@ -266,6 +266,7 @@ Public Function Message( _
 	Dim eUp As Long: eUp = UBound(elements, 1)
 	
 	Dim hasVal As Boolean, isDfl As Boolean
+	Dim hasDfl As Boolean: hasDfl = Not VBA.IsMissing(default)
 	Dim iAuto As Long: iAuto = 1
 	Dim iFld As Long: iFld = 0
 	Dim e As ParserElement, idx As Variant, pos As PositionKind, val As Variant, fmt As String, out As String
@@ -314,17 +315,17 @@ Public Function Message( _
 				
 			' ...or nonexisting values.
 			Else
-				' Throw an error...
-				If VBA.IsMissing(default) Then
+				' Use any default...
+				If hasDfl Then
+					isDfl = True
+					Assign val, default
+					
+				' ...but throw an error otherwise.
+				Else
 					Err_Index _
 						nField := iFld, _
 						index := idx, _
 						position := position
-					
-				' ...unless the user specified a default.
-				Else
-					isDfl = True
-					Assign val, default
 				End If
 			End If
 			
