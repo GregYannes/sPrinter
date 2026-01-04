@@ -265,7 +265,7 @@ Public Function Message( _
 	Dim eLow As Long: eLow = LBound(elements, 1)
 	Dim eUp As Long: eUp = UBound(elements, 1)
 	
-	Dim has As Boolean, isDfl As Boolean
+	Dim hasVal As Boolean, isDfl As Boolean
 	Dim iAuto As Long: iAuto = 1
 	Dim iFld As Long: iFld = 0
 	Dim e As ParserElement, idx As Variant, pos As PositionKind, val As Variant, fmt As String, out As String
@@ -298,7 +298,7 @@ Public Function Message( _
 			End If
 			
 			' Try extracting the value at that index.
-			has = GetValue( _
+			hasVal = GetValue( _
 				data := data, _
 				idx := idx, _
 				n := n, _
@@ -309,7 +309,7 @@ Public Function Message( _
 			)
 			
 			' Handle existing...
-			If has Then
+			If hasVal Then
 				isDfl = False
 				
 			' ...or nonexisting values.
