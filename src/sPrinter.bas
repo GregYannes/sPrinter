@@ -213,10 +213,10 @@ Public Function Message( _
 	ByRef format As String, _
 	Optional ByRef data As Variant, _
 	Optional ByRef default As Variant, _
+	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
 	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
 	Optional ByVal firstDayOfWeek As VBA.VbDayOfWeek = VBA.VbDayOfWeek.vbSunday, _
 	Optional ByVal firstWeekOfYear As VBA.VbFirstWeekOfYear = VBA.VbFirstWeekOfYear.vbFirstJan1, _
-	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
 	Optional ByVal escape As Variant = SYM_ESC, _
 	Optional ByVal openField As String = SYM_FLD_OPEN, _
 	Optional ByVal closeField As String = SYM_FLD_CLOSE, _
@@ -371,10 +371,10 @@ Public Function Print2( _
 	ByRef format As String, _
 	Optional ByRef data As Variant, _
 	Optional ByRef default As Variant, _
+	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
 	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
 	Optional ByVal firstDayOfWeek As VBA.VbDayOfWeek = VBA.VbDayOfWeek.vbSunday, _
 	Optional ByVal firstWeekOfYear As VBA.VbFirstWeekOfYear = VBA.VbFirstWeekOfYear.vbFirstJan1, _
-	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
 	Optional ByVal escape As Variant = SYM_ESC, _
 	Optional ByVal openField As String = SYM_FLD_OPEN, _
 	Optional ByVal closeField As String = SYM_FLD_CLOSE, _
@@ -386,10 +386,10 @@ Public Function Print2( _
 		format := format, _
 		data := data, _
 		default := default, _
+		position := position, _
 		mode := mode, _
 		firstDayOfWeek := firstDayOfWeek, _
 		firstWeekOfYear := firstWeekOfYear, _
-		position := position, _
 		escape := escape, _
 		openField := openField, _
 		closeField := closeField, _
