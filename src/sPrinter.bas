@@ -370,6 +370,7 @@ End Function
 Public Function Print2( _
 	ByRef format As String, _
 	Optional ByRef data As Variant, _
+	Optional ByRef default As Variant, _
 	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
 	Optional ByVal firstDayOfWeek As VBA.VbDayOfWeek = VBA.VbDayOfWeek.vbSunday, _
 	Optional ByVal firstWeekOfYear As VBA.VbFirstWeekOfYear = VBA.VbFirstWeekOfYear.vbFirstJan1, _
@@ -384,6 +385,7 @@ Public Function Print2( _
 	Print2 = Message( _
 		format := format, _
 		data := data, _
+		default := default, _
 		mode := mode, _
 		firstDayOfWeek := firstDayOfWeek, _
 		firstWeekOfYear := firstWeekOfYear, _
