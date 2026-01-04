@@ -49,6 +49,6 @@ Public Sub Test()
 	Debug.Print
 	Debug.Print nChr & " characters"
 	Debug.Print nElm & " elements"
-	Debug.Print "FORMAT: """ & format & """"
-	Debug.Print "OUTPUT: """ & out & """"
+	Debug.Print "FORMAT:" & VBA.vbTab & format
+	Debug.Print "OUTPUT:" & VBA.vbTab & out
 End Sub
