@@ -2,7 +2,7 @@ Attribute VB_Name = "Test"
 
 
 
-Public Sub Test()
+Public Sub Test_Parse()
 	Dim format As String: format = "ab}cd{ }ef\{gh{1}ij{ -2 }kl{ \3 }mn{ ""key_1"" }op{{key_2}}qr{ {key_3\}} }st{ :mm""{-dd-""yyyy}uv{""key_4"":}wx{ \5 : mm-dd-yyyy""mm-dd-yyyy""\} }yz{ : }ab""{6:mm-dd-yyyy}"""
 	Dim elements() As sPrinter.ParserElement
 	elements = sPrinter.Parse(format := format)
