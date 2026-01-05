@@ -2,6 +2,7 @@ Attribute VB_Name = "Test"
 
 
 
+' Parse a message.
 Public Sub Test_Parse()
 	Dim format As String: format = "ab}cd{ }ef\{gh{1}ij{ -2 }kl{ \3 }mn{ ""key_1"" }op{{key_2}}qr{ {key_3\}} }st{ :mm""{-dd-""yyyy}uv{""key_4"":}wx{ \5 : mm-dd-yyyy""mm-dd-yyyy""\} }yz{ : }ab""{6:mm-dd-yyyy}"""
 	Dim elements() As sPrinter.ParserElement
@@ -51,4 +52,29 @@ Public Sub Test_Parse()
 	Debug.Print nElm & " elements"
 	Debug.Print "FORMAT:" & VBA.vbTab & format
 	Debug.Print "OUTPUT:" & VBA.vbTab & out
+End Sub
+
+
+' Format and display a message.
+Public Sub Test_Message()
+	Dim fmt1 As String: fmt1 = "You have a meeting with {1} {2} at {-2} on {-1}."
+	Dim fmt2 As String: fmt2 = "You have a meeting with {{forename}} {{surname}} at {{time}:h:MM AM/PM} on {{date}:dddd, mmmm d}."
+	
+	Dim data As Collection: Set data = New Collection
+	data.Add "John",	key := "Forename"
+	data.Add "Doe",		key := "Surname"
+	data.Add VBA.Time(),	key := "Time"
+	data.Add VBA.Date(),	key := "Date"
+	
+	
+	Dim msg1 As String: msg1 = sPrinter.Message(fmt1, data, default := "?", position := posRelative)
+	Dim msg2 As String: msg2 = sPrinter.Message(fmt2, data, default := "?")
+	
+	
+	Debug.Print "INPUT:" & VBA.vbTab & fmt1
+	Debug.Print "OUTPUT:" & VBA.vbTab & msg1
+	Debug.Print
+	Debug.Print
+	Debug.Print "INPUT:" & VBA.vbTab & fmt2
+	Debug.Print "OUTPUT:" & VBA.vbTab & msg2
 End Sub
