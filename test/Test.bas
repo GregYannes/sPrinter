@@ -2,6 +2,20 @@ Attribute VB_Name = "Test"
 
 
 
+' Test all relevant features of "sPrinter".
+Public Sub Test()
+	' Parse a message.
+	Test_Parse
+	
+	Debug.Print
+	Debug.Print
+	Debug.Print
+	
+	' Format and display another message.
+	Test_Message
+End Sub
+
+
 ' Parse a message.
 Public Sub Test_Parse()
 	Dim format As String: format = "ab}cd{ }ef\{gh{1}ij{ -2 }kl{ \3 }mn{ ""key_1"" }op{{key_2}}qr{ {key_3\}} }st{ :mm""{-dd-""yyyy}uv{""key_4"":}wx{ \5 : mm-dd-yyyy""mm-dd-yyyy""\} }yz{ : }ab""{6:mm-dd-yyyy}"""
