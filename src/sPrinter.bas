@@ -747,7 +747,7 @@ Public Function Num_Cardinal(ByVal num As Long) As String
 End Function
 
 
-' Display the ordinal (3rd) of an integer (3).
+' Display an ordinal integer: 1,234th
 Public Function Num_Ordinal(ByVal num As Long, _
 	Optional ByRef format As String _
 ) As String
