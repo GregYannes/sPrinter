@@ -748,9 +748,7 @@ End Function
 
 
 ' Display an ordinal integer: 1,234th
-Public Function Num_Ordinal(ByVal num As Long, _
-	Optional ByRef format As String _
-) As String
+Public Function Num_Ordinal(ByVal num As Long) As String
 	Const NUM_BASE As Integer = 10
 	
 	' Determine the proper suffix...
@@ -762,16 +760,8 @@ Public Function Num_Ordinal(ByVal num As Long, _
 	Case Else:	sfx = "th"
 	End Select
 	
-	' ...and the proper prefix.
-	Dim pfx As String
-	If format = VBA.vbNullString Then
-		pfx = VBA.CStr(num)
-	Else
-		pfx = VBA.Format(num, Format := format)
-	End If
-	
-	' Combine them and return the result.
-	Num_Ordinal = pfx & sfx
+	' ...and append it to the cardinal.
+	Num_Ordinal = Num_Cardinal(num) & sfx
 End Function
 
 
