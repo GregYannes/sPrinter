@@ -571,7 +571,7 @@ Private Sub Err_Element( _
 	ByVal kind As ElementKind _
 )
 	Dim description As String, kindCode As String
-	description = "This " & Num_Ordinal(nElement) & " element from the parser cannot be intepreted"
+	description = "This " & Num_Ordinal(nElement) & " element from the parser cannot be interpreted"
 	description = description & ", because its "".Kind"" (" & Num_Cardinal(kind) & ") is unrecognized."
 	
 	' Raise the error.
@@ -674,7 +674,7 @@ Private Sub Err_DuplicateSyms( _
 	
 	' Generate a relevant description of the error.
 	Dim description As String
-	description = "The same formatting symbol (""" &  sym & """) may not be used twice"
+	description = "The same formatting symbol (""" & sym & """) may not be used twice"
 	description = description & "; " & "aside from quotes (" & openQuote & etc & closeQuote & ") if you so specify"
 	description = description & "."
 	
