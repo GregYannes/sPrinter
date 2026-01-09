@@ -509,8 +509,8 @@ Private Sub Err_Parsing( _
 	Dim startPos As String, stopPos As String
 	
 	If expression.Start > 0 Then
-		startPos = Num_Ordinal(expression.Start, format := ORD_FMT)
-		stopPos = Num_Ordinal(expression.Stop, format := ORD_FMT)
+		startPos = Num_Ordinal(expression.Start)
+		stopPos = Num_Ordinal(expression.Stop)
 		
 		If expression.Start < expression.Stop Then
 			qualifier = "somewhere"
@@ -578,7 +578,7 @@ Private Sub Err_Element( _
 	
 	
 	Dim description As String, kindCode As String
-	description = "This " & Num_Ordinal(nElement, format := ORD_FMT) & " element from the parser cannot be intepreted"
+	description = "This " & Num_Ordinal(nElement) & " element from the parser cannot be intepreted"
 	description = description & ", because its "".Kind"" (" & Num_Cardinal(kind) & ") is unrecognized."
 	
 	' Raise the error.
@@ -618,7 +618,7 @@ Private Sub Err_Index( _
 	description = "This"
 	If posKind <> VBA.vbNullString Then description = description & " (" & posKind & ")"
 	description = description & " " & idxKind & " does not exist in the data"
-	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
+	description = description & ", as given in the " & Num_Ordinal(nField) & " field of the message format"
 	description = description & ": " & idxCode
 	
 	' Raise the error.
@@ -645,7 +645,7 @@ Private Sub Err_Format( _
 	description = "The"
 	If valKind <> VBA.vbNullString Then description = description & " (" & valKind & ")"
 	description = description & " value cannot be displayed in this format code"
-	description = description & ", as given in the " & Num_Ordinal(nField, format := ORD_FMT) & " field of the message format"
+	description = description & ", as given in the " & Num_Ordinal(nField) & " field of the message format"
 	description = description & ": " & format
 	
 	' Raise the error.
@@ -896,7 +896,7 @@ Private Sub FormatIndex( _
 	Select Case VBA.VarType(idx)
 	Case VBA.VbVarType.vbLong
 		If ord Then
-			idxCode = Num_Ordinal(idx, format := IDX_FMT)
+			idxCode = Num_Ordinal(idx)
 		Else
 			idxCode = Num_Cardinal(idx)
 		End If
