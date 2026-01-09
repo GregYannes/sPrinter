@@ -805,6 +805,16 @@ End Function
 ' ## Utilities | Text ##
 ' ######################
 
+' Get a Unicode character, without sporadic corruption on Mac.
+Public Function Chr2(ByVal charcode As Long) As String
+	#If Mac Then
+		Chr2 = VBA.Chr(charcode)
+	#Else
+		Chr2 = VBA.ChrW(charcode)
+	#End If
+End Function
+
+
 ' Remove characters from the end(s) of a string.
 Public Function Txt_Crop(ByVal txt As String, _
 	Optional ByVal nLeft As Long = 0, _
