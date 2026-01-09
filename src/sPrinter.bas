@@ -498,7 +498,7 @@ Private Sub Err_Parsing( _
 		Const ETC_SYM As Long = 133
 	#End If
 	
-	Dim etc As String: etc = VBA.Chr(ETC_SYM)
+	Dim etc As String: etc = Chr2(ETC_SYM)
 	
 	
 	' Describe where the erroneous syntax occurs.
@@ -669,7 +669,7 @@ Private Sub Err_DuplicateSyms( _
 		Const ETC_SYM As Long = 133
 	#End If
 	
-	Dim etc As String: etc = VBA.Chr(ETC_SYM)
+	Dim etc As String: etc = Chr2(ETC_SYM)
 	
 	
 	' Generate a relevant description of the error.
