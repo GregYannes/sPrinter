@@ -491,9 +491,6 @@ Private Sub Err_Parsing( _
 	ByVal closeQuote As String, _
 	ByVal separator As String _
 )
-	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
-	Const ORD_FMT As String = "#,##0"
-	
 	' Define the horizontal ellipsis: "…"
 	#If Mac Then
 		Const ETC_SYM As Long = 201
@@ -573,10 +570,6 @@ Private Sub Err_Element( _
 	ByVal nElement As Long, _
 	ByVal kind As ElementKind _
 )
-	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
-	Const ORD_FMT As String = "#,##0"
-	
-	
 	Dim description As String, kindCode As String
 	description = "This " & Num_Ordinal(nElement) & " element from the parser cannot be intepreted"
 	description = description & ", because its "".Kind"" (" & Num_Cardinal(kind) & ") is unrecognized."
@@ -594,10 +587,6 @@ Private Sub Err_Index( _
 	ByRef index As Variant, _
 	ByRef position As PositionKind _
 )
-	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
-	Const ORD_FMT As String = "#,##0"
-	
-	
 	' Display the index in detail...
 	Dim idxCode As String, idxKind As String, posKind As String
 	FormatIndex _
@@ -634,10 +623,6 @@ Private Sub Err_Format( _
 	ByRef format As String, _
 	Optional ByVal isDefault As Boolean = False _
 )
-	' Define the format for ordinal numbers: 1st, 2nd, 3rd, 4th, etc.
-	Const ORD_FMT As String = "#,##0"
-	
-	
 	' Generate a relevant description of the error.
 	Dim description As String, valKind As String
 	If isDefault Then valKind = "default"
@@ -885,9 +870,6 @@ Private Sub FormatIndex( _
 	Optional ByVal pos As PositionKind, _
 	Optional ByRef posKind As String _
 )
-	' Define the format for numeric indices.
-	Const IDX_FMT As String = "#,##0"
-	
 	' Define how a key is displayed.
 	Const KEY_OPEN As String = """"
 	Const KEY_CLOSE As String = """"
