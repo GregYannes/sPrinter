@@ -920,11 +920,7 @@ Private Sub CheckSym(ByRef x As Variant)
 		
 	' ...or convert a code into its character.
 	Else
-		#If Mac Then
-			x = VBA.Chr(x)
-		#Else
-			x = VBA.ChrW(x)
-		#End If
+		x = Chr2(x)
 	End If
 	
 	' Ensure the symbol is not whitespace...
