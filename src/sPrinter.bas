@@ -734,6 +734,19 @@ Public Function Enum_Has(ByRef enum1 As Long, ByRef enum2 As Long) As Boolean
 End Function
 
 
+
+' #########################
+' ## Utilities | Numbers ##
+' #########################
+
+' Display a cardinal integer: 1,234
+Public Function Num_Cardinal(ByVal num As Long) As String
+	Const CARD_FMT As String = "#,##0"
+	
+	Num_Cardinal = VBA.Format(num, Format := CARD_FMT)
+End Function
+
+
 ' Display the ordinal (3rd) of an integer (3).
 Public Function Num_Ordinal(ByVal num As Long, _
 	Optional ByRef format As String _
