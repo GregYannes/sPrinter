@@ -579,7 +579,7 @@ Private Sub Err_Element( _
 	
 	Dim description As String, kindCode As String
 	description = "This " & Num_Ordinal(nElement, format := ORD_FMT) & " element from the parser cannot be intepreted"
-	description = description & ", because its "".Kind"" (" & VBA.Format(kind, ORD_FMT) & ") is unrecognized."
+	description = description & ", because its "".Kind"" (" & Num_Cardinal(kind) & ") is unrecognized."
 	
 	' Raise the error.
 	Err.Raise _
@@ -908,7 +908,7 @@ Private Sub FormatIndex( _
 		If ord Then
 			idxCode = Num_Ordinal(idx, format := IDX_FMT)
 		Else
-			idxCode = VBA.Format(idx, Format := IDX_FMT)
+			idxCode = Num_Cardinal(idx)
 		End If
 		
 		idxKind = "Position"
