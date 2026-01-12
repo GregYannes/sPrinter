@@ -1220,9 +1220,9 @@ Private Function GetValue( _
 		
 	' ...or from something else.
 	Else
-	On Error GoTo VAL_ERROR
-	Assign val, data(idx)
-	On Error GoTo 0
+		On Error GoTo VAL_ERROR
+		Assign val, data(idx)
+		On Error GoTo 0
 	End If
 	
 	' Report success.
