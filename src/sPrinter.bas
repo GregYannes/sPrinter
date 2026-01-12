@@ -233,11 +233,14 @@ Public Function Message( _
 	
 	' Validate the data.
 	Dim n As Long, low As Long, up As Long
+	Dim isRng As Boolean, ori As Excel.XlRowCol
 	CheckData _
 		data := data, _
 		n := n, _
 		low := low, _
-		up := up
+		up := up, _
+		isRng := isRng, _
+		ori := ori
 	
 	
 	' Parse the message format...
@@ -305,6 +308,8 @@ Public Function Message( _
 				n := n, _
 				low := low, _
 				up := up, _
+				isRng := isRng, _
+				ori := ori, _
 				pos := position, _
 				val := val _
 			)
