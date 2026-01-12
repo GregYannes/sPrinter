@@ -1211,6 +1211,66 @@ VAL_ERROR:
 End Function
 
 
+' Extract a value from a Range.
+Private Function GetRangeValue( _
+	ByRef rng As Range, _
+	ByVal pos As Long, _
+	ByVal n As Long, _
+	ByVal low As Long, _
+	ByVal up As Long, _
+	ByVal ori As Excel.XlRowCol, _
+	Optional ByRef val As Variant _
+)
+	' The base used by Ranges of cells.
+	Const RNG_BASE As Long = 1
+	
+	' An unspecified orientation.
+	Const NO_ORI As Long = 0
+	
+	
+	On Error GoTo VAL_ERROR
+	Select Case ori
+	
+	' Extract from the first row...
+	Case Excel.XlRowCol.xlRows
+		' TODO: Is it better to use "data.Value()(idx, RNG_BASE)" instead?
+		Assign val, data.Cells(RNG_BASE, idx).Value
+		
+	' ...or from the first column...
+	Case Excel.XlRowCol.xlColumns
+		' TODO: Is it better to use "data.Value()(RNG_BASE, idx)" instead?
+		Assign val, data.Cells(idx, RNG_BASE).Value
+		
+	' ...or from the first (single) cell.
+	Case NO_ORI
+		' Short-circuit for any position other than the first.
+		If idx <> RNG_BASE Then
+			GetRangeValue = False
+			Exit Function
+		End If
+		
+		' TODO: Is it better to use "data.Cells(RNG_BASE, RNG_BASE).Value" instead?
+		Assign val, data.Value
+		
+	' Short-circuit for any other orientation.
+	Case Else
+		GetRangeValue = False
+		Exit Function
+	End Select
+	On Error GoTo 0
+	
+	
+	' Report success.
+	GetRangeValue = True
+	Exit Function
+	
+	
+' Report a nonexistent value.
+VAL_ERROR:
+	GetValue = False
+End Function
+
+
 
 ' #######################
 ' ## Support | Parsing ##
