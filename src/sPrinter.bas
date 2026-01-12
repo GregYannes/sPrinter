@@ -1197,19 +1197,19 @@ Private Function GetValue( _
 	If isPos Then
 		' ...and interpret those which are relative.
 		If pos = PositionKind.posRelative Then
-		' Report failure for those out of bounds...
-		If idx = 0 Or idx > n Then
-			GetValue = False
-			Exit Function
-			
-		' ...but otherwise count from the beginning...
-		ElseIf idx > 0 Then
-			idx = low + idx - 1
-			
-		' ...or from the end.
-		ElseIf idx < 0 Then
-			idx = up + idx + 1
-		End If
+			' Report failure for those out of bounds...
+			If idx = 0 Or idx > n Then
+				GetValue = False
+				Exit Function
+				
+			' ...but otherwise count from the beginning...
+			ElseIf idx > 0 Then
+				idx = low + idx - 1
+				
+			' ...or from the end.
+			ElseIf idx < 0 Then
+				idx = up + idx + 1
+			End If
 		End If
 		
 		' Short-circuit for a position that is out of bounds.
