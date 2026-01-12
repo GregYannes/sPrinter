@@ -524,7 +524,7 @@ Private Sub Err_Parsing( _
 		End If
 	End If
 	
-	' Generate a relevant description of the error.
+	' Generate a relevant description of the error...
 	Select Case status
 	Case sPrinterStatus.stsError
 		description = "An error occurred when parsing the message format"
@@ -560,7 +560,9 @@ Private Sub Err_Parsing( _
 		If position <> VBA.vbNullString Then description = description & ", " & position
 		description = description & ": " & expression.Syntax
 		
-	Case Else: Exit Sub
+	' ...but do not raise an unidentified error.
+	Case Else
+		Exit Sub
 	End Select
 	
 	' Raise the error.
