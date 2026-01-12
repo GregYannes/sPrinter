@@ -1054,15 +1054,19 @@ Private Sub CheckArray( _
 	Optional ByRef low As Long, _
 	Optional ByRef up As Long _
 )
-	' Ensure the array is a (1D) vector.
+	' Ensure the array is a (1D) vector...
 	Dim rnk As Long: rnk = Arr_Rank(arr)
 	If rnk <> 1 Then GoTo DATA_ERROR
 	
+	' ...that is not empty.
 	n = Arr_Length(arr, dimension := 1)
+	If n <= 0 Then GoTo DATA_ERROR
+	
+	' Record the bounds...
 	low = LBound(arr, 1)
 	up = UBound(arr, 1)
 	
-	' Conclude validation successfully.
+	' ...and conclude validation successfully.
 	Exit Sub
 	
 	
