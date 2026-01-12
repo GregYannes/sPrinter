@@ -1175,6 +1175,8 @@ Private Function GetValue( _
 	ByVal n As Long, _
 	ByVal low As Long, _
 	ByVal up As Long, _
+	ByVal isRng As Boolean, _
+	ByVal ori As Excel.XlRowCol, _
 	Optional ByVal pos As PositionKind = PositionKind.posAbsolute, _
 	Optional ByRef val As Variant _
 ) As Boolean
@@ -1198,12 +1200,32 @@ Private Function GetValue( _
 		End If
 	End If
 	
-	' Extract the value...
+	' Extract the value from a Range...
+	If isRng Then
+		' Short-circuit without a positional index.
+		If Not isPos Then
+			GetValue = False
+			Exit Function
+		End If
+		
+		GetValue = GetRangeValue( _
+			rng := data, _
+			pos := idx, _
+			n := n, _
+			low := low, _
+			up := up, _
+			ori := ori, _
+			val := val _
+		)
+		
+	' ...or from something else.
+	Else
 	On Error GoTo VAL_ERROR
 	Assign val, data(idx)
 	On Error GoTo 0
+	End If
 	
-	' ...and report success.
+	' Report success.
 	GetValue = True
 	Exit Function
 	
