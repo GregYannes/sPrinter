@@ -993,8 +993,13 @@ Private Sub CheckData( _
 	ByRef data As Variant, _
 	Optional ByRef n As Long, _
 	Optional ByRef low As Long, _
-	Optional ByRef up As Long _
+	Optional ByRef up As Long, _
+	Optional ByRef isRng As Boolean, _
+	Optional ByRef ori As Excel.XlRowCol _
 )
+	' By default the data is not a Range with any orientation.
+	isRng = False
+	
 	' Examine an object...
 	If VBA.IsObject(data) Then
 		' Short circuit for an uninitialized object...
@@ -1006,6 +1011,8 @@ Private Sub CheckData( _
 			n := n, _
 			low := low, _
 			up := up, _
+			isRng := isRng, _
+			ori := ori
 		
 	' ...or an array...
 	ElseIf VBA.IsArray(data) Then
