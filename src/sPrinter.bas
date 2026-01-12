@@ -1193,8 +1193,10 @@ Private Function GetValue( _
 	' Identify a positional index.
 	Dim isPos As Boolean: isPos = VBA.VarType(idx) = VBA.VbVarType.vbLong
 	
-	' Handle relative positions.
-	If isPos And pos = PositionKind.posRelative Then
+	' Handle positions...
+	If isPos Then
+		' ...and interpret those which are relative.
+		If pos = PositionKind.posRelative Then
 		' Report failure for those out of bounds...
 		If idx = 0 Or idx > n Then
 			GetValue = False
@@ -1207,6 +1209,13 @@ Private Function GetValue( _
 		' ...or from the end.
 		ElseIf idx < 0 Then
 			idx = up + idx + 1
+		End If
+		End If
+		
+		' Short-circuit for a position that is out of bounds.
+		If idx < low Or idx > up Then
+			GetValue = False
+			Exit Function
 		End If
 	End If
 	
@@ -1221,9 +1230,6 @@ Private Function GetValue( _
 		GetValue = GetRangeValue( _
 			rng := data, _
 			pos := idx, _
-			n := n, _
-			low := low, _
-			up := up, _
 			ori := ori, _
 			val := val _
 		)
@@ -1251,9 +1257,6 @@ End Function
 Private Function GetRangeValue( _
 	ByVal rng As Range, _
 	ByVal pos As Long, _
-	ByVal n As Long, _
-	ByVal low As Long, _
-	ByVal up As Long, _
 	ByVal ori As Excel.XlRowCol, _
 	Optional ByRef val As Variant _
 )
