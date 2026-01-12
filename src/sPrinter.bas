@@ -1178,8 +1178,11 @@ Private Function GetValue( _
 	Optional ByVal pos As PositionKind = PositionKind.posAbsolute, _
 	Optional ByRef val As Variant _
 ) As Boolean
+	' Identify a positional index.
+	Dim isPos As Boolean: isPos = VBA.VarType(idx) = VBA.VbVarType.vbLong
+	
 	' Handle relative positions.
-	If VBA.VarType(idx) = VBA.VbVarType.vbLong And pos = PositionKind.posRelative Then
+	If isPos And pos = PositionKind.posRelative Then
 		' Report failure for those out of bounds...
 		If idx = 0 Or idx > n Then
 			GetValue = False
