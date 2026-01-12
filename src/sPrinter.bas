@@ -689,7 +689,7 @@ End Sub
 Private Sub Err_Data()
 	' Define the error: type mismatch.
 	Const ERR_NUM As Long = 13
-	Const ERR_DESC As String = "The data must be either a unidimensional array, or an object with both a default member and a "".Count"" property."
+	Const ERR_DESC As String = "The data must be either a unidimensional array or Range; or an (initialized) object with both a default member and a "".Count"" property."
 	
 	' Raise the error.
 	Err.Raise _
