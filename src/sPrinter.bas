@@ -698,19 +698,6 @@ Private Sub Err_Data()
 End Sub
 
 
-' ' Throw an error for (Range) inputs with misaligned orientations.
-' Private Sub Err_Orientation()
-' 	' Define the error: invalid procedure call or argument.
-' 	Const ERR_NUM As Long = 5
-' 	Const ERR_DESC As String = "The Range data must be aligned: either both should be columns, or both should be rows."
-' 	
-' 	' Raise the error.
-' 	Err.Raise _
-' 		Number := ERR_NUM, _
-' 		Description := ERR_DESC
-' End Sub
-
-
 
 ' ###############
 ' ## Utilities ##
@@ -1141,7 +1128,6 @@ Private Sub CheckRange( _
 	' Measure the dimensions of the Range.
 	Dim nRows As Decimal: nRow = rng.Rows.CountLarge
 	Dim nCols As Decimal: nCol = rng.Columns.CountLarge
-	' Dim newOri As Excel.XlRowCol
 	
 	' Throw an error for a rectangular (2D) area.
 	If nRows > 1 And nCols > 1 Then
@@ -1167,15 +1153,6 @@ Private Sub CheckRange( _
 	low = RNG_BASE
 	up = low + n - 1
 	
-	' ' Record the orientation if none was specified...
-	' If ori = NO_ORI Then
-	' 	ori = newOri
-	' 	
-	' ' ...but otherwise check that the orientation matches expectations.
-	' Else
-	' 	If newOri <> ori Then GoTo ORI_ERROR
-	' End If
-	
 	' Conclude validation successfully.
 	Exit Sub
 	
@@ -1183,13 +1160,6 @@ Private Sub CheckRange( _
 ' Report an error for invalid structure.
 DATA_ERROR:
 	Err_Data
-' 	Exit Sub
-' 	
-' 	
-' ' Report an error for invalid orientation.
-' ORI_ERROR:
-' 	Err_Orientation
-' 	Exit Sub
 End Sub
 
 
