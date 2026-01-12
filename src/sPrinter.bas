@@ -1037,6 +1037,132 @@ DATA_ERROR:
 End Sub
 
 
+' Validate an array as input for the data.
+Private Sub CheckArray( _
+	ByRef arr As Variant, _
+	Optional ByRef n As Long, _
+	Optional ByRef low As Long, _
+	Optional ByRef up As Long _
+)
+	' Ensure the array is a (1D) vector.
+	Dim rnk As Long: rnk = Arr_Rank(arr)
+	If rnk <> 1 Then GoTo DATA_ERROR
+	
+	n = Arr_Length(arr, dimension := 1)
+	low = LBound(arr, 1)
+	up = UBound(arr, 1)
+	
+	' Conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for invalid structure.
+DATA_ERROR:
+	Err_Data
+End Sub
+
+
+' Validate an object as input for the data.
+Private Sub CheckObject( _
+	ByRef obj As Object, _
+	Optional ByRef n As Long, _
+	Optional ByRef low As Long, _
+	Optional ByRef up As Long, _
+	Optional ByRef isRng As Boolean, _
+	Optional ByRef ori As Excel.XlRowCol _
+)
+	' The base used by objects like Collections.
+	Const OBJ_BASE As Long = 1
+	
+	
+	' Check a Range specifically...
+	isRng = TypeOf obj Is Range
+	If isRng Then
+		CheckRange _
+			rng := obj, _
+			n := n, _
+			low := low, _
+			up := up, _
+			ori := ori
+			
+	' ...or some other object.
+	Else
+		On Error GoTo DATA_ERROR
+		n = data.Count
+		On Error GoTo 0
+		
+		If n > 0 Then
+			low = OBJ_BASE
+			up = low + n - 1
+		Else
+			low = OBJ_BASE - 1
+			up = low
+		End If
+	End If
+	
+	' Conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for invalid structure.
+DATA_ERROR:
+	Err_Data
+End Sub
+
+
+' Validate a Range as input.
+Private Sub CheckRange( _
+	ByRef rng As Range, _
+	Optional ByRef n As Long, _
+	Optional ByRef low As Long, _
+	Optional ByRef up As Long, _
+	Optional ByRef ori As Excel.XlRowCol _
+)
+	' The base used by Ranges of cells.
+	Const RNG_BASE As Long = 1
+	
+	' An unspecified orientation.
+	Const NO_ORI As Long = 0
+	
+	
+	' Measure the dimensions of the Range.
+	Dim nRows As Decimal: nRow = rng.Rows.CountLarge
+	Dim nCols As Decimal: nCol = rng.Columns.CountLarge
+	
+	' Throw an error for a rectangular (2D) area.
+	If nRows > 1 And nCols > 1 Then
+		GoTo DATA_ERROR
+		
+	' Handle a single row...
+	ElseIf nCols > 1 Then
+		n = nCols
+		ori = Excel.XlRowCol.xlRows
+		
+	' ...or a single column...
+	ElseIf nRows > 1 Then
+		n = nRows
+		ori = Excel.XlRowCol.xlColumns
+		
+	' ...or a single cell.
+	Else
+		n = 1
+		ori = NO_ORI
+	End If
+	
+	' Record remaining information.
+	low = RNG_BASE
+	up = low + n - 1
+	
+	' Conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for invalid structure.
+DATA_ERROR:
+	Err_Data
+End Sub
+
+
 
 ' ##########################
 ' ## Support | Extraction ##
