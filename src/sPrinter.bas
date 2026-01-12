@@ -1227,6 +1227,7 @@ Private Function GetValue( _
 			ori := ori, _
 			val := val _
 		)
+		Exit Function
 		
 	' ...or from something else.
 	Else
