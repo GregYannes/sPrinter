@@ -1098,7 +1098,7 @@ Private Sub CheckObject( _
 	' ...or some other object.
 	Else
 		On Error GoTo DATA_ERROR
-		n = data.Count
+		n = obj.Count
 		On Error GoTo 0
 		
 		If n > 0 Then
@@ -1136,8 +1136,8 @@ Private Sub CheckRange( _
 	
 	
 	' Measure the dimensions of the Range.
-	Dim nRows As Decimal: nRow = rng.Rows.CountLarge
-	Dim nCols As Decimal: nCol = rng.Columns.CountLarge
+	Dim nRows As Decimal: nRows = rng.Rows.CountLarge
+	Dim nCols As Decimal: nCols = rng.Columns.CountLarge
 	
 	' Throw an error for a rectangular (2D) area.
 	If nRows > 1 And nCols > 1 Then
@@ -1268,24 +1268,24 @@ Private Function GetRangeValue( _
 	
 	' Extract from the first row...
 	Case Excel.XlRowCol.xlRows
-		' TODO: Is it better to use "data.Value()(idx, RNG_BASE)" instead?
-		Assign val, data.Cells(RNG_BASE, idx).Value
+		' TODO: Is it better to use "rng.Value()(pos, RNG_BASE)" instead?
+		Assign val, rng.Cells(RNG_BASE, pos).Value
 		
 	' ...or from the first column...
 	Case Excel.XlRowCol.xlColumns
-		' TODO: Is it better to use "data.Value()(RNG_BASE, idx)" instead?
-		Assign val, data.Cells(idx, RNG_BASE).Value
+		' TODO: Is it better to use "rng.Value()(RNG_BASE, pos)" instead?
+		Assign val, rng.Cells(pos, RNG_BASE).Value
 		
 	' ...or from the first (single) cell.
 	Case NO_ORI
 		' Short-circuit for any position other than the first.
-		If idx <> RNG_BASE Then
+		If pos <> RNG_BASE Then
 			GetRangeValue = False
 			Exit Function
 		End If
 		
-		' TODO: Is it better to use "data.Cells(RNG_BASE, RNG_BASE).Value" instead?
-		Assign val, data.Value
+		' TODO: Is it better to use "rng.Cells(RNG_BASE, RNG_BASE).Value" instead?
+		Assign val, rng.Value
 		
 	' Short-circuit for any other orientation.
 	Case Else
@@ -1302,7 +1302,7 @@ Private Function GetRangeValue( _
 	
 ' Report a nonexistent value.
 VAL_ERROR:
-	GetValue = False
+	GetRangeValue = False
 End Function
 
 
