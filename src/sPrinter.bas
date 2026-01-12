@@ -1074,7 +1074,7 @@ End Sub
 
 ' Validate an object as input for the data.
 Private Sub CheckObject( _
-	ByRef obj As Object, _
+	ByVal obj As Object, _
 	Optional ByRef n As Long, _
 	Optional ByRef low As Long, _
 	Optional ByRef up As Long, _
@@ -1122,7 +1122,7 @@ End Sub
 
 ' Validate a Range as input.
 Private Sub CheckRange( _
-	ByRef rng As Range, _
+	ByVal rng As Range, _
 	Optional ByRef n As Long, _
 	Optional ByRef low As Long, _
 	Optional ByRef up As Long, _
@@ -1248,7 +1248,7 @@ End Function
 
 ' Extract a value from a Range.
 Private Function GetRangeValue( _
-	ByRef rng As Range, _
+	ByVal rng As Range, _
 	ByVal pos As Long, _
 	ByVal n As Long, _
 	ByVal low As Long, _
