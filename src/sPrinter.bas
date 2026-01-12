@@ -1136,8 +1136,8 @@ Private Sub CheckRange( _
 	
 	
 	' Measure the dimensions of the Range.
-	Dim nRows As Decimal: nRows = rng.Rows.CountLarge
-	Dim nCols As Decimal: nCols = rng.Columns.CountLarge
+	Dim nRows As Double: nRows = rng.Rows.CountLarge
+	Dim nCols As Double: nCols = rng.Columns.CountLarge
 	
 	' Throw an error for a rectangular (2D) area.
 	If nRows > 1 And nCols > 1 Then
