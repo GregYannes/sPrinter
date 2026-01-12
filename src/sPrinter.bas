@@ -1203,8 +1203,7 @@ Private Function GetValue( _
 		If pos = PositionKind.posRelative Then
 			' Report failure for those out of bounds...
 			If idx = 0 Or idx > n Then
-				GetValue = False
-				Exit Function
+				GoTo VAL_ERROR
 				
 			' ...but otherwise count from the beginning...
 			ElseIf idx > 0 Then
@@ -1217,19 +1216,13 @@ Private Function GetValue( _
 		End If
 		
 		' Short-circuit for a position that is out of bounds.
-		If idx < low Or idx > up Then
-			GetValue = False
-			Exit Function
-		End If
+		If idx < low Or idx > up Then GoTo VAL_ERROR
 	End If
 	
 	' Extract the value from a Range...
 	If isRng Then
 		' Short-circuit without a positional index.
-		If Not isPos Then
-			GetValue = False
-			Exit Function
-		End If
+		If Not isPos Then GoTo VAL_ERROR
 		
 		GetValue = GetRangeValue( _
 			rng := data, _
@@ -1287,18 +1280,14 @@ Private Function GetRangeValue( _
 	' ...or from the first (single) cell.
 	Case NO_ORI
 		' Short-circuit for any position other than the first.
-		If pos <> RNG_BASE Then
-			GetRangeValue = False
-			Exit Function
-		End If
+		If pos <> RNG_BASE Then GoTo VAL_ERROR
 		
 		' TODO: Is it better to use "rng.Cells(RNG_BASE, RNG_BASE).Value" instead?
 		Assign val, rng.Value
 		
 	' Short-circuit for any other orientation.
 	Case Else
-		GetRangeValue = False
-		Exit Function
+		GoTo VAL_ERROR
 	End Select
 	On Error GoTo 0
 	
