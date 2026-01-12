@@ -1002,8 +1002,13 @@ Private Sub CheckData( _
 	Optional ByRef isRng As Boolean, _
 	Optional ByRef ori As Excel.XlRowCol _
 )
+	' Define an unspecified orientation.
+	Const NO_ORI As Long = 0
+	
+	
 	' By default the data is not a Range with any orientation.
 	isRng = False
+	ori = NO_ORI
 	
 	' Examine an object...
 	If VBA.IsObject(data) Then
