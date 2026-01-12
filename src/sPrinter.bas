@@ -995,37 +995,25 @@ Private Sub CheckData( _
 	Optional ByRef low As Long, _
 	Optional ByRef up As Long _
 )
-	' The base used by objects like Collection and Dictionary.
-	Const OBJ_BASE As Long = 1
-	
 	' Examine an object...
 	If VBA.IsObject(data) Then
-		On Error GoTo DATA_ERROR
-		n = data.Count
-		On Error GoTo 0
+		' Short circuit for an uninitialized object...
+		If data Is Nothing Then GoTo DATA_ERROR
 		
-		If n > 0 Then
-			low = OBJ_BASE
-			up = low + n - 1
-		Else
-			low = 0
-			up = 0
-		End If
+		' ...but otherwise check an initialized object.
+		CheckObject _
+			obj := data, _
+			n := n, _
+			low := low, _
+			up := up, _
 		
 	' ...or an array...
 	ElseIf VBA.IsArray(data) Then
-		Dim rnk As Long: rnk = Arr_Rank(data)
-		If rnk <> 1 Then GoTo DATA_ERROR
-		
-		n = Arr_Length(data, dimension := 1)
-		
-		If n > 0 Then
-			low = LBound(data, 1)
-			up = UBound(data, 1)
-		Else
-			low = 0
-			up = 0
-		End If
+		CheckArray _
+			arr := data, _
+			n := n, _
+			low := low, _
+			up := up
 		
 	' ...but throw an error for anything else.
 	Else
