@@ -761,7 +761,7 @@ End Function
 ' ########################
 
 ' Get the length (along a dimension) of an array.
-Private Function Arr_Length(ByRef arr As Variant, _
+Public Function Arr_Length(ByRef arr As Variant, _
 	Optional ByVal dimension As Long = 1 _
 ) As Long
 	' Subscript out of range.
