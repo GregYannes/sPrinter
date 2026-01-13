@@ -1196,6 +1196,9 @@ Private Function GetValue( _
 	Optional ByVal pos As PositionKind = PositionKind.posAbsolute, _
 	Optional ByRef val As Variant _
 ) As Boolean
+	' Short-circuit for no data.
+	If n = 0 Then GoTo VAL_ERROR
+	
 	' Identify a positional index.
 	Dim isPos As Boolean: isPos = VBA.VarType(idx) = VBA.VbVarType.vbLong
 	
