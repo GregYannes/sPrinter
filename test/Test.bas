@@ -75,7 +75,7 @@ Public Sub Test_Message()
 	
 	
 	Dim fmt1 As String: fmt1 = "You have a meeting with {1} {2} at {3:h:MM AM/PM} on {4:dddd, mmmm d}."
-	Dim fmt2 As String: fmt2 = "You have a meeting with {1} {2} at {-2} on {-1}."
+	Dim fmt2 As String: fmt2 = "You have a meeting with {1} {2} at {-2:h:MM AM/PM} on {-1:dddd, mmmm d}."
 	Dim fmt3 As String: fmt3 = "You have a meeting with {} {} at {:h:MM AM/PM} on {:dddd, mmmm d}."
 	Dim fmt4 As String: fmt4 = "You have a meeting with {{forename}} {{surname}} at {{time}:h:MM AM/PM} on {{date}:dddd, mmmm d}."
 	
