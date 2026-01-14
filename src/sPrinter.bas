@@ -270,7 +270,7 @@ Public Function Message( _
 	
 	Dim hasVal As Boolean, isDfl As Boolean
 	Dim hasDfl As Boolean: hasDfl = Not VBA.IsMissing(default)
-	Dim iAuto As Long: iAuto = 1
+	Dim iAuto As Long: iAuto = 0
 	Dim iFld As Long: iFld = 0
 	Dim e As ParserElement, idx As Variant, pos As PositionKind, val As Variant, fmt As String, out As String
 	
@@ -291,9 +291,9 @@ Public Function Message( _
 			
 			' Default to the next available index...
 			If VBA.IsEmpty(e.Field.Index) Then
+				iAuto = iAuto + 1
 				Let idx = iAuto
 				pos = PositionKind.posRelative
-				iAuto = iAuto + 1
 				
 			' ...if the field failed to specify the index.
 			Else
