@@ -268,7 +268,7 @@ Public Function Message( _
 	Dim eLow As Long: eLow = LBound(elements, 1)
 	Dim eUp As Long: eUp = UBound(elements, 1)
 	
-	Dim hasVal As Boolean, isDfl As Boolean
+	Dim hasVal As Boolean, isDfl As Boolean, isAuto As Boolean
 	Dim hasDfl As Boolean: hasDfl = Not VBA.IsMissing(default)
 	Dim iAuto As Long: iAuto = 0
 	Dim iFld As Long: iFld = 0
@@ -289,8 +289,11 @@ Public Function Message( _
 			' Count the field.
 			iFld = iFld + 1
 			
+			' Determine if the field specifies an index.
+			isAuto = VBA.IsEmpty(e.Field.Index)
+			
 			' Default to the next available index...
-			If VBA.IsEmpty(e.Field.Index) Then
+			If isAuto Then
 				iAuto = iAuto + 1
 				Let idx = iAuto
 				pos = PositionKind.posRelative
