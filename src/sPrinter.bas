@@ -310,7 +310,7 @@ Public Function Message( _
 				up := up, _
 				isRng := isRng, _
 				ori := ori, _
-				pos := position, _
+				pos := pos, _
 				val := val _
 			)
 			
@@ -330,7 +330,7 @@ Public Function Message( _
 					Err_Index _
 						nField := iFld, _
 						index := idx, _
-						position := position
+						position := pos
 				End If
 			End If
 			
