@@ -292,13 +292,13 @@ Public Function Message( _
 			' Determine if the field specifies an index.
 			isAuto = VBA.IsEmpty(e.Field.Index)
 			
-			' Default to the next available index...
+			' Default to the next available position...
 			If isAuto Then
 				iAuto = iAuto + 1
 				Let idx = iAuto
 				pos = PositionKind.posRelative
 				
-			' ...if the field failed to specify the index.
+			' ...unless the field specified an index.
 			Else
 				Let idx = e.Field.Index
 				pos = position
