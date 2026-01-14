@@ -71,7 +71,9 @@ End Sub
 
 ' Format and display a message.
 Public Sub Test_Message()
+	Dim fmt1 As String: fmt1 = "You have a meeting with {1} {2} at {3:h:MM AM/PM} on {4:dddd, mmmm d}."
 	Dim fmt2 As String: fmt2 = "You have a meeting with {1} {2} at {-2} on {-1}."
+	Dim fmt3 As String: fmt3 = "You have a meeting with {} {} at {:h:MM AM/PM} on {:dddd, mmmm d}."
 	Dim fmt4 As String: fmt4 = "You have a meeting with {{forename}} {{surname}} at {{time}:h:MM AM/PM} on {{date}:dddd, mmmm d}."
 	
 	Dim data As Collection: Set data = New Collection
@@ -81,12 +83,22 @@ Public Sub Test_Message()
 	data.Add VBA.Date(),	key := "Date"
 	
 	
+	Dim msg1 As String: msg1 = sPrinter.Message(fmt1, data, default := "?")
 	Dim msg2 As String: msg2 = sPrinter.Message(fmt2, data, default := "?", position := posRelative)
+	Dim msg3 As String: msg3 = sPrinter.Message(fmt3, data, default := "?")
 	Dim msg4 As String: msg4 = sPrinter.Message(fmt4, data, default := "?")
 	
 	
+	Debug.Print "INPUT:" & VBA.vbTab & fmt1
+	Debug.Print "OUTPUT:" & VBA.vbTab & msg1
+	Debug.Print
+	Debug.Print
 	Debug.Print "INPUT:" & VBA.vbTab & fmt2
 	Debug.Print "OUTPUT:" & VBA.vbTab & msg2
+	Debug.Print
+	Debug.Print
+	Debug.Print "INPUT:" & VBA.vbTab & fmt3
+	Debug.Print "OUTPUT:" & VBA.vbTab & msg3
 	Debug.Print
 	Debug.Print
 	Debug.Print "INPUT:" & VBA.vbTab & fmt4
