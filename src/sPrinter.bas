@@ -1121,24 +1121,24 @@ End Sub
 
 
 ' Validate input for names, with which to "look up" the original data.
-Private Sub CheckLookup(ByRef data As Variant)
+Private Sub CheckLookup(ByRef lookup As Variant)
 	' Examine an object...
-	If VBA.IsObject(data) Then
+	If VBA.IsObject(lookup) Then
 		' Short-circuit for an uninitialized object...
-		If data Is Nothing Then GoTo LOOK_ERROR
+		If lookup Is Nothing Then GoTo LOOK_ERROR
 		
 		' ...or for anything other than a Range.
-		If TypeOf data IsNot Range Then GoTo LOOK_ERROR
+		If TypeOf lookup IsNot Range Then GoTo LOOK_ERROR
 		
 		' Check a Range specifically.
 		On Error GoTo LOOK_ERROR
-		CheckRange rng := obj
+		CheckRange rng := lookup
 		On Error GoTo 0
 		
 	' ...or an array...
-	ElseIf VBA.IsArray(data) Then
+	ElseIf VBA.IsArray(lookup) Then
 		On Error GoTo LOOK_ERROR
-		CheckArray arr := data
+		CheckArray arr := lookup
 		On Error GoTo 0
 		
 	' ...but throw an error for anything else.
