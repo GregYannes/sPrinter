@@ -1052,7 +1052,7 @@ DATA_ERROR:
 End Sub
 
 
-' Validate an array as input for the data.
+' Validate a (1D) array as input.
 Private Sub CheckArray( _
 	ByRef arr As Variant, _
 	Optional ByRef n As Long, _
@@ -1129,7 +1129,7 @@ DATA_ERROR:
 End Sub
 
 
-' Validate a Range as input.
+' Validate a (1D) Range as input.
 Private Sub CheckRange( _
 	ByVal rng As Range, _
 	Optional ByRef n As Long, _
