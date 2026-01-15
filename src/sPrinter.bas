@@ -700,7 +700,7 @@ Private Sub Err_Data()
 	' Define the error: type mismatch.
 	Const ERR_NUM As Long = 13
 	
-	' Generate a relevant description of the error
+	' Generate a relevant description of the error.
 	Dim description As String: description = "The source data must be one of the following:"
 	Dim types As Variant: types = Array( _
 		"A unidimensional (1D) array.", _
@@ -721,7 +721,7 @@ Private Sub Err_Lookup()
 	' Define the error: type mismatch.
 	Const ERR_NUM As Long = 13
 	
-	' Generate a relevant description of the error
+	' Generate a relevant description of the error.
 	Dim description As String: description = "The lookup data must be one of the following:"
 	Dim types As Variant: types = Array( _
 		"A unidimensional (1D) array.", _
@@ -1072,7 +1072,7 @@ Private Sub CheckData( _
 	
 	' Examine an object...
 	If VBA.IsObject(data) Then
-		' Short circuit for an uninitialized object...
+		' Short-circuit for an uninitialized object...
 		If data Is Nothing Then GoTo DATA_ERROR
 		
 		' ...but otherwise check an initialized object.
