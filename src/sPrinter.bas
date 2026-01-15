@@ -1207,6 +1207,10 @@ Private Sub CheckObjectData( _
 	Optional ByRef isRng As Boolean, _
 	Optional ByRef ori As Excel.XlRowCol _
 )
+	' Define the error: type mismatch.
+	Const ERR_NUM As Long = 13
+	
+	
 	' The base used by objects like Collections.
 	Const OBJ_BASE As Long = 1
 	
@@ -1214,7 +1218,7 @@ Private Sub CheckObjectData( _
 	' Check a Range specifically...
 	isRng = TypeOf obj Is Range
 	If isRng Then
-		On Error GoTo DATA_ERROR
+		On Error GoTo OBJ_ERROR
 		CheckRange _
 			rng := obj, _
 			n := n, _
@@ -1225,7 +1229,7 @@ Private Sub CheckObjectData( _
 			
 	' ...or some other object.
 	Else
-		On Error GoTo DATA_ERROR
+		On Error GoTo OBJ_ERROR
 		n = obj.Count
 		On Error GoTo 0
 		
@@ -1243,8 +1247,8 @@ Private Sub CheckObjectData( _
 	
 	
 ' Report an error for invalid structure.
-DATA_ERROR:
-	Err_Data
+OBJ_ERROR:
+	Err.Raise Number := ERR_NUM
 End Sub
 
 
