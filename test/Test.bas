@@ -109,7 +109,7 @@ Public Sub Test_Message()
 	
 	
 	Dim arrMsg1 As String: arrMsg1 = sPrinter.Message(fmt1, arrData, ,          default := DEFAULT_VALUE)
-	Dim arrMsg2 As String: arrMsg2 = sPrinter.Message(fmt2, arrData, ,          default := DEFAULT_VALUE)
+	Dim arrMsg2 As String: arrMsg2 = sPrinter.Message(fmt2, arrData, ,          default := DEFAULT_VALUE, position := posRelative)
 	Dim arrMsg3 As String: arrMsg3 = sPrinter.Message(fmt3, arrData, ,          default := DEFAULT_VALUE)
 	Dim arrMsg4 As String: arrMsg4 = sPrinter.Message(fmt4, arrData, arrLookup, default := DEFAULT_VALUE)
 	
