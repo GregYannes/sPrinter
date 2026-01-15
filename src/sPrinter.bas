@@ -699,12 +699,19 @@ End Sub
 Private Sub Err_Data()
 	' Define the error: type mismatch.
 	Const ERR_NUM As Long = 13
-	Const ERR_DESC As String = "The data must be either a unidimensional array or Range; or an (initialized) object with both a default member and a "".Count"" property."
+	
+	' Generate a relevant description of the error
+	Dim description As String: description = "The source data must be one of the following:"
+	description = description & VBA.vbNewLine & Txt_List(Array( _
+		"A unidimensional (1D) array.", _
+		"A Range of cells, in a single row or single column.", _
+		"An (initialized) object with both a default member and a "".Count"" property." _
+	))
 	
 	' Raise the error.
 	Err.Raise _
 		Number := ERR_NUM, _
-		Description := ERR_DESC
+		Description := description
 End Sub
 
 
