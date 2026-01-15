@@ -1237,6 +1237,64 @@ End Sub
 
 
 
+' ###################################
+' ## Support | Validation | Lookup ##
+' ###################################
+
+' Validate input for names, with which to "look up" the original data.
+Private Sub CheckLookup(ByRef data As Variant)
+' 	Optional ByRef n As Long
+' 	Optional ByRef low As Long
+' 	Optional ByRef up As Long
+' 	Optional ByRef isRng As Boolean
+' 	Optional ByRef ori As Excel.XlRowCol
+	
+	' ' By default the data is not a Range.
+	' Dim isRng As Boolean
+	' isRng = False
+	
+	' Examine an object...
+	If VBA.IsObject(data) Then
+		' Short-circuit for an uninitialized object...
+		If data Is Nothing Then GoTo LOOK_ERROR
+		
+		' ...or for anything other than a Range.
+		If TypeOf data IsNot Range Then GoTo LOOK_ERROR
+		' isRng = TypeOf data Is Range
+		' If Not isRng Then GoTo LOOK_ERROR
+		
+		' Check a Range specifically.
+		CheckRange _
+			rng := obj  ' , _
+			n := n, _
+			low := low, _
+			up := up, _
+			ori := ori
+		
+	' ...or an array...
+	ElseIf VBA.IsArray(data) Then
+		CheckArray _
+			arr := data  ' , _
+			n := n, _
+			low := low, _
+			up := up
+		
+	' ...but throw an error for anything else.
+	Else
+		GoTo LOOK_ERROR
+	End If
+	
+	' Conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for invalid structure.
+LOOK_ERROR:
+	Err_Lookup
+End Sub
+
+
+
 ' ##########################
 ' ## Support | Extraction ##
 ' ##########################
