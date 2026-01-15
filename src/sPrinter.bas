@@ -1304,6 +1304,8 @@ Private Function GetValue( _
 	ByVal up As Long, _
 	ByVal isRng As Boolean, _
 	ByVal ori As Excel.XlRowCol, _
+	Optional ByRef hasLook As Boolean = False, _
+	Optional ByRef lookup As Variant, _
 	Optional ByVal pos As PositionKind = PositionKind.posAbsolute, _
 	Optional ByRef val As Variant _
 ) As Boolean
@@ -1315,9 +1317,30 @@ Private Function GetValue( _
 	Dim isPos As Boolean: isPos = (idxType = VBA.VbVarType.vbLong)
 	Dim isKey As Boolean: isKey = (idxType = VBA.VbVarType.vbString)
 	
-	' Handle positions...
+	' Handle textual keys...
+	If isKey Then
+		' Look up the key where appropriate...
+		If hasLook Then
+			Dim hasLoc As Boolean, loc As Long
+			hasLoc = LookupKey( _
+				lookup := lookup, _
+				key := idx, _
+				loc := loc _
+			)
+			
+			' ...and short-circuit for no match.
+			If Not hasLoc Then GoTo VAL_ERROR
+			
+			' Use relative positioning for lookups against the source data.
+			idx = loc
+			isPos = True
+			pos = PositionKind.posRelative
+		End If
+	End If
+	
+	' ...and numeric positions.
 	If isPos Then
-		' ...and interpret those which are relative.
+		' Interpret those which are relative.
 		If pos = PositionKind.posRelative Then
 			' Report failure for those out of bounds...
 			If idx = 0 Or idx > n Then
