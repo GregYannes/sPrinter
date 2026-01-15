@@ -922,6 +922,10 @@ End Sub
 ' ## Support | Validation ##
 ' ##########################
 
+' ####################################
+' ## Support | Validation | Symbols ##
+' ####################################
+
 ' Validate input (text or code) for a parsing symbol.
 Private Sub CheckSym(ByRef x As Variant)
 	' Extract the first character from a string...
@@ -997,6 +1001,11 @@ DUP_ERROR:
 		closeQuote := closeQuote
 End Sub
 
+
+
+' #################################
+' ## Support | Validation | Data ##
+' #################################
 
 ' Validate input for the data structure whose values are embedded.
 Private Sub CheckData( _
