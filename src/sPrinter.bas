@@ -212,6 +212,7 @@ End Function
 Public Function Message( _
 	ByRef format As String, _
 	ByRef data As Variant, _
+	Optional ByRef lookup As Variant, _
 	Optional ByRef default As Variant, _
 	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
 	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
@@ -241,6 +242,22 @@ Public Function Message( _
 		up := up, _
 		isRng := isRng, _
 		ori := ori
+	
+	
+	' Validate any lookup.
+	Dim hasLook As Boolean: hasLook = Not VBA.IsMissing(lookup)
+	' Dim nLook As Long, lowLook As Long, upLook As Long
+	' Dim isRngLook As Boolean, oriLook As Excel.XlRowCol
+	
+	If hasLook Then
+		CheckLookup _
+			lookup := lookup  ' , _
+			n := nLook, _
+			low := lowLook, _
+			up := upLook, _
+			isRng := isRngLook, _
+			ori := oriLook
+	End If
 	
 	
 	' Parse the message format...
@@ -313,6 +330,8 @@ Public Function Message( _
 				up := up, _
 				isRng := isRng, _
 				ori := ori, _
+				hasLook := hasLook, _
+				lookup := lookup, _
 				pos := pos, _
 				val := val _
 			)
