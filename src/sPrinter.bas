@@ -1312,9 +1312,8 @@ Private Function GetValue( _
 	
 	' Identify the type of index...
 	Dim idxType As VBA.VbVarType: idxType = VBA.VarType(idx)
-	
-	' Identify a positional index.
 	Dim isPos As Boolean: isPos = (idxType = VBA.VbVarType.vbLong)
+	Dim isKey As Boolean: isKey = (idxType = VBA.VbVarType.vbString)
 	
 	' Handle positions...
 	If isPos Then
