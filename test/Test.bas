@@ -116,6 +116,22 @@ Public Sub Test_Message()
 	
 	
 	Debug.Print "INPUT:" & VBA.vbTab & fmt1
+	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg1
+	Debug.Print
+	Debug.Print
+	Debug.Print "INPUT:" & VBA.vbTab & fmt2
+	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg2
+	Debug.Print
+	Debug.Print
+	Debug.Print "INPUT:" & VBA.vbTab & fmt3
+	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg3
+	Debug.Print
+	Debug.Print
+	Debug.Print "INPUT:" & VBA.vbTab & fmt4
+	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg4
+	
+	
+	Debug.Print "INPUT:" & VBA.vbTab & fmt1
 	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg1
 	Debug.Print
 	Debug.Print
@@ -129,4 +145,8 @@ Public Sub Test_Message()
 	Debug.Print
 	Debug.Print "INPUT:" & VBA.vbTab & fmt4
 	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg4
+	Debug.Print
+	Debug.Print
+	Debug.Print "INPUT:" & VBA.vbTab & fmt4
+	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg5
 End Sub
