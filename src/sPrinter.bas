@@ -855,6 +855,24 @@ Public Function Txt_Crop(ByVal txt As String, _
 End Function
 
 
+' Display phrases of text within a list.
+Public Function Txt_List(ByRef txts As Variant, _
+	Optional ByVal symbol As String = "-", _
+	Optional ByVal indent As String = VBA.vbTab, _
+	Optional ByVal offset As String = " " _
+) As String
+	Dim pfx As String: pfx = indent & symbol & offset
+	Dim sep As String: sep = VBA.vbNewLine & pfx
+	
+	If Arr_Length(txts) = 0 Then
+		Exit Function
+	Else
+		Txt_List = VBA.Join(sourcearray := txts, delimiter := sep)
+		Txt_List = pfx & Txt_List
+	End If
+End Function
+
+
 
 ' #############
 ' ## Support ##
