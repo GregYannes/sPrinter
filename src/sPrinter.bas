@@ -1165,7 +1165,7 @@ Private Sub CheckData( _
 		If data Is Nothing Then GoTo DATA_ERROR
 		
 		' ...but otherwise check an initialized object.
-		CheckObjectData _
+		CheckObject _
 			obj := data, _
 			n := n, _
 			low := low, _
@@ -1198,8 +1198,8 @@ DATA_ERROR:
 End Sub
 
 
-' Validate an object as input for the data.
-Private Sub CheckObjectData( _
+' Validate an object as input.
+Private Sub CheckObject( _
 	ByVal obj As Object, _
 	Optional ByRef n As Long, _
 	Optional ByRef low As Long, _
