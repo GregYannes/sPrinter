@@ -1021,7 +1021,7 @@ Private Sub CheckData( _
 		If data Is Nothing Then GoTo DATA_ERROR
 		
 		' ...but otherwise check an initialized object.
-		CheckObject _
+		CheckObjectData _
 			obj := data, _
 			n := n, _
 			low := low, _
@@ -1082,7 +1082,7 @@ End Sub
 
 
 ' Validate an object as input for the data.
-Private Sub CheckObject( _
+Private Sub CheckObjectData( _
 	ByVal obj As Object, _
 	Optional ByRef n As Long, _
 	Optional ByRef low As Long, _
