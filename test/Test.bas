@@ -96,10 +96,10 @@ Public Sub Test_Message()
 	
 	
 	Dim clxData As Collection: Set clxData = New Collection
-	clxData.Add "John",	key := "Forename"
-	clxData.Add "Doe",	key := "Surname"
-	clxData.Add VBA.Time(),	key := "Time"
-	clxData.Add VBA.Date(),	key := "Date"
+	Dim i As Long
+	For i = LBound(arrData) To UBound(arrData)
+		clxData.Add arrData(i), key := arrLookup(i)
+	Next i
 	
 	
 	Dim arrMsg1 As String: arrMsg1 = sPrinter.Message(fmt1, arrData, ,          default := DEFAULT_VALUE)
