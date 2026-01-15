@@ -10,6 +10,12 @@ Public Sub Test()
 	Debug.Print
 	Debug.Print
 	Debug.Print
+	Debug.Print
+	
+	Debug.Print
+	Debug.Print
+	Debug.Print
+	Debug.Print
 	
 	' Format and display another message.
 	Test_Message
@@ -130,6 +136,10 @@ Public Sub Test_Message()
 	Debug.Print "INPUT:" & VBA.vbTab & fmt4
 	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg4
 	
+	Debug.Print
+	Debug.Print
+	Debug.Print
+	Debug.Print
 	
 	Debug.Print "INPUT:" & VBA.vbTab & fmt1
 	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg1
