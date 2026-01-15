@@ -966,97 +966,6 @@ End Sub
 ' ## Support | Validation ##
 ' ##########################
 
-' Validate a (1D) Range as input.
-Private Sub CheckRange( _
-	ByVal rng As Range, _
-	Optional ByRef n As Long, _
-	Optional ByRef low As Long, _
-	Optional ByRef up As Long, _
-	Optional ByRef ori As Excel.XlRowCol _
-)
-	' Define the error: type mismatch.
-	Const ERR_NUM As Long = 13
-	
-	
-	' The base used by Ranges of cells.
-	Const RNG_BASE As Long = 1
-	
-	' An unspecified orientation.
-	Const NO_ORI As Long = 0
-	
-	
-	' Measure the dimensions of the Range.
-	Dim nRows As Double: nRows = rng.Rows.CountLarge
-	Dim nCols As Double: nCols = rng.Columns.CountLarge
-	
-	' Throw an error for a rectangular (2D) area.
-	If nRows > 1 And nCols > 1 Then
-		GoTo RNG_ERROR
-		
-	' Handle a single row...
-	ElseIf nCols > 1 Then
-		n = nCols
-		ori = Excel.XlRowCol.xlRows
-		
-	' ...or a single column...
-	ElseIf nRows > 1 Then
-		n = nRows
-		ori = Excel.XlRowCol.xlColumns
-		
-	' ...or a single cell.
-	Else
-		n = 1
-		ori = NO_ORI
-	End If
-	
-	' Record remaining information.
-	low = RNG_BASE
-	up = low + n - 1
-	
-	' Conclude validation successfully.
-	Exit Sub
-	
-	
-' Report an error for invalid structure.
-RNG_ERROR:
-	Err.Raise Number := ERR_NUM
-End Sub
-
-
-' Validate a (1D) array as input.
-Private Sub CheckArray( _
-	ByRef arr As Variant, _
-	Optional ByRef n As Long, _
-	Optional ByRef low As Long, _
-	Optional ByRef up As Long _
-)
-	' Define the error: type mismatch.
-	Const ERR_NUM As Long = 13
-	
-	
-	' Ensure the array is a (1D) vector...
-	Dim rnk As Long: rnk = Arr_Rank(arr)
-	If rnk <> 1 Then GoTo ARR_ERROR
-	
-	' ...that is not empty.
-	n = Arr_Length(arr, dimension := 1)
-	If n <= 0 Then GoTo ARR_ERROR
-	
-	' Record the bounds...
-	low = LBound(arr, 1)
-	up = UBound(arr, 1)
-	
-	' ...and conclude validation successfully.
-	Exit Sub
-	
-	
-' Report an error for invalid structure.
-ARR_ERROR:
-	Err.Raise Number := ERR_NUM
-End Sub
-
-
-
 ' ####################################
 ' ## Support | Validation | Symbols ##
 ' ####################################
@@ -1248,6 +1157,96 @@ Private Sub CheckObject( _
 	
 ' Report an error for invalid structure.
 OBJ_ERROR:
+	Err.Raise Number := ERR_NUM
+End Sub
+
+
+' Validate a (1D) Range as input.
+Private Sub CheckRange( _
+	ByVal rng As Range, _
+	Optional ByRef n As Long, _
+	Optional ByRef low As Long, _
+	Optional ByRef up As Long, _
+	Optional ByRef ori As Excel.XlRowCol _
+)
+	' Define the error: type mismatch.
+	Const ERR_NUM As Long = 13
+	
+	
+	' The base used by Ranges of cells.
+	Const RNG_BASE As Long = 1
+	
+	' An unspecified orientation.
+	Const NO_ORI As Long = 0
+	
+	
+	' Measure the dimensions of the Range.
+	Dim nRows As Double: nRows = rng.Rows.CountLarge
+	Dim nCols As Double: nCols = rng.Columns.CountLarge
+	
+	' Throw an error for a rectangular (2D) area.
+	If nRows > 1 And nCols > 1 Then
+		GoTo RNG_ERROR
+		
+	' Handle a single row...
+	ElseIf nCols > 1 Then
+		n = nCols
+		ori = Excel.XlRowCol.xlRows
+		
+	' ...or a single column...
+	ElseIf nRows > 1 Then
+		n = nRows
+		ori = Excel.XlRowCol.xlColumns
+		
+	' ...or a single cell.
+	Else
+		n = 1
+		ori = NO_ORI
+	End If
+	
+	' Record remaining information.
+	low = RNG_BASE
+	up = low + n - 1
+	
+	' Conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for invalid structure.
+RNG_ERROR:
+	Err.Raise Number := ERR_NUM
+End Sub
+
+
+' Validate a (1D) array as input.
+Private Sub CheckArray( _
+	ByRef arr As Variant, _
+	Optional ByRef n As Long, _
+	Optional ByRef low As Long, _
+	Optional ByRef up As Long _
+)
+	' Define the error: type mismatch.
+	Const ERR_NUM As Long = 13
+	
+	
+	' Ensure the array is a (1D) vector...
+	Dim rnk As Long: rnk = Arr_Rank(arr)
+	If rnk <> 1 Then GoTo ARR_ERROR
+	
+	' ...that is not empty.
+	n = Arr_Length(arr, dimension := 1)
+	If n <= 0 Then GoTo ARR_ERROR
+	
+	' Record the bounds...
+	low = LBound(arr, 1)
+	up = UBound(arr, 1)
+	
+	' ...and conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for invalid structure.
+ARR_ERROR:
 	Err.Raise Number := ERR_NUM
 End Sub
 
