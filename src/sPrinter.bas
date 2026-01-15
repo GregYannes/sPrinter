@@ -211,7 +211,7 @@ End Function
 ' Embed (formatted) values within a message...
 Public Function Message( _
 	ByRef format As String, _
-	Optional ByRef data As Variant, _
+	ByRef data As Variant, _
 	Optional ByRef default As Variant, _
 	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
 	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
