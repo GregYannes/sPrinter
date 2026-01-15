@@ -702,11 +702,12 @@ Private Sub Err_Data()
 	
 	' Generate a relevant description of the error
 	Dim description As String: description = "The source data must be one of the following:"
-	description = description & VBA.vbNewLine & Txt_List(Array( _
+	Dim types As Variant: types = Array( _
 		"A unidimensional (1D) array.", _
 		"A Range of cells, in a single row or single column.", _
 		"An (initialized) object with both a default member and a "".Count"" property." _
-	))
+	)
+	description = description & VBA.vbNewLine & Txt_List(types)
 	
 	' Raise the error.
 	Err.Raise _
@@ -722,10 +723,11 @@ Private Sub Err_Lookup()
 	
 	' Generate a relevant description of the error
 	Dim description As String: description = "The lookup data must be one of the following:"
-	description = description & VBA.vbNewLine & Txt_List(Array( _
+	Dim types As Variant: types = Array( _
 		"A unidimensional (1D) array.", _
 		"A Range of cells, in a single row or single column." _
-	))
+	)
+	description = description & VBA.vbNewLine & Txt_List(types)
 	
 	' Raise the error.
 	Err.Raise _
