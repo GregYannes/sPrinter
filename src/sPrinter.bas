@@ -1175,11 +1175,13 @@ Private Sub CheckData( _
 		
 	' ...or an array...
 	ElseIf VBA.IsArray(data) Then
+		On Error GoTo DATA_ERROR
 		CheckArray _
 			arr := data, _
 			n := n, _
 			low := low, _
 			up := up
+		On Error GoTo 0
 		
 	' ...but throw an error for anything else.
 	Else
@@ -1212,12 +1214,14 @@ Private Sub CheckObjectData( _
 	' Check a Range specifically...
 	isRng = TypeOf obj Is Range
 	If isRng Then
+		On Error GoTo DATA_ERROR
 		CheckRange _
 			rng := obj, _
 			n := n, _
 			low := low, _
 			up := up, _
 			ori := ori
+		On Error GoTo 0
 			
 	' ...or some other object.
 	Else
@@ -1260,11 +1264,15 @@ Private Sub CheckLookup(ByRef data As Variant)
 		If TypeOf data IsNot Range Then GoTo LOOK_ERROR
 		
 		' Check a Range specifically.
+		On Error GoTo LOOK_ERROR
 		CheckRange rng := obj
+		On Error GoTo 0
 		
 	' ...or an array...
 	ElseIf VBA.IsArray(data) Then
+		On Error GoTo LOOK_ERROR
 		CheckArray arr := data
+		On Error GoTo 0
 		
 	' ...but throw an error for anything else.
 	Else
