@@ -80,6 +80,7 @@ Public Sub Test_Message()
 	Const DEFAULT_VALUE As Variant = "?"
 	
 	
+	Dim fmt0 As String: fmt0 = "You have a meeting with {0} {1} at {2:h:MM AM/PM} on {3:dddd, mmmm d}."
 	Dim fmt1 As String: fmt1 = "You have a meeting with {1} {2} at {3:h:MM AM/PM} on {4:dddd, mmmm d}."
 	Dim fmt2 As String: fmt2 = "You have a meeting with {1} {2} at {-2:h:MM AM/PM} on {-1:dddd, mmmm d}."
 	Dim fmt3 As String: fmt3 = "You have a meeting with {} {} at {:h:MM AM/PM} on {:dddd, mmmm d}."
@@ -108,7 +109,7 @@ Public Sub Test_Message()
 	Next i
 	
 	
-	Dim arrMsg1 As String: arrMsg1 = sPrinter.Message(fmt1, arrData, ,          default := DEFAULT_VALUE)
+	Dim arrMsg1 As String: arrMsg1 = sPrinter.Message(fmt0, arrData, ,          default := DEFAULT_VALUE)
 	Dim arrMsg2 As String: arrMsg2 = sPrinter.Message(fmt2, arrData, ,          default := DEFAULT_VALUE, position := posRelative)
 	Dim arrMsg3 As String: arrMsg3 = sPrinter.Message(fmt3, arrData, ,          default := DEFAULT_VALUE)
 	Dim arrMsg4 As String: arrMsg4 = sPrinter.Message(fmt4, arrData, arrLookup, default := DEFAULT_VALUE)
@@ -121,7 +122,7 @@ Public Sub Test_Message()
 	Dim clxMsg5 As String: clxMsg5 = sPrinter.Message(fmt4, clxData, arrLookup, default := DEFAULT_VALUE)
 	
 	
-	Debug.Print "INPUT:" & VBA.vbTab & fmt1
+	Debug.Print "INPUT:" & VBA.vbTab & fmt0
 	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg1
 	Debug.Print
 	Debug.Print
