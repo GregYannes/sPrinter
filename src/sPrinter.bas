@@ -715,6 +715,25 @@ Private Sub Err_Data()
 End Sub
 
 
+' Throw an error for a lookup of the wrong structure.
+Private Sub Err_Lookup()
+	' Define the error: type mismatch.
+	Const ERR_NUM As Long = 13
+	
+	' Generate a relevant description of the error
+	Dim description As String: description = "The lookup data must be one of the following:"
+	description = description & VBA.vbNewLine & Txt_List(Array( _
+		"A unidimensional (1D) array.", _
+		"A Range of cells, in a single row or single column." _
+	))
+	
+	' Raise the error.
+	Err.Raise _
+		Number := ERR_NUM, _
+		Description := description
+End Sub
+
+
 
 ' ###############
 ' ## Utilities ##
