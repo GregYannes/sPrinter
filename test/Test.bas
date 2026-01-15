@@ -91,7 +91,7 @@ Public Sub Test_Message()
 		"Forename", _
 		"Surname", _
 		"Time", _
-		"Date" -
+		"Date" _
 	)
 	
 	
