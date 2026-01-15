@@ -86,10 +86,10 @@ Public Sub Test_Message()
 	data.Add VBA.Date(),	key := "Date"
 	
 	
-	Dim msg1 As String: msg1 = sPrinter.Message(fmt1, data, default := DEFAULT_VALUE)
-	Dim msg2 As String: msg2 = sPrinter.Message(fmt2, data, default := DEFAULT_VALUE, position := posRelative)
-	Dim msg3 As String: msg3 = sPrinter.Message(fmt3, data, default := DEFAULT_VALUE)
-	Dim msg4 As String: msg4 = sPrinter.Message(fmt4, data, default := DEFAULT_VALUE)
+	Dim msg1 As String: msg1 = sPrinter.Message(fmt1, data, , default := DEFAULT_VALUE)
+	Dim msg2 As String: msg2 = sPrinter.Message(fmt2, data, , default := DEFAULT_VALUE, position := posRelative)
+	Dim msg3 As String: msg3 = sPrinter.Message(fmt3, data, , default := DEFAULT_VALUE)
+	Dim msg4 As String: msg4 = sPrinter.Message(fmt4, data, , default := DEFAULT_VALUE)
 	
 	
 	Debug.Print "INPUT:" & VBA.vbTab & fmt1
