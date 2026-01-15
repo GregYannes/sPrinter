@@ -79,31 +79,31 @@ Public Sub Test_Message()
 	Dim fmt3 As String: fmt3 = "You have a meeting with {} {} at {:h:MM AM/PM} on {:dddd, mmmm d}."
 	Dim fmt4 As String: fmt4 = "You have a meeting with {{forename}} {{surname}} at {{time}:h:MM AM/PM} on {{date}:dddd, mmmm d}."
 	
-	Dim data As Collection: Set data = New Collection
-	data.Add "John",	key := "Forename"
-	data.Add "Doe",		key := "Surname"
-	data.Add VBA.Time(),	key := "Time"
-	data.Add VBA.Date(),	key := "Date"
+	Dim clxData As Collection: Set clxData = New Collection
+	clxData.Add "John",	key := "Forename"
+	clxData.Add "Doe",	key := "Surname"
+	clxData.Add VBA.Time(),	key := "Time"
+	clxData.Add VBA.Date(),	key := "Date"
 	
 	
-	Dim msg1 As String: msg1 = sPrinter.Message(fmt1, data, , default := DEFAULT_VALUE)
-	Dim msg2 As String: msg2 = sPrinter.Message(fmt2, data, , default := DEFAULT_VALUE, position := posRelative)
-	Dim msg3 As String: msg3 = sPrinter.Message(fmt3, data, , default := DEFAULT_VALUE)
-	Dim msg4 As String: msg4 = sPrinter.Message(fmt4, data, , default := DEFAULT_VALUE)
+	Dim clxMsg1 As String: clxMsg1 = sPrinter.Message(fmt1, clxData, , default := DEFAULT_VALUE)
+	Dim clxMsg2 As String: clxMsg2 = sPrinter.Message(fmt2, clxData, , default := DEFAULT_VALUE, position := posRelative)
+	Dim clxMsg3 As String: clxMsg3 = sPrinter.Message(fmt3, clxData, , default := DEFAULT_VALUE)
+	Dim clxMsg4 As String: clxMsg4 = sPrinter.Message(fmt4, clxData, , default := DEFAULT_VALUE)
 	
 	
 	Debug.Print "INPUT:" & VBA.vbTab & fmt1
-	Debug.Print "OUTPUT:" & VBA.vbTab & msg1
+	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg1
 	Debug.Print
 	Debug.Print
 	Debug.Print "INPUT:" & VBA.vbTab & fmt2
-	Debug.Print "OUTPUT:" & VBA.vbTab & msg2
+	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg2
 	Debug.Print
 	Debug.Print
 	Debug.Print "INPUT:" & VBA.vbTab & fmt3
-	Debug.Print "OUTPUT:" & VBA.vbTab & msg3
+	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg3
 	Debug.Print
 	Debug.Print
 	Debug.Print "INPUT:" & VBA.vbTab & fmt4
-	Debug.Print "OUTPUT:" & VBA.vbTab & msg4
+	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg4
 End Sub
