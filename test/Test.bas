@@ -79,11 +79,33 @@ Public Sub Test_Message()
 	Dim fmt3 As String: fmt3 = "You have a meeting with {} {} at {:h:MM AM/PM} on {:dddd, mmmm d}."
 	Dim fmt4 As String: fmt4 = "You have a meeting with {{forename}} {{surname}} at {{time}:h:MM AM/PM} on {{date}:dddd, mmmm d}."
 	
+	
+	Dim arrData As Variant: arrData = Array( _
+		"John", _
+		"Doe", _
+		VBA.Time(), _
+		VBA.Date() _
+	)
+	
+	Dim arrLookup As Variant: arrLookup = Array( _
+		"Forename", _
+		"Surname", _
+		"Time", _
+		"Date" -
+	)
+	
+	
 	Dim clxData As Collection: Set clxData = New Collection
 	clxData.Add "John",	key := "Forename"
 	clxData.Add "Doe",	key := "Surname"
 	clxData.Add VBA.Time(),	key := "Time"
 	clxData.Add VBA.Date(),	key := "Date"
+	
+	
+	Dim arrMsg1 As String: arrMsg1 = sPrinter.Message(fmt1, arrData, ,          default := DEFAULT_VALUE)
+	Dim arrMsg2 As String: arrMsg2 = sPrinter.Message(fmt2, arrData, ,          default := DEFAULT_VALUE)
+	Dim arrMsg3 As String: arrMsg3 = sPrinter.Message(fmt3, arrData, ,          default := DEFAULT_VALUE)
+	Dim arrMsg4 As String: arrMsg4 = sPrinter.Message(fmt4, arrData, arrLookup, default := DEFAULT_VALUE)
 	
 	
 	Dim clxMsg1 As String: clxMsg1 = sPrinter.Message(fmt1, clxData, , default := DEFAULT_VALUE)
