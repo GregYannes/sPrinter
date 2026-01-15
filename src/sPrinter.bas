@@ -1421,6 +1421,50 @@ VAL_ERROR:
 End Function
 
 
+' Locate a key within lookup data.
+Private Function LookupKey( _
+	ByRef lookup As Variant, _
+	ByVal key As String, _
+	Optional ByRef pos As Long _
+) As Boolean
+	' ' Define the bases for relative locations.
+	' Const MATCH_BASE As Long = 1
+	' Const POS_BASE As Long = 1
+	
+	' Search forwards for an exact match.
+	Const MATCH_MODE As Long = 0
+	Const SEARCH_MODE As Long = 1
+	
+	
+	' Perform the search...
+	Dim result As Variant: result = Excel.Application.XMatch( _
+		Arg1 := key, _
+		Arg2 := lookup, _
+		Arg3 := MATCH_MODE, _
+		Arg4 := SEARCH_MODE _
+	)
+	
+	' ...and short-circuit for no match.
+	If VBA.IsError(result) Then GoTo LOOK_ERROR
+	
+	' Record the match location...
+	pos = VBA.CLng(result)
+	' pos = pos - MATCH_BASE + POS_BASE
+	
+	' ...and report success.
+	LookupKey = True
+	Exit Function
+	
+	
+' Report a nonexistent key.
+LOOK_ERROR:
+	' ' Ensure the error is #NA! for no match.
+	' If VBA.CLng(result) = Excel.XlCVError.xlErrNA
+	
+	LookupKey = False
+End Function
+
+
 
 ' #######################
 ' ## Support | Parsing ##
