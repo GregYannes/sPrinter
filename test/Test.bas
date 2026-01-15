@@ -112,6 +112,7 @@ Public Sub Test_Message()
 	Dim clxMsg2 As String: clxMsg2 = sPrinter.Message(fmt2, clxData, , default := DEFAULT_VALUE, position := posRelative)
 	Dim clxMsg3 As String: clxMsg3 = sPrinter.Message(fmt3, clxData, , default := DEFAULT_VALUE)
 	Dim clxMsg4 As String: clxMsg4 = sPrinter.Message(fmt4, clxData, , default := DEFAULT_VALUE)
+	Dim clxMsg5 As String: clxMsg5 = sPrinter.Message(fmt4, clxData, arrLookup, default := DEFAULT_VALUE)
 	
 	
 	Debug.Print "INPUT:" & VBA.vbTab & fmt1
