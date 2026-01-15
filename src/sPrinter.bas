@@ -974,6 +974,10 @@ Private Sub CheckRange( _
 	Optional ByRef up As Long, _
 	Optional ByRef ori As Excel.XlRowCol _
 )
+	' Define the error: type mismatch.
+	Const ERR_NUM As Long = 13
+	
+	
 	' The base used by Ranges of cells.
 	Const RNG_BASE As Long = 1
 	
@@ -987,7 +991,7 @@ Private Sub CheckRange( _
 	
 	' Throw an error for a rectangular (2D) area.
 	If nRows > 1 And nCols > 1 Then
-		GoTo DATA_ERROR
+		GoTo RNG_ERROR
 		
 	' Handle a single row...
 	ElseIf nCols > 1 Then
@@ -1014,8 +1018,8 @@ Private Sub CheckRange( _
 	
 	
 ' Report an error for invalid structure.
-DATA_ERROR:
-	Err_Data
+RNG_ERROR:
+	Err.Raise Number := ERR_NUM
 End Sub
 
 
@@ -1026,13 +1030,17 @@ Private Sub CheckArray( _
 	Optional ByRef low As Long, _
 	Optional ByRef up As Long _
 )
+	' Define the error: type mismatch.
+	Const ERR_NUM As Long = 13
+	
+	
 	' Ensure the array is a (1D) vector...
 	Dim rnk As Long: rnk = Arr_Rank(arr)
-	If rnk <> 1 Then GoTo DATA_ERROR
+	If rnk <> 1 Then GoTo ARR_ERROR
 	
 	' ...that is not empty.
 	n = Arr_Length(arr, dimension := 1)
-	If n <= 0 Then GoTo DATA_ERROR
+	If n <= 0 Then GoTo ARR_ERROR
 	
 	' Record the bounds...
 	low = LBound(arr, 1)
@@ -1043,8 +1051,8 @@ Private Sub CheckArray( _
 	
 	
 ' Report an error for invalid structure.
-DATA_ERROR:
-	Err_Data
+ARR_ERROR:
+	Err.Raise Number := ERR_NUM
 End Sub
 
 
