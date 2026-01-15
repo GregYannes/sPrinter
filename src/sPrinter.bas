@@ -1128,7 +1128,7 @@ Private Sub CheckLookup(ByRef lookup As Variant)
 		If lookup Is Nothing Then GoTo LOOK_ERROR
 		
 		' ...or for anything other than a Range.
-		If TypeOf lookup IsNot Range Then GoTo LOOK_ERROR
+		If Not TypeOf lookup Is Range Then GoTo LOOK_ERROR
 		
 		' Check a Range specifically.
 		On Error GoTo LOOK_ERROR
@@ -1335,7 +1335,7 @@ Private Function GetValue( _
 			hasLoc = LookupKey( _
 				lookup := lookup, _
 				key := idx, _
-				loc := loc _
+				pos := loc _
 			)
 			
 			' ...and short-circuit for no match.
