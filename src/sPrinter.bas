@@ -246,17 +246,8 @@ Public Function Message( _
 	
 	' Validate any lookup.
 	Dim hasLook As Boolean: hasLook = Not VBA.IsMissing(lookup)
-	' Dim nLook As Long, lowLook As Long, upLook As Long
-	' Dim isRngLook As Boolean, oriLook As Excel.XlRowCol
-	
 	If hasLook Then
-		CheckLookup _
-			lookup := lookup  ' , _
-			n := nLook, _
-			low := lowLook, _
-			up := upLook, _
-			isRng := isRngLook, _
-			ori := oriLook
+		CheckLookup lookup := lookup
 	End If
 	
 	
