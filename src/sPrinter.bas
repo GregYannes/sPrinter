@@ -1107,6 +1107,42 @@ DATA_ERROR:
 End Sub
 
 
+' Validate input for names, with which to "look up" the original data.
+Private Sub CheckLookup(ByRef data As Variant)
+	' Examine an object...
+	If VBA.IsObject(data) Then
+		' Short-circuit for an uninitialized object...
+		If data Is Nothing Then GoTo LOOK_ERROR
+		
+		' ...or for anything other than a Range.
+		If TypeOf data IsNot Range Then GoTo LOOK_ERROR
+		
+		' Check a Range specifically.
+		On Error GoTo LOOK_ERROR
+		CheckRange rng := obj
+		On Error GoTo 0
+		
+	' ...or an array...
+	ElseIf VBA.IsArray(data) Then
+		On Error GoTo LOOK_ERROR
+		CheckArray arr := data
+		On Error GoTo 0
+		
+	' ...but throw an error for anything else.
+	Else
+		GoTo LOOK_ERROR
+	End If
+	
+	' Conclude validation successfully.
+	Exit Sub
+	
+	
+' Report an error for invalid structure.
+LOOK_ERROR:
+	Err_Lookup
+End Sub
+
+
 ' Validate an object as input.
 Private Sub CheckObject( _
 	ByVal obj As Object, _
@@ -1248,47 +1284,6 @@ Private Sub CheckArray( _
 ' Report an error for invalid structure.
 ARR_ERROR:
 	Err.Raise Number := ERR_NUM
-End Sub
-
-
-
-' ###################################
-' ## Support | Validation | Lookup ##
-' ###################################
-
-' Validate input for names, with which to "look up" the original data.
-Private Sub CheckLookup(ByRef data As Variant)
-	' Examine an object...
-	If VBA.IsObject(data) Then
-		' Short-circuit for an uninitialized object...
-		If data Is Nothing Then GoTo LOOK_ERROR
-		
-		' ...or for anything other than a Range.
-		If TypeOf data IsNot Range Then GoTo LOOK_ERROR
-		
-		' Check a Range specifically.
-		On Error GoTo LOOK_ERROR
-		CheckRange rng := obj
-		On Error GoTo 0
-		
-	' ...or an array...
-	ElseIf VBA.IsArray(data) Then
-		On Error GoTo LOOK_ERROR
-		CheckArray arr := data
-		On Error GoTo 0
-		
-	' ...but throw an error for anything else.
-	Else
-		GoTo LOOK_ERROR
-	End If
-	
-	' Conclude validation successfully.
-	Exit Sub
-	
-	
-' Report an error for invalid structure.
-LOOK_ERROR:
-	Err_Lookup
 End Sub
 
 
