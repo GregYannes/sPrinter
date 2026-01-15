@@ -887,10 +887,11 @@ End Function
 Public Function Txt_List(ByRef txts As Variant, _
 	Optional ByVal symbol As String = "-", _
 	Optional ByVal indent As String = VBA.vbTab, _
-	Optional ByVal offset As String = " " _
+	Optional ByVal offset As String = " ", _
+	Optional ByVal separator As String = VBA.vbNewLine _
 ) As String
 	Dim pfx As String: pfx = indent & symbol & offset
-	Dim sep As String: sep = VBA.vbNewLine & pfx
+	Dim sep As String: sep = separator & pfx
 	
 	If Arr_Length(txts) = 0 Then
 		Exit Function
