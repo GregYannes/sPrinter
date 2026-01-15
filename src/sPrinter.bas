@@ -707,7 +707,7 @@ Private Sub Err_Data()
 		"A Range of cells, in a single row or single column.", _
 		"An (initialized) object with both a default member and a "".Count"" property." _
 	)
-	description = description & ":" & VBA.vbNewLine & Txt_List(types)
+	description = description & ":" & VBA.vbNewLine & Txt_List(types, separator := VBA.vbNewLine)
 	
 	' Raise the error.
 	Err.Raise _
@@ -727,7 +727,7 @@ Private Sub Err_Lookup()
 		"A unidimensional (1D) array.", _
 		"A Range of cells, in a single row or single column." _
 	)
-	description = description & ":" & VBA.vbNewLine & Txt_List(types)
+	description = description & ":" & VBA.vbNewLine & Txt_List(types, separator := VBA.vbNewLine)
 	
 	' Raise the error.
 	Err.Raise _
