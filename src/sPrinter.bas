@@ -1460,10 +1460,6 @@ Private Function LookupKey( _
 	ByVal key As String, _
 	Optional ByRef pos As Long _
 ) As Boolean
-	' ' Define the bases for relative locations.
-	' Const MATCH_BASE As Long = 1
-	' Const POS_BASE As Long = 1
-	
 	' Search forwards for an exact match.
 	Const MATCH_MODE As Long = 0
 	Const SEARCH_MODE As Long = 1
@@ -1491,9 +1487,6 @@ Private Function LookupKey( _
 	
 ' Report a nonexistent key.
 LOOK_ERROR:
-	' ' Ensure the error is #NA! for no match.
-	' If VBA.CLng(result) = Excel.XlCVError.xlErrNA
-	
 	LookupKey = False
 End Function
 
