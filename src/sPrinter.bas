@@ -875,7 +875,7 @@ End Function
 Public Function Txt_Crop(ByVal txt As String, _
 	Optional ByVal nLeft As Long = 0, _
 	Optional ByVal nRight As Long = 0 _
-)
+) As String
 	Dim n As Long
 	
 	If nRight > 0 Then
@@ -1415,7 +1415,7 @@ Private Function GetRangeValue( _
 	ByVal pos As Long, _
 	ByVal ori As Excel.XlRowCol, _
 	Optional ByRef val As Variant _
-)
+) As Boolean
 	' The base used by Ranges of cells.
 	Const RNG_BASE As Long = 1
 	
