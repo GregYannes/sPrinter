@@ -1488,7 +1488,6 @@ Private Function LookupKey( _
 	
 	' Record the match location...
 	pos = VBA.CLng(result)
-	' pos = pos - MATCH_BASE + POS_BASE
 	
 	' ...and report success.
 	LookupKey = True
@@ -2242,7 +2241,6 @@ Private Function Fld_Close(ByRef fld As ParserField, _
 	If argIdx > FieldArgument.[_First] Then
 		' Extract the final argument...
 		arg = args(argIdx)
-		' Expr_Clone args(argIdx), arg
 		
 		' ...and process this format.
 		Fld_Close = Fld_CloseFormat(fld, _
@@ -2275,7 +2273,7 @@ Private Function Fld_CloseIndex(ByRef fld As ParserField, _
 	ByRef idxEsc As Long _
 ) As sPrinterStatus
 	' Define fallback for missing argument.
-	Dim noIdx As Variant  ' noIdx = Missing()
+	Dim noIdx As Variant
 	
 	' Save the defused syntax...
 	Dim dfuSyntax As String: dfuSyntax = idx.Syntax
