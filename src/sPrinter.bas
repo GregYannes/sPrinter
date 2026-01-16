@@ -710,6 +710,10 @@ Private Sub Err_Data()
 	' Define the error: type mismatch.
 	Const ERR_NUM As Long = 13
 	
+	' Specify formatting.
+	Const DESC_IND As String = "  "
+	
+	
 	' Generate a relevant description of the error.
 	Dim description As String: description = "The source data must be one of the following"
 	Dim types As Variant: types = Array( _
@@ -717,7 +721,7 @@ Private Sub Err_Data()
 		"A Range of cells, in a single row or single column.", _
 		"An (initialized) object with a "".Count"" property and default member." _
 	)
-	description = description & ":" & VBA.vbNewLine & Txt_List(types, separator := VBA.vbNewLine)
+	description = description & ":" & VBA.vbNewLine & Txt_List(types, indent := DESC_IND, separator := VBA.vbNewLine)
 	
 	' Raise the error.
 	Err.Raise _
@@ -731,13 +735,17 @@ Private Sub Err_Lookup()
 	' Define the error: type mismatch.
 	Const ERR_NUM As Long = 13
 	
+	' Specify formatting.
+	Const DESC_IND As String = "  "
+	
+	
 	' Generate a relevant description of the error.
 	Dim description As String: description = "The lookup data must be one of the following"
 	Dim types As Variant: types = Array( _
 		"A unidimensional (1D) array.", _
 		"A Range of cells, in a single row or single column." _
 	)
-	description = description & ":" & VBA.vbNewLine & Txt_List(types, separator := VBA.vbNewLine)
+	description = description & ":" & VBA.vbNewLine & Txt_List(types, indent := DESC_IND, separator := VBA.vbNewLine)
 	
 	' Raise the error.
 	Err.Raise _
