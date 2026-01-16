@@ -715,7 +715,7 @@ Private Sub Err_Data()
 	Dim types As Variant: types = Array( _
 		"A unidimensional (1D) array.", _
 		"A Range of cells, in a single row or single column.", _
-		"An (initialized) object with both a default member and a "".Count"" property." _
+		"An (initialized) object with a "".Count"" property and default member." _
 	)
 	description = description & ":" & VBA.vbNewLine & Txt_List(types, separator := VBA.vbNewLine)
 	
