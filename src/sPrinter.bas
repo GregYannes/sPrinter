@@ -1894,7 +1894,7 @@ Private Sub Parse0( _
 					' Activate escaping.
 					dfu = dfu + ParsingDefusal.dfuEscape
 					
-					' Note any escaping in the index argument.
+					' Locate escaping in any index argument.
 					If depth = 1 And argIdx = FieldArgument.argIndex And idxEsc = 0 Then idxEsc = charIndex
 					
 					' Extend the location of this field.
