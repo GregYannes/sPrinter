@@ -1428,12 +1428,10 @@ Private Function GetRangeValue( _
 	
 	' Extract from the first row...
 	Case Excel.XlRowCol.xlRows
-		' TODO: Is it better to use "rng.Value()(pos, RNG_BASE)" instead?
 		Assign val, rng.Cells(RNG_BASE, pos).Value
 		
 	' ...or from the first column...
 	Case Excel.XlRowCol.xlColumns
-		' TODO: Is it better to use "rng.Value()(RNG_BASE, pos)" instead?
 		Assign val, rng.Cells(pos, RNG_BASE).Value
 		
 	' ...or from the first (single) cell.
@@ -1441,7 +1439,6 @@ Private Function GetRangeValue( _
 		' Short-circuit for any position other than the first.
 		If pos <> RNG_BASE Then GoTo VAL_ERROR
 		
-		' TODO: Is it better to use "rng.Cells(RNG_BASE, RNG_BASE).Value" instead?
 		Assign val, rng.Value
 		
 	' Short-circuit for any other orientation.
