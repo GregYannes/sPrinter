@@ -109,7 +109,7 @@ Public Sub Test_Message()
 	Next i
 	
 	
-	Dim arrMsg1 As String: arrMsg1 = sPrinter.Message(fmt0, arrData, ,          default := DEFAULT_VALUE)
+	Dim arrMsg0 As String: arrMsg0 = sPrinter.Message(fmt0, arrData, ,          default := DEFAULT_VALUE)
 	Dim arrMsg2 As String: arrMsg2 = sPrinter.Message(fmt2, arrData, ,          default := DEFAULT_VALUE, position := posRelative)
 	Dim arrMsg3 As String: arrMsg3 = sPrinter.Message(fmt3, arrData, ,          default := DEFAULT_VALUE)
 	Dim arrMsg4 As String: arrMsg4 = sPrinter.Message(fmt4, arrData, arrLookup, default := DEFAULT_VALUE)
@@ -123,7 +123,7 @@ Public Sub Test_Message()
 	
 	
 	Debug.Print "INPUT:" & VBA.vbTab & fmt0
-	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg1
+	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg0
 	Debug.Print
 	Debug.Print
 	Debug.Print "INPUT:" & VBA.vbTab & fmt2
