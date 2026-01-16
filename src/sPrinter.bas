@@ -1473,18 +1473,15 @@ Private Function LookupKey( _
 	Const SEARCH_MODE As Long = 1
 	
 	
-	' Perform the search...
+	' Perform the search to record the location...
 	On Error GoTo LOOK_ERROR
-	Dim result As Variant: result = Application.WorksheetFunction.XMatch( _
+	pos = Application.WorksheetFunction.XMatch( _
 		Arg1 := key, _
 		Arg2 := lookup, _
 		Arg3 := MATCH_MODE, _
 		Arg4 := SEARCH_MODE _
 	)
 	On Error GoTo 0
-	
-	' Record the match location...
-	pos = VBA.CLng(result)
 	
 	' ...and report success.
 	LookupKey = True
