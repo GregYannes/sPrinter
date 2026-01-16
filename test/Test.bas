@@ -85,6 +85,7 @@ Public Sub Test_Message()
 	Dim fmt2 As String: fmt2 = "You have a meeting with {1} {2} at {-2:h:MM AM/PM} on {-1:dddd, mmmm d}."
 	Dim fmt3 As String: fmt3 = "You have a meeting with {} {} at {:h:MM AM/PM} on {:dddd, mmmm d}."
 	Dim fmt4 As String: fmt4 = "You have a meeting with {{forename}} {{surname}} at {{time}:h:MM AM/PM} on {{date}:dddd, mmmm d}."
+	Dim fmt5 As String: fmt5 = "You have a meeting with {} {2} at {-2:h:MM AM/PM} on {{date}:dddd, mmmm d} regarding {5} and {-5} and {{omitted}}."
 	
 	
 	Dim arrData As Variant: arrData = Array( _
@@ -113,13 +114,14 @@ Public Sub Test_Message()
 	Dim arrMsg2 As String: arrMsg2 = sPrinter.Message(fmt2, arrData, ,          default := DEFAULT_VALUE, position := posRelative)
 	Dim arrMsg3 As String: arrMsg3 = sPrinter.Message(fmt3, arrData, ,          default := DEFAULT_VALUE)
 	Dim arrMsg4 As String: arrMsg4 = sPrinter.Message(fmt4, arrData, arrLookup, default := DEFAULT_VALUE)
+	Dim arrMsg5 As String: arrMsg5 = sPrinter.Message(fmt5, arrData, arrLookup, default := DEFAULT_VALUE, position := posRelative)
 	
 	
 	Dim clxMsg1 As String: clxMsg1 = sPrinter.Message(fmt1, clxData, ,          default := DEFAULT_VALUE)
 	Dim clxMsg2 As String: clxMsg2 = sPrinter.Message(fmt2, clxData, ,          default := DEFAULT_VALUE, position := posRelative)
 	Dim clxMsg3 As String: clxMsg3 = sPrinter.Message(fmt3, clxData, ,          default := DEFAULT_VALUE)
 	Dim clxMsg4 As String: clxMsg4 = sPrinter.Message(fmt4, clxData, ,          default := DEFAULT_VALUE)
-	Dim clxMsg5 As String: clxMsg5 = sPrinter.Message(fmt4, clxData, arrLookup, default := DEFAULT_VALUE)
+	Dim clxMsg5 As String: clxMsg5 = sPrinter.Message(fmt5, clxData, arrLookup, default := DEFAULT_VALUE, position := posRelative)
 	
 	
 	Debug.Print "INPUT:" & VBA.vbTab & fmt0
@@ -136,6 +138,10 @@ Public Sub Test_Message()
 	Debug.Print
 	Debug.Print "INPUT:" & VBA.vbTab & fmt4
 	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg4
+	Debug.Print
+	Debug.Print
+	Debug.Print "INPUT:" & VBA.vbTab & fmt5
+	Debug.Print "OUTPUT:" & VBA.vbTab & arrMsg5
 	
 	Debug.Print
 	Debug.Print
@@ -158,6 +164,6 @@ Public Sub Test_Message()
 	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg4
 	Debug.Print
 	Debug.Print
-	Debug.Print "INPUT:" & VBA.vbTab & fmt4
+	Debug.Print "INPUT:" & VBA.vbTab & fmt5
 	Debug.Print "OUTPUT:" & VBA.vbTab & clxMsg5
 End Sub
