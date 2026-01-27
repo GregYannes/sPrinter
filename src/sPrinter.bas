@@ -208,6 +208,11 @@ Public Function Format2( _
 End Function
 
 
+
+' #####################
+' ## API | Messaging ##
+' #####################
+
 ' Embed (formatted) values within a message...
 Public Function Message( _
 	ByRef format As String, _
