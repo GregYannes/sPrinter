@@ -213,7 +213,7 @@ End Function
 ' ## API | Messaging ##
 ' #####################
 
-' Embed (formatted) values within a message...
+' Embed (formatted) values within a message, sourced from fleXible data.
 Public Function xMessage( _
 	ByRef format As String, _
 	ByRef data As Variant, _
@@ -390,7 +390,7 @@ FMT_ERROR:
 End Function
 
 
-' ...and print that message to the console.
+' Print such a message to the console, sourced from fleXible data.
 Public Function xPrint( _
 	ByRef format As String, _
 	Optional ByRef data As Variant, _
