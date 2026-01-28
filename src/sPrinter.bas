@@ -395,9 +395,11 @@ Public Function iMessage( _
 	ByRef format As String, _
 	ParamArray data() As Variant _
 ) As String
+	Dim d() As Variant: d = data
+	
 	iMessage = ixMessage( _
 		format := format, _
-		data := data _
+		data := d _
 	)
 End Function
 
@@ -459,9 +461,11 @@ Public Function vMessage( _
 	ByRef format As String, _
 	ParamArray data() As Variant _
 ) As String
+	Dim d() As Variant: d = data
+	
 	vMessage = vxMessage( _
 		format := format, _
-		data := data _
+		data := d _
 	)
 End Function
 
@@ -528,9 +532,11 @@ Public Function iPrint( _
 	ByRef format As String, _
 	ParamArray data() As Variant _
 ) As String
+	Dim d() As Variant: d = data
+	
 	iPrint = ixMessage( _
 		format := format, _
-		data := data _
+		data := d _
 	)
 	
 	Debug.Print iPrint
@@ -542,9 +548,11 @@ Public Function vPrint( _
 	ByRef format As String, _
 	ParamArray data() As Variant _
 ) As String
+	Dim d() As Variant: d = data
+	
 	vPrint = vxMessage( _
 		format := format, _
-		data := data _
+		data := d _
 	)
 	
 	Debug.Print vPrint
