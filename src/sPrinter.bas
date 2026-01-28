@@ -216,7 +216,7 @@ End Function
 ' Embed (formatted) values within a message, sourced from fleXible data.
 Public Function xMessage( _
 	ByRef format As String, _
-	ByRef data As Variant, _
+	Optional ByRef data As Variant, _
 	Optional ByRef lookup As Variant, _
 	Optional ByRef default As Variant, _
 	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
@@ -235,6 +235,11 @@ Public Function xMessage( _
 		xMessage = VBA.vbNullString
 		Exit Function
 	End If
+	
+	
+	' Default to empty data.
+	Dim hasData As Boolean: hasData = Not VBA.IsMissing(data)
+	If Not hasData Then data = Array()
 	
 	
 	' Validate the data.
@@ -498,7 +503,7 @@ End Function
 ' Print such a message to the console: sourced from fleXible data...
 Public Function xPrint( _
 	ByRef format As String, _
-	ByRef data As Variant, _
+	Optional ByRef data As Variant, _
 	Optional ByRef lookup As Variant, _
 	Optional ByRef default As Variant, _
 	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
