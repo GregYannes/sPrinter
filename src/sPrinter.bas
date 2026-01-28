@@ -418,7 +418,7 @@ Private Function ixMessage( _
 	
 	' Extract the arguments into usable data.
 	Dim xData() As Variant
-	Dim xLook() As Variant
+	Dim xLook() As String
 	Dim hasDfl As Boolean, dfl As Variant
 	
 	Dim status As Boolean: status = iGetData( _
@@ -1502,7 +1502,7 @@ End Sub
 Private Function iGetData( _
 	ByRef args() As Variant, _
 	ByRef data() As Variant, _
-	ByRef lookup() As Variant, _
+	ByRef lookup() As String, _
 	Optional ByRef hasDefault As Boolean, _
 	Optional ByRef default As Variant _
 ) As Boolean
@@ -1516,8 +1516,8 @@ Private Function iGetData( _
 	' Short-circuit for no arguments.
 	If nArgs <= 0 Then
 		hasDefault = False
-		data = Array()
-		lookup = Array()
+		Erase data
+		Erase lookup
 		
 		iGetData = True
 		Exit Function
@@ -1543,8 +1543,8 @@ Private Function iGetData( _
 		ReDim data(lowData To upData)
 		ReDim lookup(lowData To upData)
 	Else
-		data = Array()
-		lookup = Array()
+		Erase data
+		Erase lookup
 	End If
 	
 	' Populate the data arrays from the arguments.
