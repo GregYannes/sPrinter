@@ -1491,6 +1491,7 @@ Private Function iGetData( _
 	' Short-circuit for no arguments.
 	If nArgs <= 0 Then
 		hasDefault = False
+		iGetData = True
 		Exit Function
 	End If
 	
