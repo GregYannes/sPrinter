@@ -390,6 +390,78 @@ FMT_ERROR:
 End Function
 
 
+' Embed (formatted) values within a message, sourced from Identity-value pairs of arguments...
+Public Function iMessage( _
+	ByRef format As String, _
+	ParamArray data() As Variant _
+) As String
+	iMessage = ixMessage( _
+		format := format, _
+		data := data _
+	)
+End Function
+
+
+' ...and support conversion from those arguments to fleXible data.
+Private Function ixMessage( _
+	ByRef format As String, _
+	ByRef data() As Variant _
+) As String
+	' Use relative positioning for arguments.
+	Dim pos As PositionKind: pos = PositionKind.posRelative
+	
+	' Extract the arguments into usable data.
+	Dim xData() As Variant
+	Dim xLook() As String
+	Dim hasDfl As Boolean, dfl As Variant
+	
+	Dim status As Boolean: status = iGetData( _
+		args := data, _
+		data := xData, _
+		lookup := xLook, _
+		hasDefault := hasDfl, _
+		default := dfl _
+	)
+	
+	' Dim xData As Collection
+	' status = iGetData( _
+	' 	args := data, _
+	' 	data := xData, _
+	' 	hasDefault := hasDfl, _
+	' 	default := dfl _
+	' )
+	
+	' Short-circuit for invalid key.
+	If Not status Then GoTo KEY_ERROR
+	
+	' Generate the message from the data.
+	If hasDfl Then
+		ixMessage = xMessage( _
+			format := format, _
+			data := xData, _
+			lookup := xLook, _
+			default := dfl, _
+			position := pos _
+		)
+	Else
+		ixMessage = xMessage( _
+			format := format, _
+			data := xData, _
+			lookup := xLook, _
+			position := pos _
+		)
+	End If
+	
+	' Return the result.
+	Exit Function
+	
+	
+' Handle an error for an invalid key.
+KEY_ERROR:
+	Err_Key
+End Function
+
+
 ' Embed (formatted) values within a message, sourced from single Values as arguments...
 Public Function vMessage( _
 	ByRef format As String, _
@@ -456,6 +528,20 @@ Public Function xPrint( _
 	)
 	
 	Debug.Print xPrint
+End Function
+
+
+' ...or from Identity-value pairs of arguments...
+Public Function iPrint( _
+	ByRef format As String, _
+	ParamArray data() As Variant _
+) As String
+	iPrint = ixMessage( _
+		format := format, _
+		data := data _
+	)
+	
+	Debug.Print iPrint
 End Function
 
 
@@ -803,6 +889,20 @@ Private Sub Err_Lookup()
 	Err.Raise _
 		Number := ERR_NUM, _
 		Description := description
+End Sub
+
+
+' Throw an error for an invalid key within an argument pair.
+Private Sub Err_Key()
+	' Define the error: type mismatch.
+	Const ERR_NUM As Long = 13
+	Const ERR_DESC As String = "The key-value pair of arguments must have a textual key."
+	
+	
+	' Raise the error.
+	Err.Raise _
+		Number := ERR_NUM, _
+		Description := ERR_DESC
 End Sub
 
 
