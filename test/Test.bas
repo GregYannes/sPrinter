@@ -110,17 +110,17 @@ Public Sub Test_Message()
 	Next i
 	
 	
-	Dim arrMsg0 As String: arrMsg0 = sPrinter.Message(fmt0, arrData, ,          default := DEFAULT_VALUE)
-	Dim arrMsg2 As String: arrMsg2 = sPrinter.Message(fmt2, arrData, ,          default := DEFAULT_VALUE, position := posRelative)
-	Dim arrMsg3 As String: arrMsg3 = sPrinter.Message(fmt3, arrData, ,          default := DEFAULT_VALUE)
+	Dim arrMsg0 As String: arrMsg0 = sPrinter.Message(fmt0, arrData,          , default := DEFAULT_VALUE)
+	Dim arrMsg2 As String: arrMsg2 = sPrinter.Message(fmt2, arrData,          , default := DEFAULT_VALUE, position := posRelative)
+	Dim arrMsg3 As String: arrMsg3 = sPrinter.Message(fmt3, arrData,          , default := DEFAULT_VALUE)
 	Dim arrMsg4 As String: arrMsg4 = sPrinter.Message(fmt4, arrData, arrLookup, default := DEFAULT_VALUE)
 	Dim arrMsg5 As String: arrMsg5 = sPrinter.Message(fmt5, arrData, arrLookup, default := DEFAULT_VALUE, position := posRelative)
 	
 	
-	Dim clxMsg1 As String: clxMsg1 = sPrinter.Message(fmt1, clxData, ,          default := DEFAULT_VALUE)
-	Dim clxMsg2 As String: clxMsg2 = sPrinter.Message(fmt2, clxData, ,          default := DEFAULT_VALUE, position := posRelative)
-	Dim clxMsg3 As String: clxMsg3 = sPrinter.Message(fmt3, clxData, ,          default := DEFAULT_VALUE)
-	Dim clxMsg4 As String: clxMsg4 = sPrinter.Message(fmt4, clxData, ,          default := DEFAULT_VALUE)
+	Dim clxMsg1 As String: clxMsg1 = sPrinter.Message(fmt1, clxData,          , default := DEFAULT_VALUE)
+	Dim clxMsg2 As String: clxMsg2 = sPrinter.Message(fmt2, clxData,          , default := DEFAULT_VALUE, position := posRelative)
+	Dim clxMsg3 As String: clxMsg3 = sPrinter.Message(fmt3, clxData,          , default := DEFAULT_VALUE)
+	Dim clxMsg4 As String: clxMsg4 = sPrinter.Message(fmt4, clxData,          , default := DEFAULT_VALUE)
 	Dim clxMsg5 As String: clxMsg5 = sPrinter.Message(fmt5, clxData, arrLookup, default := DEFAULT_VALUE, position := posRelative)
 	
 	
