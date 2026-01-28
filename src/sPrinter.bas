@@ -418,7 +418,7 @@ Private Function ixMessage( _
 	
 	' Extract the arguments into usable data.
 	Dim xData() As Variant
-	Dim xLook() As String
+	Dim xLook() As Variant
 	Dim hasDfl As Boolean, dfl As Variant
 	
 	Dim status As Boolean: status = iGetData( _
@@ -1476,8 +1476,8 @@ End Sub
 ' Extract data structures from variadic arguments.
 Private Function iGetData( _
 	ByRef args() As Variant, _
-	ByRef data As Variant, _
-	ByRef lookup As Variant, _
+	ByRef data() As Variant, _
+	ByRef lookup() As Variant, _
 	Optional ByRef hasDefault As Boolean, _
 	Optional ByRef default As Variant _
 ) As Boolean
@@ -1491,6 +1491,8 @@ Private Function iGetData( _
 	' Short-circuit for no arguments.
 	If nArgs <= 0 Then
 		hasDefault = False
+		data = Array()
+		lookup = Array()
 		iGetData = True
 		Exit Function
 	End If
@@ -1511,8 +1513,13 @@ Private Function iGetData( _
 	Dim lowData As Long: lowData = DATA_BASE
 	Dim upData As Long: upData = lowData + nData - 1
 	
+	If nData > 0 Then
 	ReDim data(lowData To upData)
 	ReDim lookup(lowData To upData)
+	Else
+		data = Array()
+		lookup = Array()
+	End If
 	
 	' Populate the data arrays from the arguments.
 	Dim iData As Long: iData = lowData
