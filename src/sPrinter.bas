@@ -498,7 +498,8 @@ End Function
 ' Print such a message to the console: sourced from fleXible data...
 Public Function xPrint( _
 	ByRef format As String, _
-	Optional ByRef data As Variant, _
+	ByRef data As Variant, _
+	Optional ByRef lookup As Variant, _
 	Optional ByRef default As Variant, _
 	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
 	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
@@ -514,6 +515,7 @@ Public Function xPrint( _
 	xPrint = xMessage( _
 		format := format, _
 		data := data, _
+		lookup := lookup, _
 		default := default, _
 		position := position, _
 		mode := mode, _
