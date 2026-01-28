@@ -390,12 +390,40 @@ FMT_ERROR:
 End Function
 
 
+' Embed (formatted) values within a message, sourced from single Values as arguments...
+Public Function vMessage( _
+	ByRef format As String, _
+	ParamArray data() As Variant _
+) As String
+	vMessage = vxMessage( _
+		format := format, _
+		data := data _
+	)
+End Function
+
+
+' ...and support conversion from those arguments to fleXible data.
+Private Function vxMessage( _
+	ByRef format As String, _
+	ByRef data() As Variant _
+) As String
+	' Use relative positioning for arguments.
+	Dim pos As PositionKind: pos = PositionKind.posRelative
+	
+	vxMessage = xMessage( _
+		format := format, _
+		data := data, _
+		position := pos _
+	)
+End Function
+
+
 
 ' ####################
 ' ## API | Printing ##
 ' ####################
 
-' Print such a message to the console, sourced from fleXible data.
+' Print such a message to the console: sourced from fleXible data...
 Public Function xPrint( _
 	ByRef format As String, _
 	Optional ByRef data As Variant, _
@@ -428,6 +456,20 @@ Public Function xPrint( _
 	)
 	
 	Debug.Print xPrint
+End Function
+
+
+' ...or from single Values as arguments.
+Public Function vPrint( _
+	ByRef format As String, _
+	ParamArray data() As Variant _
+) As String
+	vPrint = vxMessage( _
+		format := format, _
+		data := data _
+	)
+	
+	Debug.Print vPrint
 End Function
 
 
