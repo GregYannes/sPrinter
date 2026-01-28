@@ -1509,7 +1509,7 @@ Private Function iGetData( _
 	End If
 	
 	' Resize the data arrays to fit the arguments.
-	Dim nData As Long: nData = nArgs/ 2
+	Dim nData As Long: nData = nArgs / 2
 	Dim lowData As Long: lowData = DATA_BASE
 	Dim upData As Long: upData = lowData + nData - 1
 	
