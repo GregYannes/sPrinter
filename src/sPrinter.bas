@@ -214,7 +214,7 @@ End Function
 ' #####################
 
 ' Embed (formatted) values within a message...
-Public Function Message( _
+Public Function xMessage( _
 	ByRef format As String, _
 	ByRef data As Variant, _
 	Optional ByRef lookup As Variant, _
@@ -232,7 +232,7 @@ Public Function Message( _
 ) As String
 	' Short-circuit for blank format.
 	If format = VBA.vbNullString Then
-		Message = VBA.vbNullString
+		xMessage = VBA.vbNullString
 		Exit Function
 	End If
 	
@@ -272,7 +272,7 @@ Public Function Message( _
 	' ...and short-circuit for no elements.
 	Dim count As Long: count = Elm_Count(elements)
 	If count = 0 Then
-		Message = VBA.vbNullString
+		xMessage = VBA.vbNullString
 		Exit Function
 	End If
 	
@@ -373,7 +373,7 @@ Public Function Message( _
 		End Select
 		
 		' Append the result to the message.
-		Message = Message & out
+		xMessage = xMessage & out
 	Next i
 	
 	
@@ -406,7 +406,7 @@ Public Function Print2( _
 	Optional ByVal closeQuote As String = SYM_QUO_CLOSE, _
 	Optional ByVal separator As String = SYM_SEP _
 ) As String
-	Print2 = Message( _
+	xPrint = xMessage( _
 		format := format, _
 		data := data, _
 		default := default, _
