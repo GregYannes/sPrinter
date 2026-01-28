@@ -391,7 +391,7 @@ End Function
 
 
 ' ...and print that message to the console.
-Public Function Print2( _
+Public Function xPrint( _
 	ByRef format As String, _
 	Optional ByRef data As Variant, _
 	Optional ByRef default As Variant, _
@@ -422,7 +422,7 @@ Public Function Print2( _
 		separator := separator _
 	)
 	
-	Debug.Print Print2
+	Debug.Print xPrint
 End Function
 
 
