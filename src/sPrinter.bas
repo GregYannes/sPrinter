@@ -1516,7 +1516,7 @@ Private Function iGetData( _
 	' Populate the data arrays from the arguments.
 	Dim iData As Long: iData = lowData
 	Dim iKey As Long, key As String
-	Dim iVal As Long, val As Variant
+	Dim iVal As Long
 	
 	Dim iArg As Long
 	For iArg = lowArg To upArg Step 2
