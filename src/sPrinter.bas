@@ -423,14 +423,6 @@ Private Function ixMessage( _
 		default := dfl _
 	)
 	
-	' Dim xData As Collection
-	' status = iGetData( _
-	' 	args := data, _
-	' 	data := xData, _
-	' 	hasDefault := hasDfl, _
-	' 	default := dfl _
-	' )
-	
 	' Short-circuit for invalid key.
 	If Not status Then GoTo KEY_ERROR
 	
@@ -1481,7 +1473,6 @@ Private Function iGetData( _
 	Dim lowArg As Long: lowArg = LBound(args, 1)
 	Dim upArg As Long: upArg = UBound(args, 1)
 	Dim nArgs As Long: nArgs = Arr_Length(args, dimension := 1)
-	' nArgs = upArg - lowArg + 1
 	
 	' Short-circuit for no arguments.
 	If nArgs = 0 Then
@@ -1491,7 +1482,6 @@ Private Function iGetData( _
 	
 	' Handle any trailing default.
 	hasDefault = ((nArgs Mod 2) = 1)
-	' hasDefault = Num_IsOdd(nArgs)
 	If hasDefault Then
 		Assign default, args(upArg)
 		upArg = upArg - 1
