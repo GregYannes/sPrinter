@@ -1098,6 +1098,24 @@ End Function
 
 
 
+' #######################
+' ## Support | Options ##
+' #######################
+
+' Retrieve the setting for Option Base.
+Private Property Get Opt_Base() As Integer
+	Static isInit As Boolean, base As Integer
+	
+	If Not isInit Then
+		base = LBound(Array(False), 1)
+		isInit = True
+	End If
+	
+	Opt_Base = base
+End Function
+
+
+
 ' ##########################
 ' ## Support | Formatting ##
 ' ##########################
@@ -1451,12 +1469,18 @@ Private Sub CheckArray( _
 	
 	' Ensure the array is a (1D) vector...
 	Dim rnk As Long: rnk = Arr_Rank(arr)
-	If rnk <> 1 Then GoTo ARR_ERROR
+	If rnk > 1 Then GoTo ARR_ERROR
 	
 	' ...and record the bounds.
+	If rnk > 0 Then
 	n = Arr_Length(arr, dimension := 1)
 	low = LBound(arr, 1)
 	up = UBound(arr, 1)
+	Else
+		n = 0
+		low = Opt_Base()
+		up = low - 1
+	End If
 	
 	' Conclude validation successfully.
 	Exit Sub
