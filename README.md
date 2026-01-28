@@ -7,9 +7,9 @@ The [`sprintf()`][c_spf] family is popular across [many programming languages][s
 Introducing the [**`sPrinter`**][proj_mod] module for Excel and VBA!  Simply write a template for your message, and use curly braces `{…}` to embed data inside.
 
 ```vba
-Print2("You have a meeting with {1} {2} at {3} on {4}.", Array("John", "Doe", Time(), Date()))
-'       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^  ^^^^^  ^^^^^^  ^^^^^^
-'                      Message Template                                     Data
+vPrint "You have a meeting with {1} {2} at {3} on {4}.", "John", "Doe", Time(), Date()
+'       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^  ^^^^^  ^^^^^^  ^^^^^^
+'                      Message Template                               Data
 ```
 
 > ```
@@ -21,7 +21,7 @@ Print2("You have a meeting with {1} {2} at {3} on {4}.", Array("John", "Doe", Ti
 You can make this look even nicer, by applying [format codes][docs_fmt] to your data!
 
 ```vba
-Print2("You have a meeting with {1} {2} at {3:h:MM AM/PM} on {4:dddd, mmmm d}.", Array("John", "Doe", Time(), Date()))
+vPrint "You have a meeting with {1} {2} at {3:h:MM AM/PM} on {4:dddd, mmmm d}.", "John", "Doe", Time(), Date()
 '                                             ^^^^^^^^^^        ^^^^^^^^^^^^
 '                                             Time Format        Date Format
 ```
