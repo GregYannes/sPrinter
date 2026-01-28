@@ -1515,8 +1515,7 @@ Private Function iGetData( _
 	
 	' Populate the data arrays from the arguments.
 	Dim iData As Long: iData = lowData
-	Dim iKey As Long, key As String
-	Dim iVal As Long
+	Dim iKey As Long, iVal As Long
 	
 	Dim iArg As Long
 	For iArg = lowArg To upArg Step 2
@@ -1526,10 +1525,8 @@ Private Function iGetData( _
 		
 		' Save the key among the lookups...
 		On Error GoTo KEY_ERROR
-		key = VBA.CStr(args(iKey))
+		lookup(iData) = VBA.CStr(args(iKey))
 		On Error GoTo 0
-		
-		lookup(iData) = key
 		
 		' ...and the value among the data.
 		Assign data(iData), args(iVal)
