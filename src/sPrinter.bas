@@ -390,6 +390,11 @@ FMT_ERROR:
 End Function
 
 
+
+' ####################
+' ## API | Printing ##
+' ####################
+
 ' Print such a message to the console, sourced from fleXible data.
 Public Function xPrint( _
 	ByRef format As String, _
