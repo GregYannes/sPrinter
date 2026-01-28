@@ -1473,9 +1473,9 @@ Private Sub CheckArray( _
 	
 	' ...and record the bounds...
 	If rnk > 0 Then
-	n = Arr_Length(arr, dimension := 1)
-	low = LBound(arr, 1)
-	up = UBound(arr, 1)
+		n = Arr_Length(arr, dimension := 1)
+		low = LBound(arr, 1)
+		up = UBound(arr, 1)
 	' ...even for an empty vector.
 	Else
 		n = 0
@@ -1539,8 +1539,8 @@ Private Function iGetData( _
 	Dim upData As Long: upData = lowData + nData - 1
 	
 	If nData > 0 Then
-	ReDim data(lowData To upData)
-	ReDim lookup(lowData To upData)
+		ReDim data(lowData To upData)
+		ReDim lookup(lowData To upData)
 	Else
 		data = Array()
 		lookup = Array()
