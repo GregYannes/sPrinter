@@ -1526,8 +1526,10 @@ Private Function iGetData( _
 		
 		' Save the key among the lookups...
 		On Error GoTo KEY_ERROR
-		lookup(iData) = VBA.CStr(args(iKey))
+		key = VBA.CStr(args(iKey))
 		On Error GoTo 0
+		
+		lookup(iData) = key
 		
 		' ...and the value among the data.
 		Assign data(iData), args(iVal)
