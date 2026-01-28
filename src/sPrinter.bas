@@ -53,7 +53,7 @@ Public Enum FormatMode
 End Enum
 
 
-' Context from which Message() is called.
+' Context from which Format2() is called.
 Private Enum CallingContext
 	[_Unknown] = 0	' Uninitialized.
 	cxtVBA		' The VBA environment.
@@ -1090,7 +1090,7 @@ End Function
 ' ## Support | Formatting ##
 ' ##########################
 
-' Display the index for a field...
+' Display the index for a field.
 Private Sub FormatIndex( _
 	ByRef idx As Variant, _
 	Optional ByRef idxCode As String, _
