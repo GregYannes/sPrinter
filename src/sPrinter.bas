@@ -1438,15 +1438,12 @@ Private Sub CheckArray( _
 	Const ERR_NUM As Long = 13
 	
 	
-	' Ensure the array is a (1D) vector...
+	' Ensure the array is a (1D) vector.
 	Dim rnk As Long: rnk = Arr_Rank(arr)
 	If rnk <> 1 Then GoTo ARR_ERROR
 	
-	' ...that is not empty.
-	n = Arr_Length(arr, dimension := 1)
-	If n <= 0 Then GoTo ARR_ERROR
-	
 	' Record the bounds...
+	n = Arr_Length(arr, dimension := 1)
 	low = LBound(arr, 1)
 	up = UBound(arr, 1)
 	
