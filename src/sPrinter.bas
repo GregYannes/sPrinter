@@ -250,9 +250,12 @@ Public Function xMessage( _
 	
 	
 	' Validate any lookup.
+	Dim nLook As Long
 	Dim hasLook As Boolean: hasLook = Not VBA.IsMissing(lookup)
 	If hasLook Then
-		CheckLookup lookup := lookup
+		CheckLookup _
+			lookup := lookup, _
+			n := nLook
 	End If
 	
 	
@@ -328,6 +331,7 @@ Public Function xMessage( _
 				ori := ori, _
 				hasLook := hasLook, _
 				lookup := lookup, _
+				nLook := nLook, _
 				pos := pos, _
 				val := val _
 			)
@@ -1281,7 +1285,10 @@ End Sub
 
 
 ' Validate input for names, with which to "look up" the original data.
-Private Sub CheckLookup(ByRef lookup As Variant)
+Private Sub CheckLookup( _
+	ByRef lookup As Variant, _
+	Optional ByRef n As Long _
+)
 	' Examine an object...
 	If VBA.IsObject(lookup) Then
 		' Short-circuit for an uninitialized object...
@@ -1292,13 +1299,17 @@ Private Sub CheckLookup(ByRef lookup As Variant)
 		
 		' Check a Range specifically.
 		On Error GoTo LOOK_ERROR
-		CheckRange rng := lookup
+		CheckRange _
+			rng := lookup, _
+			n := n
 		On Error GoTo 0
 		
 	' ...or an array...
 	ElseIf VBA.IsArray(lookup) Then
 		On Error GoTo LOOK_ERROR
-		CheckArray arr := lookup
+		CheckArray _
+			arr := lookup, _
+			n := n
 		On Error GoTo 0
 		
 	' ...but throw an error for anything else.
@@ -1547,6 +1558,7 @@ Private Function GetValue( _
 	ByVal ori As Excel.XlRowCol, _
 	Optional ByRef hasLook As Boolean = False, _
 	Optional ByRef lookup As Variant, _
+	Optional ByRef nLook As Long, _
 	Optional ByVal pos As PositionKind = PositionKind.posAbsolute, _
 	Optional ByRef val As Variant _
 ) As Boolean
@@ -1565,6 +1577,7 @@ Private Function GetValue( _
 			Dim hasLoc As Boolean, loc As Long
 			hasLoc = LookupKey( _
 				lookup := lookup, _
+				n := nLook, _
 				key := idx, _
 				pos := loc _
 			)
@@ -1685,6 +1698,7 @@ End Function
 ' Locate a key within lookup data.
 Private Function LookupKey( _
 	ByRef lookup As Variant, _
+	ByRef n As Long, _
 	ByVal key As String, _
 	Optional ByRef pos As Long _
 ) As Boolean
@@ -1692,6 +1706,9 @@ Private Function LookupKey( _
 	Const MATCH_MODE As Long = 0
 	Const SEARCH_MODE As Long = 1
 	
+	
+	' Short-circuit for no data.
+	If n = 0 Then GoTo LOOK_ERROR
 	
 	' Perform the search to record the location...
 	On Error GoTo LOOK_ERROR
