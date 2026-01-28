@@ -1470,15 +1470,17 @@ Private Function iGetData( _
 	
 	
 	' Count the arguments.
-	Dim lowArg As Long: lowArg = LBound(args, 1)
-	Dim upArg As Long: upArg = UBound(args, 1)
 	Dim nArgs As Long: nArgs = Arr_Length(args, dimension := 1)
 	
 	' Short-circuit for no arguments.
-	If nArgs = 0 Then
+	If nArgs <= 0 Then
 		hasDefault = False
 		Exit Function
 	End If
+	
+	' Bound the arguments.
+	Dim lowArg As Long: lowArg = LBound(args, 1)
+	Dim upArg As Long: upArg = UBound(args, 1)
 	
 	' Handle any trailing default.
 	hasDefault = ((nArgs Mod 2) = 1)
