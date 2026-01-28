@@ -1518,6 +1518,7 @@ Private Function iGetData( _
 		hasDefault = False
 		data = Array()
 		lookup = Array()
+		
 		iGetData = True
 		Exit Function
 	End If
