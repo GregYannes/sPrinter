@@ -1471,11 +1471,12 @@ Private Sub CheckArray( _
 	Dim rnk As Long: rnk = Arr_Rank(arr)
 	If rnk > 1 Then GoTo ARR_ERROR
 	
-	' ...and record the bounds.
+	' ...and record the bounds...
 	If rnk > 0 Then
 	n = Arr_Length(arr, dimension := 1)
 	low = LBound(arr, 1)
 	up = UBound(arr, 1)
+	' ...even for an empty vector.
 	Else
 		n = 0
 		low = Opt_Base()
