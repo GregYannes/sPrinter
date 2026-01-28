@@ -1509,7 +1509,7 @@ Private Function iGetData( _
 		iVal = iArg + 1
 		
 		' Save the key among the lookups...
-		On Error GoTo INVALID_KEY
+		On Error GoTo KEY_ERROR
 		lookup(iData) = VBA.CStr(args(iKey))
 		On Error GoTo 0
 		
