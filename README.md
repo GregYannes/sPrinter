@@ -4,7 +4,7 @@ The [`sprintf()`][c_spf] family is popular across [many programming languages][s
 
 <br>
 
-Introducing the [**`sPrinter`**][proj_mod] module for Excel and VBA!  Simply write a template for your message, and use curly braces `{…}` to embed data inside.
+Introducing the [**`sPrinter`**][proj_mod] module for Excel VBA!  Simply write a template for your message, and use curly braces `{…}` to embed data inside.
 
 ```vba
 vPrint "You have a meeting with {1} {2} at {3} on {4}.", "John", "Doe", Time(), Date()
