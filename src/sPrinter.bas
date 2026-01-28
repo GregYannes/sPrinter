@@ -1365,6 +1365,80 @@ End Sub
 ' ## Support | Extraction ##
 ' ##########################
 
+' Extract data structures from variadic arguments.
+Private Function iGetData( _
+	ByRef args() As Variant, _
+	ByRef data As Variant, _
+	ByRef lookup As Variant, _
+	Optional ByRef hasDefault As Boolean, _
+	Optional ByRef default As Variant _
+) As Boolean
+	' The base for data arrays.
+	Const DATA_BASE As Long = 1
+	
+	
+	' Count the arguments.
+	Dim lowArg As Long: lowArg = LBound(args, 1)
+	Dim upArg As Long: upArg = UBound(args, 1)
+	Dim nArgs As Long: nArgs = Arr_Length(args, dimension := 1)
+	' nArgs = upArg - lowArg + 1
+	
+	' Short-circuit for no arguments.
+	If nArgs = 0 Then
+		hasDefault = False
+		Exit Function
+	End If
+	
+	' Handle any trailing default.
+	hasDefault = ((nArgs Mod 2) = 1)
+	' hasDefault = Num_IsOdd(nArgs)
+	If hasDefault Then
+		Assign default, args(upArg)
+		upArg = upArg - 1
+	End If
+	
+	' Resize the data arrays to fit the arguments.
+	Dim nData As Long: nData = nArgs/ 2
+	Dim lowData As Long: lowData = DATA_BASE
+	Dim upData As Long: upData = lowData + nData - 1
+	
+	ReDim data(lowData To upData)
+	ReDim lookup(lowData To upData)
+	
+	' Populate the data arrays from the arguments.
+	Dim iData As Long: iData = lowData
+	Dim iKey As Long, key As String
+	Dim iVal As Long, val As Variant
+	
+	Dim iArg As Long
+	For iArg = lowArg To upArg Step 2
+		' Locate the key and value arguments.
+		iKey = iArg
+		iVal = iArg + 1
+		
+		' Save the key among the lookups...
+		On Error GoTo INVALID_KEY
+		lookup(iData) = VBA.CStr(args(iKey))
+		On Error GoTo 0
+		
+		' ...and the value among the data.
+		Assign data(iData), args(iVal)
+		
+		' Increment the data location.
+		iData = iData + 1
+	Next iArg
+	
+	' Report success.
+	iGetData = True
+	Exit Function
+	
+	
+' Handle invalid keys.
+KEY_ERROR:
+	iGetData = False
+End Function
+
+
 ' Extract a value from a data structure.
 Private Function GetValue( _
 	ByRef data As Variant, _
