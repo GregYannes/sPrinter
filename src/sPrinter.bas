@@ -53,7 +53,7 @@ Public Enum FormatMode
 End Enum
 
 
-' Context from which Format2() is called.
+' Context from which xFormat() is called.
 Private Enum CallingContext
 	[_Unknown] = 0	' Uninitialized.
 	cxtVBA		' The VBA environment.
@@ -165,7 +165,7 @@ End Type
 ' ######################
 
 ' Display a value with a certain formatting code and engine.
-Public Function Format2( _
+Public Function xFormat( _
 	ByRef value As Variant, _
 	Optional ByRef format As String, _
 	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
@@ -192,7 +192,7 @@ Public Function Format2( _
 	' Format via the desired mode.
 	Select Case mode
 	Case FormatMode.fmtVbFormat
-		Format2 = VBA.Format( _
+		xFormat = VBA.Format( _
 			Expression := value, _
 			Format := format, _
 			FirstDayOfWeek := firstDayOfWeek, _
@@ -200,7 +200,7 @@ Public Function Format2( _
 		)
 		
 	Case FormatMode.fmtXlText
-		Format2 = Application.WorksheetFunction.Text( _
+		xFormat = Application.WorksheetFunction.Text( _
 			Arg1 := value, _
 			Arg2 := format _
 		)
@@ -365,7 +365,7 @@ Public Function xMessage( _
 			fmt = e.Field.Format
 			
 			On Error GoTo FMT_ERROR
-			out = Format2( _
+			out = xFormat( _
 				value := val, _
 				format := fmt, _
 				mode := mode, _
