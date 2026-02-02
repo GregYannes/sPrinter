@@ -665,7 +665,7 @@ Private Sub Err_Parsing( _
 		Const ETC_SYM As Long = 133
 	#End If
 	
-	Dim etc As String: etc = Chr2(ETC_SYM)
+	Dim etc As String: etc = ChrX(ETC_SYM)
 	
 	
 	' Describe where the erroneous syntax occurs.
@@ -838,7 +838,7 @@ Private Sub Err_DuplicateSyms( _
 		Const ETC_SYM As Long = 133
 	#End If
 	
-	Dim etc As String: etc = Chr2(ETC_SYM)
+	Dim etc As String: etc = ChrX(ETC_SYM)
 	
 	
 	' Generate a relevant description of the error.
@@ -1025,11 +1025,11 @@ End Function
 ' ######################
 
 ' Get a Unicode character, without sporadic corruption on Mac.
-Public Function Chr2(ByVal charcode As Long) As String
+Public Function ChrX(ByVal charcode As Long) As String
 	#If Mac Then
-		Chr2 = VBA.Chr(charcode)
+		ChrX = VBA.Chr(charcode)
 	#Else
-		Chr2 = VBA.ChrW(charcode)
+		ChrX = VBA.ChrW(charcode)
 	#End If
 End Function
 
@@ -1180,7 +1180,7 @@ Private Sub CheckSym(ByRef x As Variant)
 		
 	' ...or convert a code into its character.
 	Else
-		x = Chr2(x)
+		x = ChrX(x)
 	End If
 	
 	' Ensure the symbol is not whitespace...
