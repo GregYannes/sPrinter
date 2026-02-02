@@ -8,7 +8,7 @@ Introducing the [**`sPrinter`**][proj_mod] module for Excel VBA!  Simply write a
 
 ```vba
 vPrint "You have a meeting with {1} {2} at {3} on {4}.", "John", "Doe", Time(), Date()
-'       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^  ^^^^^  ^^^^^^  ^^^^^^
+'       ˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄   ˄˄˄˄˄˄  ˄˄˄˄˄  ˄˄˄˄˄˄  ˄˄˄˄˄˄
 '                      Message Template                               Data
 ```
 
@@ -22,7 +22,7 @@ You can make this look even nicer, by applying [format codes][docs_fmt] to your 
 
 ```vba
 vPrint "You have a meeting with {1} {2} at {3:h:MM AM/PM} on {4:dddd, mmmm d}.", "John", "Doe", Time(), Date()
-'                                             ^^^^^^^^^^        ^^^^^^^^^^^^
+'                                             ˄˄˄˄˄˄˄˄˄˄        ˄˄˄˄˄˄˄˄˄˄˄˄
 '                                             Time Format        Date Format
 ```
 
