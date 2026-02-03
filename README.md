@@ -132,7 +132,7 @@ Break down a template into an array of its components.
 
 Perform broadly useful tasks.
 
-  - [`Assign()`][docs_utl]: Assign any value (scalar or objective) to a variable by [reference][vba_ref].
+  - [`Assign()`][docs_utl]: Assign any value (scalar or objective) to a variable by [reference][vba_byrf].
   
   <br>
   
@@ -172,7 +172,7 @@ Perform broadly useful tasks.
   [docs_stx]: docs/Syntax.md
   [mod_prv]:  src/sPrinter.bas#L13-L14
   [vba_prv]:  https://learn.microsoft.com/office/vba/language/reference/user-interface-help/option-private-statement
-  [docs_met]: src/Metadata.md
+  [docs_met]: docs/Metadata.md
   [sem_ver]:  https://semver.org
   [docs_msg]: docs/Messaging.md
   [vba_arr]:  https://learn.microsoft.com/office/vba/language/concepts/getting-started/using-arrays
