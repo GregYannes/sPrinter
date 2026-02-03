@@ -185,12 +185,12 @@ Perform broadly useful tasks.
   [docs_utl]: docs/Utilities.md
   [vba_byrf]: https://learn.microsoft.com/dotnet/visual-basic/programming-guide/language-features/procedures/passing-arguments-by-value-and-by-reference
   [vba_enm]:  https://learn.microsoft.com/office/vba/language/reference/user-interface-help/enum-statement
-  [vba_enm2]: https://www.codestack.net/visual-basic/data-structures/enumerators#flag-enumerator-multiple-options
   [card_num]: https://en.wikipedia.org/wiki/Cardinal_numeral
   [ord_num]:  https://en.wikipedia.org/wiki/Ordinal_numeral
   [vba_dimn]: https://learn.microsoft.com/dotnet/visual-basic/programming-guide/language-features/arrays/array-dimensions
+  [vba_fmt]:  https://learn.microsoft.com/office/vba/language/reference/user-interface-help/format-function-visual-basic-for-applications#remarks
+  [xl_txt]:   https://support.microsoft.com/office/text-function-20d5ac4d-7b94-49fd-bb38-93d29371225c#ID0EDJ
+  [vba_enm2]: https://www.codestack.net/visual-basic/data-structures/enumerators#flag-enumerator-multiple-options
   [vba_mbox]: https://learn.microsoft.com/office/vba/language/reference/user-interface-help/msgbox-function#settings
   [vba_rnk]:  https://learn.microsoft.com/office/vba/language/reference/user-interface-help/too-many-dimensions
   [vba_chr]:  https://learn.microsoft.com/office/vba/language/reference/user-interface-help/chr-function#remarks
-  [vba_fmt]:  https://learn.microsoft.com/office/vba/language/reference/user-interface-help/format-function-visual-basic-for-applications#remarks
-  [xl_txt]:   https://support.microsoft.com/office/text-function-20d5ac4d-7b94-49fd-bb38-93d29371225c#ID0EDJ
