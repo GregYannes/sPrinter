@@ -1483,6 +1483,7 @@ Private Sub CheckArray( _
 		n = Arr_Length(arr, dimension := 1)
 		low = LBound(arr, 1)
 		up = UBound(arr, 1)
+		
 	' ...even for an empty vector.
 	Else
 		n = 0
