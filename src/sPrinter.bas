@@ -219,7 +219,7 @@ Public Function xMessage( _
 	Optional ByRef data As Variant, _
 	Optional ByRef lookup As Variant, _
 	Optional ByRef default As Variant, _
-	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
+	Optional ByVal position As PositionKind = PositionKind.posRelative, _
 	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
 	Optional ByVal firstDayOfWeek As VBA.VbDayOfWeek = VBA.VbDayOfWeek.vbSunday, _
 	Optional ByVal firstWeekOfYear As VBA.VbFirstWeekOfYear = VBA.VbFirstWeekOfYear.vbFirstJan1, _
@@ -506,7 +506,7 @@ Public Function xPrint( _
 	Optional ByRef data As Variant, _
 	Optional ByRef lookup As Variant, _
 	Optional ByRef default As Variant, _
-	Optional ByVal position As PositionKind = PositionKind.posAbsolute, _
+	Optional ByVal position As PositionKind = PositionKind.posRelative, _
 	Optional ByVal mode As FormatMode = FormatMode.[_Unknown], _
 	Optional ByVal firstDayOfWeek As VBA.VbDayOfWeek = VBA.VbDayOfWeek.vbSunday, _
 	Optional ByVal firstWeekOfYear As VBA.VbFirstWeekOfYear = VBA.VbFirstWeekOfYear.vbFirstJan1, _
@@ -1599,7 +1599,7 @@ Private Function GetValue( _
 	Optional ByRef hasLook As Boolean = False, _
 	Optional ByRef lookup As Variant, _
 	Optional ByRef nLook As Long, _
-	Optional ByVal pos As PositionKind = PositionKind.posAbsolute, _
+	Optional ByVal pos As PositionKind = PositionKind.posRelative, _
 	Optional ByRef val As Variant _
 ) As Boolean
 	' Short-circuit for no data.
