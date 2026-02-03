@@ -1641,17 +1641,17 @@ Private Function GetValue( _
 			If idx = 0 Or idx > n Then
 				GoTo VAL_ERROR
 				
-			' ...but otherwise count from the beginning...
+			' ...but otherwise count forwards from the beginning...
 			ElseIf idx > 0 Then
 				idx = low + idx - 1
 				
-			' ...or from the end.
+			' ...or backwards from the end.
 			ElseIf idx < 0 Then
 				idx = up + idx + 1
 			End If
 		End If
 		
-		' Short-circuit for a position that is out of bounds.
+		' Short-circuit for any position that is out of bounds.
 		If idx < low Or idx > up Then GoTo VAL_ERROR
 	End If
 	
